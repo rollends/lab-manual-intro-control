@@ -1,0 +1,3 @@
+[submodule "lab-template-files"]
+	path = lab-template-files
+	url = ist-git@git.uwaterloo.ca:ece380-s2020-lab/ece380-s2020-lab-template-files.git

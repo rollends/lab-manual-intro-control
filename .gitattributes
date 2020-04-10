@@ -1,0 +1,6 @@
+*.xlsx -diff -merge
+*.docx -diff -merge
+*.pdf -diff -merge
+*.jpg -diff -merge
+*.png -diff -merge
+*.bmp -diff -merge
