@@ -1,5 +1,6 @@
 BUILD=build
 DOCUMENT=ECE380-S2020-Lab-Manual.pdf
+SECTIONS=Introduction.tex Lab-1.tex
 
 all: $(BUILD) $(DOCUMENT)
 
@@ -12,15 +13,11 @@ $(BUILD):
 	mkdir $(BUILD)
 
 # PDF Build
-$(BUILD)/ECE380-S2020-Lab-Manual.pdf: ECE380-S2020-Lab-Manual.tex images/
+ECE380-S2020-Lab-Manual.pdf: ECE380-S2020-Lab-Manual.tex Math.sty $(SECTIONS) images/
 	cp -R $^ $(BUILD)/
 	cd $(BUILD) && xelatex $<
 	cd $(BUILD) && xelatex $<
 	cd $(BUILD) && xelatex $<
-
-# Copy build out if successful.
-%.pdf: $(BUILD)/%.pdf
-	cp $< $@
-
+	cp $(BUILD)/ECE380-S2020-Lab-Manual.pdf .
 
 .PHONY: all clean
