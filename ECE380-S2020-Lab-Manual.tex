@@ -1,15 +1,17 @@
 \documentclass[letterpaper, 12pt, oneside]{memoir}
-\usepackage{fontspec}
+\usepackage[no-math]{fontspec}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEG: PACKAGES
 %
 \usepackage{amsmath}
+\usepackage{caption}
 \usepackage{enumitem}
 \usepackage[left=1.25in, right=1.25in, top=1.5in, bottom=1.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{siunitx}
+\usepackage{subfig}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins, breakable}
 \usepackage{tikz}
@@ -24,20 +26,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEG: COLOR/TEXT/FONT CONFIGURATION
 %
-
-\setmainfont{SourceSerifPro-Regular}[
-  BoldFont = SourceSerifPro-Bold,
-  ItalicFont = SourceSerifPro-It,
-]
-\setsansfont{SourceSansPro-Regular}[
-  BoldFont = SourceSansPro-Bold,
-  ItalicFont = SourceSansPro-It,
-]
-\setmonofont{SourceCodePro-Regular}[
-  BoldFont = SourceCodePro-Bold,
-  ItalicFont = SourceCodePro-It,
-  Scale = 0.90,
-]
+% \setmainfont{SourceSerifPro-Regular}[
+%   BoldFont = SourceSerifPro-Bold,
+%   ItalicFont = SourceSerifPro-It,
+% ]
+% \setsansfont{SourceSansPro-Regular}[
+%   BoldFont = SourceSansPro-Bold,
+%   ItalicFont = SourceSansPro-It,
+% ]
+% \setmonofont{SourceCodePro-Regular}[
+%   BoldFont = SourceCodePro-Bold,
+%   ItalicFont = SourceCodePro-It,
+%   Scale = 0.90,
+% ]
 
 \definecolor{Orange}{cmyk}{0, 0.40, 0.80, 0}
 \definecolor{Red}{cmyk}{0.20, 1.00, 1.00, 0}

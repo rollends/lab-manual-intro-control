@@ -1,4 +1,4 @@
-\chapter{Familiarizing Yourself with Simulink}\label{Lab:1}
+\chapter{System Identification Fundamentals}\label{Lab:1}
 Low-pass filters are ubiquitous. They can be found in the hardware of
 audio processing chips, or the software of image editing tools. As you may
 recall from a course on Signals and Systems theory\footnote{If you haven't
@@ -9,6 +9,13 @@ is a system that, generally speaking, rejects high-frequency signals while
 to analyze a low-pass filter block and determine its parameters via a time
 domain approach. This is not meant to be a difficult lab and is instead
 designed to give you a sense of the lab format.
+
+In the real world, our models rarely are infinitely accurate. The techniques
+you learn here generalize nonetheless. Whenever you confront a novel system,
+devise a generic model that you think characterizes its behaviour and then
+come up with experiments that expose its characteristics; this gives you
+estimates of generic model's parameters that best fit the actual system.
+We will encounter such a situation in a future lab.
 
 \section{Objectives}
 The primary objectives of this lab are to
@@ -36,16 +43,29 @@ you do so.
 \section{Experimental Procedure}
 This entire lab will be done using the ``\texttt{Lab\_1.slx}'' Simulink model.
 In there you will
-find five blocks already placed for you in an open loop configuration:
+find a number of blocks already placed for you in an open loop configuration:
 \begin{itemize}
   \item{a signal generator,}
+  \item{a step input,}
+  \item{a manual switch block,}
   \item{a summing junction,}
   \item{an adjustable gain block,}
   \item{a ``plant'', the system we are going to analyze, and}
   \item{a terminator.}
 \end{itemize}
-You do not require any more blocks than these. You will be asked to add
-a new path.
+%
+The plant --- labelled \(P(s)\) in the diagram --- can be assumed to be a
+transfer function taking the form
+\[
+  P(s) = \frac{b T}{s + a T},
+\]
+where \(a, b > 0\) and \(T \in \{10, 100\}.\) Your goal is to use the
+techniques described in the following subsections to estimate the parameters
+\(a,\) \(b\) and \(T\) for your plant. This process is known as
+\textbf{system identification} and it is a critical precursor to control
+design. How can we design a controller if we don't even know the parameters
+of the system we wish to control?
+
 
 \subsection{Acquiring the Bandwidth in Time-Domain}
 The goal of this portion of the lab is to acquire the bandwidth of the
@@ -105,6 +125,13 @@ input, we take a different approach.
   \label{fig:lab1:lowfreq}
 \end{figure}
 %
+\begin{figure}
+  \includegraphics{images/Lab_1_Bandwidth.eps}
+  \caption{The response to my \(P(s)\) at the bandwidth frequency.
+  Can you see why this is the bandwidth frequency for my plant?}
+  \label{fig:lab1:bandwidth}
+\end{figure}
+%
 \begin{deliverable}
   \textbf{Record} your estimated DC gain and \textbf{capture} the generated
   figure with the cursors you used to measure the amplitudes.
@@ -134,9 +161,15 @@ inputs a low-pass system rejects.
   \]
 \end{definition}
 %
-Simply put, the bandwidth frequency is where we find the gain has
-dropped by a factor of \(\sqrt{2}\) in comparison to the DC gain.
-Figure~ depicts this. We can see when we apply
+Here is what the definition above is really trying to characterize: the
+gain is the multiplier between the input amplitude and output amplitude. For
+a low-pass system, this gain decreases as a function of input frequency. The
+bandwidth frequency is the frequency where this gain has fallen, in comparison
+to the DC gain, by factor of \(\sqrt{2}.\) This is further demonstrated
+by the difference in response we observe between Figure~\ref{fig:lab1:lowfreq}
+and Figure~\ref{fig:lab1:bandwidth}. Note how much smaller the output signal
+is in the response with higher frequencies in comparison to the response
+with lower frequencies.
 %
 \begin{procedure}
   You will acquire the bandwidth frequency of the plant \(P(s)\).
@@ -180,13 +213,6 @@ Figure~ depicts this. We can see when we apply
   \label{lab1:p2}
 \end{procedure}
 %
-\begin{figure}
-  \includegraphics{images/Lab_1_Bandwidth.eps}
-  \caption{The response to my \(P(s)\) at the bandwidth frequency.
-  Can you see why this is the bandwidth frequency for my plant?}
-  \label{fig:lab1:bandwidth}
-\end{figure}
-%
 \begin{deliverable}
   At the bandwidth frequency,
   \textbf{capture a figure} of the input and output signal. It should look
@@ -195,9 +221,8 @@ Figure~ depicts this. We can see when we apply
   \label{lab1:d2}
 \end{deliverable}
 %
-Now \textbf{close the loop} around the slider gain and plant \(P(s).\) That
-is, connect your diagram so that it looks like Figure
-\ref{fig:lab1:closing-loop}.
+Having acquired the bandwidth for the open loop system, we now investigate
+the closed loop system.
 %
 \begin{figure}
   \centering
@@ -232,17 +257,66 @@ is, connect your diagram so that it looks like Figure
 \end{figure}
 %
 \begin{procedure}
+  Now \textbf{close the loop} around the slider gain and plant \(P(s).\) That
+  is, connect your diagram so that it looks like Figure
+  \ref{fig:lab1:closing-loop}. Then \textbf{set} the slider gain to
+  your group provided parameter value \(Kp.\)
   Repeat Procedures~\ref{lab1:p1} and~\ref{lab1:p2} for the closed-loop
   system depicted in Figure~\ref{fig:lab1:closing-loop}.
+  \label{lab1:p3}
 \end{procedure}
 %
 \begin{deliverable}
   Repeat Deliverables~\ref{lab1:d1} and~\ref{lab1:d2} for the closed-loop
-  system depicted in Figure~\ref{fig:lab1:closing-loop}.
+  system discussed in Procedure~\ref{lab1:p3}
 \end{deliverable}
 
 \subsection{Acquiring the Settling Time and Time Constant}
-
+In this section of Lab 1 we take a different approach to estimating the plant
+parameters. Instead of feeding in a sinusoid of low and high frequency, we
+acquire what is known as the \textbf{step response}. The step response of
+a plant \(P(s)\) is the output \(Y(s) = P(s) U(s)\) when \(U(s)\) is the unit
+step function, i.e. \(U(s) = \frac{1}{s}.\) In practice, we often feed
+square waves.
+%
+There are two characteristic values we care about for a first-order step
+response. The \(2\%\)-settling time and the time constant.
+\begin{definition}[The \(2\%\)-Settling Time]
+  For a first order plant \(P(s)\) and step input \(U(s) = \frac{1}{s},\)
+  the \textbf{\(2\%\)-Settling Time} is the time \(T\) it takes for
+  the output \(y(t)\) to reach within \(2\%\) of its final value and stay
+  within that \(2\%\) margin for all future time \(t > T.\)
+\end{definition}
+%
+\begin{figure}
+  \centering
+  \subfloat[Complete step response.\label{fig:lab1:settling-time:a}]{%
+    \includegraphics{images/Lab_1_SettlingTime_1.eps}%
+  }\hfill
+  \subfloat[Zoomed-in view on the settling behaviour of signal.%
+  \label{fig:lab1:settling-time:b}]{%
+    \includegraphics{images/Lab_1_SettlingTime_2.eps}%
+  }
+  \caption{
+    The step response of some unknown plant with the \(2\%\)-settling time
+    annotated in part (b). Observe how the the signal stays in
+    the \(2\%\) region, demarcated by the broken lines,
+    after the settling time of \(\SI{391.4}{ms}\) is attained.
+  }
+  \label{fig:lab1:settling-time}
+\end{figure}
+%
+The notion of \(2\%\)-settling time is best depicted by Figure
+\ref{fig:lab1:settling-time}. The same signal is displayed in both subfigures.
+In Figure~\ref{fig:lab1:settling-time:a} the final value is
+measured \emph{from the base to the top} of the signal. Then \(2\%\) of the
+settling value is computed to define a cut-off point above and below the final
+value, depicted as the broken lines in Figure
+\ref{fig:lab1:settling-time:b}. Notice how the signal \emph{stays} in the
+settling region after the settling time.
+%
+The next characteristic of the step response worthy of measurement is the
+time constant.
 
 \section{Report Deliverable}
 
