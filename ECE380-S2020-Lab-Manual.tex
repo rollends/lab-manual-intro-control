@@ -10,6 +10,7 @@
 \usepackage[left=1.25in, right=1.25in, top=1.5in, bottom=1.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{newpxtext,newpxmath}
 \usepackage{siunitx}
 \usepackage{subfig}
 \usepackage{tcolorbox}
@@ -52,35 +53,41 @@
 \newtcolorbox[%
   auto counter,%
   number within=chapter%
-]{deliverable}{%
+]{deliverable}[1][]{%
   enhanced,
   colframe=Red,%
   colback=LiteRed,%
   fonttitle=\bfseries,%
   title={Deliverable~\thetcbcounter},
-  breakable
+  breakable,
+  arc=0pt,
+  #1
 }
 \newtcolorbox[%
   auto counter,%
-  number within=section%
-]{procedure}{%
+  number within=chapter%
+]{procedure}[1][]{%
   enhanced,
   colframe=Green,%
   colback=LiteGreen,%
   fonttitle=\bfseries,%
   title={Procedure~\thetcbcounter},
-  breakable
+  breakable,
+  arc=0pt,
+  #1
 }
 \newtcolorbox[%
   auto counter,%
   number within=chapter%
-]{definition}[1][]{%
+]{definition}[2][]{%
   enhanced,
   colframe=Blue,%
   colback=LiteBlue,%
   fonttitle=\bfseries,%
-  title={Definition~\thetcbcounter: #1},
-  breakable
+  title={Definition~\thetcbcounter: #2},
+  breakable,
+  arc=0pt,
+  #1
 }
 
 \tikzfading[name=fade lightly right,%
@@ -93,9 +100,7 @@
     rectangle,
     minimum width=0.5in,
     minimum height=2.5em,
-    very thick,
     draw=RichBlack,
-    rounded corners,
     font={},
     align=center%
   },
@@ -106,14 +111,11 @@
     circle,
     minimum width=0.2in,
     minimum height=0.2in,
-    thick,
     draw=RichBlack,
   },
   signal/.style={%
     color=RichBlack,
-    very thick,
     line join=round,
-    rounded corners=0.25em,
     shorten >=0.05em%
   },
   arrow/.style={-{Latex[length=0.5em]}}
@@ -231,7 +233,7 @@
 % BEG: COPYRIGHT BS
 %
 \thispagestyle{empty}
-\noindent\textcopyright 2020 Rollen S. D'Souza\\
+%\noindent\textcopyright 2020 Rollen S. D'Souza\\
 
 \noindent
 Cover page image captured by SpaceX\textregistered~on their
@@ -244,6 +246,19 @@ in
 \href{http://www.larsblackmore.com/nae_bridge_2016.pdf}{this publication}. It
 isn't very technical but you can find where to jump from there if you want a
 little more technical content.
+\begin{center}
+  * \qquad * \qquad *
+\end{center}
+\noindent
+A big thank you to the following persons
+\begin{itemize}[label={}]
+  \item{Carmen Caradima}
+  \item{Prof. Christopher Nielsen}
+  \item{Prof. Andrew Heunis}
+\end{itemize}
+and other ECE 380 lab and course instructors whose work has inspired much
+of this lab manual. This lab manual is just a variation of past
+ECE 380 labs.
 
 \pagebreak
 % END: COPYRIGHT BS
