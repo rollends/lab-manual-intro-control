@@ -23,24 +23,33 @@ We will encounter such a situation in a future lab.
 The primary objectives of this lab are to
 \begin{enumerate}[label=(\arabic*)]
   \item{
-    Install MATLAB, Simulink and required toolboxes.
-    Alternatively, connect remotely to
+    \textbf{Install} MATLAB, Simulink and required toolboxes.
+    Alternatively, \textbf{connect remotely} to
     \url{engterm.uwaterloo.ca} or any other lab computer of your choice
     that has MATLAB.
   }
   \item{
-    Understand how to create a Simulink diagram and how to run
+    Understand how to \textbf{create} a Simulink diagram and how to run
     a simulation.
   }
   \item{
-    Understand how to log signals for future inspection and how to then
-    make time-domain measurements.
+    Understand how to \textbf{log} signals for future inspection.
+  }
+  \item{
+    Understand how to \textbf{plot} figures and capture them.
+  }
+  \item{
+    Understand the theory behind first-order low-pass systems.
+  }
+  \item{
+    Understand how to \textbf{identify} a first-order low-pass system.
   }
 \end{enumerate}
-The list of required deliverables is not very large so you should
-spend your time exploring Simulink so as to reduce the amount of time
-you spend on future labs. That is, of course, not a requirement but I recommend
-you do so.
+This is not a particularly long lab, but you may have trouble as it is
+very likely your first encounter with Simulink. As a result, I suggest you
+give you and your partner time to work through the lab and the problems.
+I also recommend you spend some time by yourself exploring Simulink so as to
+reduce the amount of time you spend on future labs.
 
 \section{Experimental Procedure}
 This entire lab will be done using the ``\texttt{Lab\_1.slx}'' Simulink model.
@@ -65,7 +74,6 @@ techniques described in the following subsections to estimate the parameters
 \textbf{system identification} and it is a critical precursor to control
 design. How can we design a controller if we don't even know the parameters
 of the system we wish to control?
-
 
 \subsection{Acquiring the Bandwidth in Time-Domain}
 The goal of this portion of the lab is to acquire the bandwidth of the
@@ -509,3 +517,40 @@ Make sure to leverage your other deliverables in your answers!
     }
   \end{enumerate}
 \end{deliverable}
+
+\subsection{Grading Scheme}
+The grading scheme is shown in Table~\ref{tab:lab1:grading}. The breakdown of
+your grade is shown per deliverable except in the case of the lab
+questions where it is shown per question. Your grade in each row is determined
+as per the letter grading scheme described by Table~\ref{tab:letter-grading}.
+%
+\begin{table}
+\centering
+\begin{tabular}{c|l|c|c}
+        & Deliverable           & Weight  \\ \hline
+        & \ref{lab1:d1}         & 5       \\ \hline
+        & \ref{lab1:d2}         & 5       \\ \hline
+        & \ref{lab1:d3}         & 5       \\ \hline
+        & \ref{lab1:d4}         & 5       \\ \hline
+        & \ref{lab1:d5}         & 5       \\ \hline
+        & \ref{lab1:d6}         & 5       \\ \hhline{=|=|=|=}
+Lab Subtotal&                       & 30      \\ \hhline{=|=|=|=}
+        & \ref{lab1:report}~\ref{lab1:report:q1}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q2}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q3}  & 2       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q4}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q5}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q6}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q7}  & 2       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q8}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q9}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q10} & 4       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q11} & 4       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q12} & 1       \\ \hhline{=|=|=|=}
+Report Subtotal&  & 20 \\ \hhline{=|=|=|=}
+  Total &                       & 50
+\end{tabular}
+\caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
+\label{tab:lab1:grading}
+\end{table}
+%

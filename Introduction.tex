@@ -1,29 +1,57 @@
 \chapter{Introduction}
 Welcome to your remote lab for ECE 380, Introduction to Feedback Control.
-The in-lab portion of this course was designed to give you a pseudo hands-on
-feel for control using analog circuits. As this is a remotely delivered lab,
-we no longer can provide you with the hands-on feel!
+The in-lab portion of this course was designed to give you a hands-on
+feel for control using analog circuits. Given the current climate, this is
+clearly not possible in the way previously envisioned.
 
-We persist. This lab is designed to run in MATLAB. You will engage
+We persist. This lab is designed to run in MATLAB and Simulink. You will engage
 in understanding, developing, executing and analyzing Simulink
-diagrams that model control systems. Every lab, though artificial, is
+diagrams that model and simulate control systems. Every lab, though
+somewhat artificial, is
 provided with brief motivation on how one can see this applied in a real
-world problem. I hope this helps connect the abstract block diagrams of
-Simulink with the real world.
+world problem. I hope I can help connect the abstract block diagrams of
+Simulink with the real world for you.
 
 Control systems is a very broad topic with a long history that even predates
 the ideas discussed in this course. This course and lab covers the very basic
 notion of control, the idea of the negative feedback loop, buttressed by
-the mathematics of linear dynamical systems (Laplace theory).
-
-\section{Logistics}
-Please
+the mathematical tools of linear dynamical systems.
 
 \section{MATLAB and Simulink}
-MATLAB is a desktop (or command line) numerical and symbolic
+MATLAB is a desktop numerical and symbolic
 mathematics computing environment. We will not rely heavily on MATLAB
-scripting itself and instead use Simulink. Simulink is a
-package add-on to MATLAB that allows you to design and simulate
+scripting itself and instead use Simulink but you should be familiar with
+both environments. Please ensure that, when you are installing MATLAB, you
+install
+%
+\begin{enumerate}[label=(\arabic*)]
+  \item{
+    MATLAB,
+  }
+  \item{
+    Simulink,
+  }
+  \item{
+    the Control Systems Toolbox,
+  }
+  \item{
+    the Simulink Control Design,
+  }
+  \item{
+    the DSP System Toolbox,
+  }
+  \item{
+    the Signal Processing Toolbox,
+  }
+  \item{
+    the Statistics and Machine Learning Toolbox and
+  }
+  \item{
+    the Symbolic Math Toolbox.
+  }
+\end{enumerate}
+%
+Simulink is an add-on to MATLAB that allows you to design and simulate
 systems (physical or otherwise) using block diagrams like in
 Figure~\ref{fig:intro:1}.
 %
@@ -62,7 +90,7 @@ Figure~\ref{fig:intro:1}.
 \end{figure}
 %
 Figure~\ref{fig:intro:1} can be replicated perfectly in Simulink.
-That fact makes it easy for engineers to quickly and easily design and verify
+That fact makes it easy for engineers to quickly design and verify
 control designs. Simulink even supports direct interaction with
 hardware but we will not utilize this feature.
 
@@ -95,9 +123,9 @@ and \emph{transfer functions} depicted in Simulink like
 
   \end{tikzpicture}.
 \end{center}
-You will be provided template blocks to help you set up the Lab plant, the
-system we wish to control, and it will be your task to analyze this block
-design a controller, and implement it by linking up blocks to the plant
+You may be provided template blocks to help you setup the Lab plant, the
+system we wish to control; it will then be your task to analyze this block,
+design a controller, and implement it by linking up blocks
 in the appropriate feedback architecture.
 
 \section{Git Version Control}
@@ -115,5 +143,78 @@ tools like \href{https://www.sourcetreeapp.com/}{Sourcetree} or
 upload the files using the graphical web interface at \url{git.uwaterloo.ca}.
 As long as your able to download files from your repository and upload your
 solutions, I am happy. Having said that, it is an important skill in this
-day and age to understand how to use version control. Therefore, this is a
+day and age to understand how to use version control. This is a
 great opportunity to learn git!
+
+\section{Lab Logistics and Deliverables}\label{intro:logistics}
+Every lab requires you to complete a number of procedures described in
+green boxes like
+\begin{procedure}[]
+  Here are some steps:
+  \begin{enumerate}[label=(\arabic*)]
+    \item{Yes here is step 1,}
+    \item{oh wow step 2,}
+    \item{really you are still reading this,}
+    \item{you must be really bored,}
+    \item{consider finding better things to do.}
+  \end{enumerate}
+\end{procedure}
+\noindent
+and deliverables described in red boxes like
+\begin{deliverable}[]
+  Here are some things you will need to save for your report.
+\end{deliverable}
+Procedures are simply steps you should follow that will eventually result in
+a deliverable, which is something you must record and submit as part of your
+report. Every lab chapter ends with a final summative deliverable, usually
+consisting of a series of questions that you must answer.
+%
+All the deliverables should be packaged up in an organized way, ideally
+in the order presented, in the final report which must be submitted as
+a PDF document in your \texttt{git} repository. Your grade is entirely based
+on your report. Every lab has its own grading scheme, but the following
+penalties apply equally to all labs:
+\begin{itemize}
+  \item{
+    \(-10\%\) for not submitting a PDF,
+  }
+  \item{
+    \(-10\%\) per day late until you get \(0.\) All reports are due
+    at \texttt{23:59:59 EDT} on the due date.
+    \texttt{10} minutes past the
+    deadline counts as one day late. All deadlines will be reported both
+    in Eastern Daylight Time (\texttt{EDT}) and Coordinated Universal Time
+    (\texttt{UTC})
+    so that there can be no confusion on the deadline in case you are not
+    in Waterloo.
+  }
+\end{itemize}
+%
+In terms of general style, I am very much a proponent of letter grade style
+grading schemes. Often grading is anyways quite arbitrary, and it can be hard
+to really pin down the value of a question especially when the content has
+multiple reasonable answers. I prefer markers
+rate answers on the scale shown in Figure~\ref{tab:letter-grading}.
+\begin{table}
+\centering
+\begin{tabular}{r|c|l}
+Value & Letter & Explanation\\ \hline
+\(100\%\) & A+ & Meets Expectations.\\ \hline
+\(90\%\)  & A & Meets Expectations. Answer could be Improved Upon. \\ \hline
+\(80\%\) & B & Would Meet Expectations. Made Minor Mistakes.\\ \hline
+\(60\%\) & C & Would Meet Expectations. Made a few Major Mistakes.\\ \hline
+\(40\%\) & D & Fundamental Lack of Understanding in Attempt.\\ \hline
+\(0\%\) & F & No Understanding or No Work Shown.
+\end{tabular}
+\caption[Letter Grading Scheme]{Letter grade with associated value and
+description for how we assign the grade.}
+\label{tab:letter-grading}
+\end{table}
+Generally speaking this will work in your favour, unlike in Work Term Reports,
+since your work doesn't need to be outstanding to get perfect. Minor mistakes
+are penalized quite steeply, so check your work. However, each question is
+individually rated on this scale. We will make an attempt to avoid double
+deductions. The letter grade \(A\) is reserved for discussion responses where
+no mistakes were made but a better explanation exists or the student must
+expand further on an idea. This is to prevent steep penalties for purely a lack
+of insight.
