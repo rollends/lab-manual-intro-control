@@ -7,11 +7,13 @@
 \usepackage{amsmath}
 \usepackage{caption}
 \usepackage{enumitem}
+\usepackage{float}
 \usepackage[left=1.25in, right=1.25in, top=1.5in, bottom=1.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hhline}
 \usepackage{hyperref}
 \usepackage{newpxtext,newpxmath}
+\usepackage{placeins}
 \usepackage{siunitx}
 \usepackage{subfig}
 \usepackage{tcolorbox}
@@ -143,7 +145,7 @@
 \hypersetup{
   xetex,
   pdfauthor={Rollen S. D'Souza},
-  pdftitle={ECE 380 --- Introduction to Feedback Control, Spring 2020, Lab Manual},
+  pdftitle={ECE 380 --- Spring 2020 --- Lab Manual},
   pdfcreator={XeLaTeX with the HyperRef package.},
   breaklinks,
   plainpages=false,
@@ -251,15 +253,16 @@ little more technical content.
   * \qquad * \qquad *
 \end{center}
 \noindent
-A big thank you to the following persons
+A big thank you to
 \begin{itemize}[label={}]
-  \item{Carmen Caradima}
-  \item{Prof. Christopher Nielsen}
-  \item{Prof. Andrew Heunis}
+  \item{Carmen Caradima,}
+  \item{Prof. Christopher Nielsen,}
+  \item{Prof. Andrew Heunis,}
 \end{itemize}
 and other ECE 380 lab and course instructors whose work has inspired much
 of this lab manual. This lab manual is just a variation of past
-ECE 380 labs.
+ECE 380 labs. Also thank you to Prof. Derek Rayside whose general teaching
+style inspires the variations made in this lab.
 
 \pagebreak
 % END: COPYRIGHT BS
@@ -281,7 +284,9 @@ ECE 380 labs.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \mainmatter
-\input{Lab-1.tex}
+\input{Lab-1}
+\input{Lab-2}
+\input{Lab-3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEG: APPENDIX

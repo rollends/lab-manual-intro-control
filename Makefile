@@ -1,6 +1,6 @@
 BUILD=build
 DOCUMENT=ECE380-S2020-Lab-Manual.pdf
-SECTIONS=Appendix-Simulink.tex Introduction.tex Lab-1.tex
+SECTIONS=Appendix-Simulink.tex Introduction.tex Lab-1.tex Lab-2.tex Lab-3.tex
 
 all: $(BUILD) $(DOCUMENT)
 

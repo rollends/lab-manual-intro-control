@@ -4,3 +4,4 @@
 *.jpg -diff -merge
 *.png -diff -merge
 *.bmp -diff -merge
+*.xcf -diff -merge
