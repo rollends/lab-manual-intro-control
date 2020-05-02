@@ -1,0 +1,34 @@
+\chapter{Bringing it Together: Lateral Motion Control}\label{Lab:3}
+Imagine you are a young, aspiring, junior engineer at MoonX, a
+private company in an alternate Universe, manufucturing a mining probe for the
+Moon.\footnote{This society isn't particularly concerned about environmental
+impacts. They have the technology to hop, skip and jump to another satellite
+or planet.} Because of your junior status, they have only asked you to design
+a simple controller that ensures the lunar module lands at the correct
+location. The controller you design controls the level of horizontal thrust
+to achieve a desired position relative to some point on the surface.
+
+\section{Objectives}
+\begin{enumerate}[label=(\arabic*)]
+  \item{
+    \textbf{Use} the skills you learned in Labs~\ref{Lab:1} and~\ref{Lab:2}
+    to identify parameters of an opaque, black box system.
+  }
+  \item{
+    \textbf{Explore} and \textbf{report} on a variety of control strategies
+    to stabilize the system and achieve objectives.
+  }
+\end{enumerate}
+
+\section{Experimental Procedure}
+This entire lab will be done using the ``\texttt{Lab\_3.slx}'' Simulink model.
+In there you will find a number of blocks already placed for you in an open
+loop configuration:
+\begin{itemize}
+  \item{a zero signal,}
+  \item{a summing junction,}
+  \item{an gain block,}
+  \item{the ``Lunar Module Dynamics'' block, which represent the plant, and}
+  \item{a terminator.}
+\end{itemize}
+%
