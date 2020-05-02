@@ -128,23 +128,23 @@ system we wish to control; it will then be your task to analyze this block,
 design a controller, and implement it by linking up blocks
 in the appropriate feedback architecture.
 
-\section{Git Version Control}
-We will be using the \texttt{git} version control system in tandem with
-the Gitlab hosted on \url{git.uwaterloo.ca} to facilitate delivery of lab
-content and to give you a mechanism for
-\begin{enumerate}[label=(\arabic*)]
-  \item{tracking your temporary work, and}
-  \item{submitting your final work.}
-\end{enumerate}
-There is no requirement that you use git ``properly.'' If you are not
-comfortable using the terminal to perform git operations, you can use graphical
-tools like \href{https://www.sourcetreeapp.com/}{Sourcetree} or
-\href{https://www.gitkraken.com/git-client}{GitKraken}. You can even manually
-upload the files using the graphical web interface at \url{git.uwaterloo.ca}.
-As long as your able to download files from your repository and upload your
-solutions, I am happy. Having said that, it is an important skill in this
-day and age to understand how to use version control. This is a
-great opportunity to learn git!
+% \section{Git Version Control}
+% We will be using the \texttt{git} version control system in tandem with
+% the Gitlab hosted on \url{git.uwaterloo.ca} to facilitate delivery of lab
+% content and to give you a mechanism for
+% \begin{enumerate}[label=(\arabic*)]
+%   \item{tracking your temporary work, and}
+%   \item{submitting your final work.}
+% \end{enumerate}
+% There is no requirement that you use git ``properly.'' If you are not
+% comfortable using the terminal to perform git operations, you can use graphical
+% tools like \href{https://www.sourcetreeapp.com/}{Sourcetree} or
+% \href{https://www.gitkraken.com/git-client}{GitKraken}. You can even manually
+% upload the files using the graphical web interface at \url{git.uwaterloo.ca}.
+% As long as your able to download files from your repository and upload your
+% solutions, I am happy. Having said that, it is an important skill in this
+% day and age to understand how to use version control. This is a
+% great opportunity to learn git!
 
 \section{Lab Logistics and Deliverables}\label{intro:logistics}
 Every lab requires you to complete a number of procedures described in
@@ -169,20 +169,30 @@ a deliverable, which is something you must record and submit as part of your
 report. Every lab chapter ends with a final summative deliverable, usually
 consisting of a series of questions that you must answer.
 %
-All the deliverables should be packaged up in an organized way, ideally
-in the order presented, in the final report which must be submitted as
-a PDF document in your \texttt{git} repository. Your grade is entirely based
+All the deliverables should be packaged up in an organized way; ideally
+they should be in your report in the order presented under headings directly
+corresponding to the deliverable label (1.1, 1.2, etc.). Your final report
+must be submitted as a PDF document on Learn. Your grade is entirely based
 on your report. Every lab has its own grading scheme, but the following
 penalties apply equally to all labs:
 \begin{itemize}
   \item{
+    \(-5\%\) for not having a typeset document or for poor organization,
+  }
+  \item{
     \(-10\%\) for not submitting a PDF,
   }
   \item{
-    \(-10\%\) per day late until you get \(0.\) All reports are due
-    at \texttt{23:59:59 EDT} on the due date.
-    \texttt{10} minutes past the
-    deadline counts as one day late. All deadlines will be reported both
+    \(-20\%\) within the first \texttt{24} hours it is late. After
+    \texttt{24} hours, it becomes \(-100\%.\) If prior arrangements are made
+    or a valid reason presented within a week from the missed deadline, this
+    is waived. In no case will a lab report be accepted more than a week past
+    the deadline; if a valid reason exists for being unable to hand in the lab
+    within the week following the deadline, then the lab will be assigned a
+    weight of zero and the remaining labs will be reweighted accordingly.
+    All reports are due at \texttt{23:59:59 EDT} on the due date.
+    \texttt{10} minutes past the deadline counts as one day late. All
+    deadlines will be reported both
     in Eastern Daylight Time (\texttt{EDT}) and Coordinated Universal Time
     (\texttt{UTC})
     so that there can be no confusion on the deadline in case you are not
@@ -190,8 +200,8 @@ penalties apply equally to all labs:
   }
 \end{itemize}
 %
-In terms of general style, I am very much a proponent of letter grade style
-grading schemes. Often grading is anyways quite arbitrary, and it can be hard
+In terms of general style, I am a proponent of letter grade style
+grading schemes. Often grading is arbitrary and it can be hard
 to really pin down the value of a question especially when the content has
 multiple reasonable answers. I prefer markers
 rate answers on the scale shown in Figure~\ref{tab:letter-grading}.
@@ -212,11 +222,11 @@ description for how we assign the grade.}
 \label{tab:letter-grading}
 \end{table}
 %
-Generally speaking, this will work in your favour unlike in Work Term Reports
+Generally speaking, this will work in your favour, unlike in Work Term Reports,
 since your work doesn't need to be outstanding to get perfect. Minor mistakes
-are penalized quite steeply, so check your work. However, each question is
+are penalized quite steeply so check your work. However, each question is
 individually rated on this scale. We will make an attempt to avoid double
-deductions. The letter grade \(A\) is reserved for discussion responses where
-no mistakes were made but a better explanation exists or the student must
-expand further on an idea. This is to prevent steep penalties for purely a lack
-of insight.
+(cascade) deductions. The letter grade \(A\) is reserved for discussion
+responses where no mistakes were made but a better explanation exists or the
+student must expand further on an idea. This is to prevent steep penalties for
+purely a lack of insight.
