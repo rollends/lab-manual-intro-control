@@ -20,8 +20,18 @@ linear system. More fundamentally, you will realize the value of learning
 control theory. You will discover the limitations of proportional error
 feedback control --- the most na\'ive of control laws --- when applied to
 a physical system. This hopefully motivates you to explore why we consider
-more complicated control strategies. Lab~\ref{Lab:4} further expands on this
+more complicated control strategies. A future lab expands on this
 idea by exploring PID control.
+
+\emph{A word of caution. This is the final lab where it is possible to
+to find out the parameters of your system by inspecting the data file.
+This, in principal, allows you to back-calculate what your procedures should
+tell you. This was intentional to allow
+you to check your work and ensure you understand how to perform the procedure.
+However, future labs will assume you've perfected the procedure.
+The parameters will be fairly well hidden like how it is sometimes in the
+\texttt{\#RealWorld}. So, make sure you understand how to perform the
+procedures!}
 
 \section{Objectives}
 The primary objectives of this lab are to
@@ -168,6 +178,7 @@ measure.
           the \(2\%\) settling time \(T_{\mathrm{s}}.\)
         }
       \end{itemize}
+      \label{proc:lab2:p1:4}
     }
     \item{
       \textbf{Compute} the \(\%\) overshoot of your output signal \(y(t).\)
@@ -181,7 +192,7 @@ measure.
   Appendix~\ref{App:Simulink:ModelLinearizer:3} on how to do so.
 \end{deliverable}
 
-\section{Exploring Proportional Error Feeedback}
+\subsection{Exploring Proportional Error Feeedback}
 For this section you will explore how proportional error feedback affects
 the behaviour of a second-order system. Connect your diagram so that it
 looks like Figure~\ref{fig:lab2:closing-loop}.
@@ -286,13 +297,265 @@ added to produce the output.
 \end{table}
 %
 
-\section{Acquiring the Bandwidth in the Frequency-Domain}
+\subsection{Acquiring the Bandwidth in the Frequency-Domain}
 Once again we will acquire the bandwidth of our system. We will do so for
 \emph{both} the closed and open loop configurations. This time, we will do
 so using the frequency response and not using time domain measurements.
 %
 \begin{procedure}[label={proc:lab2:p3}]
   \begin{enumerate}[label=(\arabic*)]
-    \item{}
+    \item{
+      \textbf{Ensure} your system is in the open-loop configuration.
+      \textbf{Ensure} the gain \(K_p\) is set to \(1.\)
+    }
+    \item{
+      \textbf{Open} the Model Linearizer App.
+    }
+    \item{
+      \textbf{Acquire} a Bode plot. Your Bode plot will probably look a lot
+      like Figure~\ref{fig:lab2:bode}. Note that, for some of you, you may
+      have a little peak in the magnitude plot like in
+      Figure~\ref{fig:lab2:bode:b}; this is normal!
+    }
+    \item{
+      \textbf{Measure} the DC gain on the Magnitude plot using a data tip.
+      Recall that this is the gain at very low frequency inputs!
+    }
+    \item{
+      \textbf{Measure} the frequency at which the gain drops \(\SI{3}{dB}\)
+      below the DC gain measured in the last step. This frequency
+      is called the \textbf{bandwidth}.
+    }
   \end{enumerate}
 \end{procedure}
+%
+\begin{deliverable}[label={lab2:d3a}]
+  \textbf{Capture} a Figure depicted the Bode plot found in
+  Procedure~\ref{proc:lab2:p3}. \textbf{Include} a data tip measuring
+  the bandwidth frequency.
+\end{deliverable}
+%
+\begin{figure}
+  \centering
+  \subfloat[A fairly well damped second order system.]{%
+    \includegraphics{images/Lab_2_Bode.eps}%
+  }\hfill\\
+  \subfloat[A much less damped, \(\zeta << 0.707,\) second order system.%
+  \label{fig:lab2:bode:b}]{%
+    \includegraphics{images/Lab_2_Bode_Peak.eps}%
+  }\hfill\\
+  \caption[Sample Bode Plots of a Second Order System]{
+    Sample Bode plots of a second order system.
+  }
+  \label{fig:lab2:bode}
+\end{figure}
+%
+\begin{procedure}[label={proc:lab2:p4}]
+  \begin{enumerate}[label=(\arabic*)]
+    \item{
+      \textbf{Put} your system is in the closed-loop configuration as depicted
+      in Figure~\ref{fig:lab2:closing-loop}.
+      \textbf{Ensure} the gain \(K_p\) is set to \(1.\)
+    }
+    \item{
+      \textbf{Acquire} a Bode plot. \emph{Did you know you can overlay
+      this Bode plot on top of the Bode plot of Procedure~\ref{proc:lab2:p3}?
+      To do so, take the Bode plot of the open loop system. Then, change the
+      configuration. Finally, instead of pressing ``\texttt{Bode Plot}'' press
+      a new button with the title of the plot. In my case it was
+      ``\texttt{Bode Plot 1}.'' You will have something replicating that of
+      Figure~\ref{fig:lab2:bodeclosed}}
+    }
+  \end{enumerate}
+\end{procedure}
+%
+\begin{figure}
+  \centering
+  \includegraphics{images/Lab_2_Bode_ClosedLoop.eps}%
+  \caption[Sample Overlayed Bode Plots of a Second Order System]{
+    Sample overlayed Bode plots of a second order system.
+  }
+  \label{fig:lab2:bodeclosed}
+\end{figure}
+%
+%
+\begin{deliverable}[label={lab2:d3}]
+  \textbf{Capture} a Figure depicted the Bode plot found in
+  Procedure~\ref{proc:lab2:p4}. \textbf{Include} a data tip measuring
+  the bandwidth frequency.
+\end{deliverable}
+%
+
+\subsection{Disturbance Rejection}
+Wow! You are almost done the experimental part of this lab. This section
+explores how the closed-loop affects disturbance rejection. Disturbances are
+signals that we haven't modelled \emph{or} cannot be modelled and therefore
+cannot account for. Naturally, large enough disturbances affect our ability to
+control systems. The beauty of control is that we can design systems that
+mitigate disturbances we do not explicitly model or know about! Here we will
+find that our system can mitigate some types of disturbance signals, but not
+all.
+
+\begin{procedure}[label={proc:lab2:p5}]
+  For this procedure, you will change the input signal. You will remove the
+  ``\texttt{Input Perturbation}'' annotation from the reference \(r\) and
+  place it on the disturbance \(d.\)
+
+  \begin{enumerate}[label=(\arabic*)]
+    \item{
+      \textbf{Ensure} the system is in the closed-loop configuration
+      depicted in Figure~\ref{fig:lab2:closing-loop}. \textbf{Set} the gain
+      \(K_p\) to \(1.\)
+    }
+    \item{
+      \textbf{Remove} the ``\texttt{Input Perturbation}'' annotation from
+      the reference signal. This amounts to repeating the process described
+      in Appendix~\ref{App:Simulink:ModelLinearizer:2}, i.e. right click the
+      signal wire \(r\) and press
+      \texttt{Linear Analysis Points/Input Perturbation}.
+    }
+    \item{
+      \textbf{Add} the ``\texttt{Input Perturbation}'' annotation to the
+      the disturbance signal \(d.\)
+    }
+    \item{
+      \textbf{Open} the Model Linearizer App and \textbf{acquire} a Bode
+      plot. \emph{Expect the Bode plot to look substantially different than
+      your previous Bode plots.}
+    }
+  \end{enumerate}
+\end{procedure}
+%
+\begin{deliverable}[label={lab2:d4}]
+  \textbf{Include} the Bode plot you generated in Procedure~\ref{proc:lab2:p5}
+  in you report.
+\end{deliverable}
+
+\section{Report Deliverable}
+Good job! You made it through Lab~\ref{Lab:2}.
+You are required to submit a report
+that verifies you completed Lab~\ref{Lab:2} and that you understand the
+procedures you performed. In addition to including
+\begin{itemize}
+  \item{Deliverable~\ref{lab2:d1},}
+  \item{Deliverable~\ref{lab2:d2},}
+  \item{Deliverable~\ref{lab2:d3a},}
+  \item{Deliverable~\ref{lab2:d3} and }
+  \item{Deliverable~\ref{lab2:d4}}
+\end{itemize}
+in your report,
+you are required to answer the questions of the following deliverable.
+Make sure to leverage your other deliverables in your answers!
+\begin{deliverable}[label={lab2:report}]
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{
+      Using the characteristics collected in Step~\ref{proc:lab2:p1:4} of
+      Procedure~\ref{proc:lab2:p1}, \textbf{determine} the parameters
+      \(\hat{K},\) \(\omega_n\) and \(\zeta\) that describe your plant \(P(s)\)
+      in the standard second order form
+      \[
+        P(s) = \frac{\hat{K} \omega_n^2}{s^2 + 2 \zeta \omega_n s + \omega_n^2}
+        .
+      \]
+      \emph{Hint: What are the formulas that connect the above parameters
+      (damping ratio, gain, natural frequency) to the rise time, settling time
+      and other parameters?}
+      \label{lab2:report:q1}
+    }
+    \item{
+      \textbf{Identify} one another way you could compute \(\omega_n\)
+      experimentally given the data you've collected already.
+      \label{lab2:report:q2}
+    }
+    \item{
+      For the closed-loop diagram of Figure~\ref{fig:lab2:closing-loop},
+      \textbf{compute} the transfer function from \(r\) to \(y.\)
+      Then \textbf{compute} the damping ratio and natural frequency of the
+      resulting second-order system.
+      \label{lab2:report:q3}
+    }
+    \item{
+      Given the open-loop damping ratio and natural frequency found in
+      \ref{lab2:report:q1} and closed-loop damping ratio and natural
+      frequency found in~\ref{lab2:report:q3},
+      \textbf{discuss} how closing the loop
+      affects the damping ratio and natural frequency of a second order system.
+      \label{lab2:report:q4}
+    }
+    \item{
+      Using Table~\ref{tab:lab2:p2}, \textbf{discuss} how changing the
+      gain \(K_p\) affects the various characteristics of the second order
+      system. In effect, \textbf{discuss} the benefits and limitations of a
+      proportional error feedback control system when applied to a second
+      order system. \emph{\textbf{Ensure} you discuss every characteristic
+      you've collected; if there is no trend, say so.}
+      \label{lab2:report:q5}
+    }
+    \item{
+      Using the bandwidth frequencies found in Procedures~\ref{proc:lab2:p3}
+      and~\ref{proc:lab2:p4}, \textbf{discuss} how closing the loop
+      changes the bandwidth frequency.
+      \label{lab2:report:q6}
+    }
+    \item{
+      \textbf{Why} is it desireable to be able to change the bandwidth
+      of a system?
+      \label{lab2:report:q7}
+    }
+    \item{
+      Leveraging Deliverable~\ref{lab2:d4}, \textbf{discuss} how well the
+      closed loop rejects disturbance signals. \emph{Hint: The Bode plot
+      depicts the steady-state gain and phase shift of the output relative
+      to the input when the system is hit with an input signal of a given
+      frequency (x-axis). In this Bode plot, the input was the disturbance.}
+      \label{lab2:report:q8}
+    }
+    \item{
+      For the open-loop configuration, \textbf{derive} the transfer function
+      from the disturbance signal \(d\) to the output \(y.\)
+      \textbf{Compare} the disturbance rejection properties between the
+      open-loop and closed-loop system.
+      \label{lab2:report:q9}
+    }
+    \item{
+      \textbf{Derive} the closed-loop transfer function from the
+      disturbance \(d\) to the output \(y.\) How do the disturbance rejection
+      properties change as you increase \(K_p\)? Do they improve or degrade?
+      If so, for what frequencies?
+      \label{lab2:report:q10}
+    }
+  \end{enumerate}
+\end{deliverable}
+
+\subsection{Grading Scheme}
+The grading scheme is shown in Table~\ref{tab:lab2:grading}. The breakdown of
+your grade is shown per deliverable except in the case of the lab
+questions where it is shown per question.
+%
+\begin{table}
+\centering
+\begin{tabular}{c|l|c}
+        & Deliverable           & Weight  \\ \hline
+        & \ref{lab2:d1}         & 2       \\ \hline
+        & \ref{lab2:d2}         & 2       \\ \hline
+        & \ref{lab2:d3a}        & 2       \\ \hline
+        & \ref{lab2:d3}         & 2       \\ \hline
+        & \ref{lab2:d4}         & 2       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 10      \\ \hhline{=|=|=}
+        & \ref{lab2:report}~\ref{lab2:report:q1}  & 3       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q2}  & 1       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q3}  & 3       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q4}  & 2       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q5}  & 5      \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q6}  & 1       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q7}  & 1       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q8}  & 10      \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q9}  & 2       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q10} & 5       \\ \hhline{=|=|=}
+Report Subtotal&  & 32 \\ \hhline{=|=|=}
+  Total &                       & 42
+\end{tabular}
+\caption[Grading Scheme for Lab 2]{Grading scheme for Lab 2.}
+\label{tab:lab2:grading}
+\end{table}
+%
