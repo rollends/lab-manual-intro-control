@@ -5,6 +5,13 @@ interesting circumstances we are in, I have the pleasure of
 delivering to you an _online_ lab that helps develop your
 understanding of feedback control.
 
+This repository contains the Lab Manual documentation. It is built
+using `XeLaTeX`. It has been built using TeXLive 2019 and 2020, so
+I expect it will build on most LaTeX setups. To perform the build
+on Linux or Mac, just run `make`. The `Makefile` will create a
+temporary directory where the build is performed and then copy the
+result out if successful.
+
 ## A Little bit about the Course
 We will be using `MATLAB R2020a` for this course. You should
 have access to this software through the University's plan
