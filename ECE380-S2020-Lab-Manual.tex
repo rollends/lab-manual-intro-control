@@ -214,8 +214,16 @@
   \rmfamily\HUGE\noindent
   \textbf{ECE 380 --- Intro to Feedback Control}\\
   Spring 2020\\
-  {\small Lab Manual v0.1}\\
-  {\small Built: \today}
+  {Lab Manual v0.1}\\
+  {
+    \scshape
+    \small Built \today ---
+    \makeatletter
+    \small Commit {%
+      \@@input|"git rev-list --max-count=1 HEAD | cut -c -6 -"
+    }
+    \makeatother
+  }
 }
 \end{flushright}
 \begin{flushright}
