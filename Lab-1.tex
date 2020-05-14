@@ -500,11 +500,12 @@ Make sure to leverage your other deliverables in your answers!
       \textbf{Find} the transfer
       function from the input to the output when the system is in
       closed-loop, treating \(a, b, T, K_p\) as just unknown parameters.
-      \emph{Hint: In closed loop you can write \(P(s) = K_p(R(s) - Y(s))\)
+      \emph{Hint: In closed loop you can write the input to the plant as
+      \(U(s) = K_p(R(s) - Y(s))\)
       where \(R(s)\) is the input to the loop summing junction. See
-      Figure~\ref{fig:lab1:closing-loop}.
-      Rewrite in the form \(Y(s) = G(s) R(s)\) where \(G(s)\) is the
-      transfer function. Put \(G(s)\) in standard first order form.}
+      Figure~\ref{fig:lab1:closing-loop}. Combine this with \(Y(s) = P(s)U(s)\)
+      and isolate \(Y(s)\) to get an expression \(Y(s) = G(s) R(s)\) where
+      \(G(s)\) is some transfer function. Put \(G(s)\) in standard first order form.}
       \label{lab1:report:q9}
     }
     \item{
