@@ -66,7 +66,7 @@ find a number of blocks already placed for you in an open loop configuration:
 The plant --- labelled \(P(s)\) in the diagram --- can be assumed to be a
 transfer function taking the form
 \[
-  P(s) = \frac{b T}{s + a T},
+  P(s) = \frac{b T}{s + a T} \quad ,
 \]
 where \(a, b > 0\) and \(T \in \{10, 100\}.\) Your goal is to use the
 techniques described in the following subsections to estimate the parameters
@@ -101,7 +101,8 @@ input, we take a different approach.
   You will acquire the DC gain of the plant \(P(s)\). Follow these steps:
   \begin{enumerate}[label=(\arabic*)]
     \item{
-      \textbf{Open} the signal generator block, and set the
+      \textbf{Open} the signal generator block, \textbf{set} the type of signal
+      to be a sinusoidal wave, and set the
       \textbf{amplitude} to be \(1\) and the \textbf{frequency}
       to be \(\SI{0.5}{Hz}.\) This signal is so low frequency that it
       emulates a constant signal.
@@ -111,10 +112,7 @@ input, we take a different approach.
       Figure 1, which depicts the input and output signal.
     }
     \item{
-      \textbf{Measure the amplitudes} of the input and output signals
-      respectively when the system is in steady-state. In simulation, this
-      amounts to performing this measurement near the end of the simulation
-      time.
+      \textbf{Measure the peak to peak amplitudes} of the input and output signals respectively when the system is in steady-state.
     }
     \item{
       \textbf{Estimate} the DC gain by dividing the output amplitude
@@ -193,7 +191,8 @@ with lower frequencies.
       an output signal amplitude with the above value.
     }
     \item{
-      \textbf{Open} the signal generator block, and set the
+      \textbf{Open} the signal generator block, \textbf{set} the type of signal
+      to be a sinusoidal wave, and set the
       \textbf{amplitude} to be \(1\) and
       the \textbf{frequency} to be \(\SI{0.5}{Hz}.\)
       \label{lab1:p2:2}
@@ -267,7 +266,7 @@ the closed loop system.
   Now \textbf{close the loop} around the slider gain and plant \(P(s).\) That
   is, connect your diagram so that it looks like Figure
   \ref{fig:lab1:closing-loop}. Then \textbf{set} the slider gain to
-  your group provided parameter value \(Kp.\)
+  your group provided parameter value \(K_p.\)
   Repeat Procedures~\ref{proc:lab1:p1} and~\ref{proc:lab1:p2} for the
   closed-loop system depicted in Figure~\ref{fig:lab1:closing-loop}.
 \end{procedure}
@@ -435,7 +434,7 @@ Make sure to leverage your other deliverables in your answers!
     \item{
       You know that your plant takes the form
       \[
-        P(s) = \frac{b T}{s + a T},
+        P(s) = \frac{b T}{s + a T}\quad ,
       \]
       for \(a, b > 0\) and \(T \in \{10, 100\}.\) \textbf{Derive} a
       formula for the bandwidth of \(P(s)\) in terms of \(a, b, T.\)
@@ -446,7 +445,7 @@ Make sure to leverage your other deliverables in your answers!
         =
         \frac{1}{\sqrt{2}}.
       \]
-      \emph{Can you explain why? Solve the expression for \(\omega.\) As
+      \emph{Solve the expression for \(\omega.\) As
       an additional hint, you should get a polynomial in \(\omega^2\) which
       you can solve.}
       \label{lab1:report:q2}
