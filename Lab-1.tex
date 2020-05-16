@@ -129,18 +129,18 @@ input, we take a different approach.
 \end{procedure}
 %
 \begin{figure}
-  \label{fig:lab1:lowfreq}
   \includegraphics{images/Lab_1_LowFrequency.eps}
   \caption[Low Frequency Response of a Low-Pass Plant]{The low-frequency response to my low-pass plant \(P(s).\) The gain
   at this low frequency is \(0.8395.\) Can you see why? What is the DC
   gain approximately?}
+  \label{fig:lab1:lowfreq}
 \end{figure}
 %
 \begin{figure}
-  \label{fig:lab1:bandwidth}
   \includegraphics{images/Lab_1_Bandwidth.eps}
   \caption[Time-Domain Response of a First-Order System at the Bandwidth Frequency]{The response to my \(P(s)\) at the bandwidth frequency.
   Can you see why this is the bandwidth frequency for my plant?}
+  \label{fig:lab1:bandwidth}
 \end{figure}
 %
 \begin{deliverable}[label={lab1:d1}]
@@ -234,7 +234,6 @@ Having acquired the bandwidth for the open loop system, we now investigate
 the closed loop system.
 %
 \begin{figure}
-  \label{fig:lab1:closing-loop}
   \centering
   \begin{tikzpicture}[x=1in, y=1in]
     \node [draw, block] (Controller) {\(K_p\)};
@@ -266,6 +265,7 @@ the closed loop system.
   \caption[Closed-Loop Diagram for Lab 1]{
     Closing the loop around the Plant \(P(s)\) for Lab 1.
   }
+  \label{fig:lab1:closing-loop}
 \end{figure}
 %
 \begin{procedure}[label={proc:lab1:p3}]
@@ -300,7 +300,6 @@ response. The \(2\%\)-settling time and the time constant.
 \end{definition}
 %
 \begin{figure}
-  \label{fig:lab1:settling-time}
   \centering
   \subfloat[Complete step response.\label{fig:lab1:settling-time:a}]{%
     \includegraphics{images/Lab_1_SettlingTime_1.eps}%
@@ -315,6 +314,7 @@ response. The \(2\%\)-settling time and the time constant.
     the \(2\%\) region, demarcated by the broken lines,
     after the settling time of \(\SI{391.4}{ms}\) is attained.
   }
+  \label{fig:lab1:settling-time}
 \end{figure}
 %
 The settling time is a measure of long-term behaviour.
@@ -557,7 +557,6 @@ your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
 \begin{table}
-\label{tab:lab1:grading}
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
@@ -584,5 +583,6 @@ Report Subtotal&  & 28 \\ \hhline{=|=|=}
   Total &                       & 40
 \end{tabular}
 \caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
+\label{tab:lab1:grading}
 \end{table}
 %
