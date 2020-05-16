@@ -53,7 +53,13 @@ reduce the amount of time you spend on future labs.
 
 \section{Experimental Procedure}
 This entire lab will be done using the ``\texttt{Lab\_1.slx}'' Simulink model.
-In there you will
+First extract the ``\texttt{Lab\_1\_Data.zip}'' file available from Learn.
+Inside there you will find zip files created for each individual group. Extract
+the zip file associated to your group, and there you will find the relevant
+``\texttt{Lab\_1.slx}'' file. The R2018 version may be found in a nested
+directory.
+
+In the Simulink model you will
 find a number of blocks already placed for you in an open loop configuration:
 \begin{itemize}
   \item{a signal generator,}
@@ -123,18 +129,18 @@ input, we take a different approach.
 \end{procedure}
 %
 \begin{figure}
+  \label{fig:lab1:lowfreq}
   \includegraphics{images/Lab_1_LowFrequency.eps}
   \caption[Low Frequency Response of a Low-Pass Plant]{The low-frequency response to my low-pass plant \(P(s).\) The gain
   at this low frequency is \(0.8395.\) Can you see why? What is the DC
   gain approximately?}
-  \label{fig:lab1:lowfreq}
 \end{figure}
 %
 \begin{figure}
+  \label{fig:lab1:bandwidth}
   \includegraphics{images/Lab_1_Bandwidth.eps}
   \caption[Time-Domain Response of a First-Order System at the Bandwidth Frequency]{The response to my \(P(s)\) at the bandwidth frequency.
   Can you see why this is the bandwidth frequency for my plant?}
-  \label{fig:lab1:bandwidth}
 \end{figure}
 %
 \begin{deliverable}[label={lab1:d1}]
@@ -191,20 +197,20 @@ with lower frequencies.
       an output signal amplitude with the above value.
     }
     \item{
+      \label{lab1:p2:2}
       \textbf{Open} the signal generator block, \textbf{set} the type of signal
       to be a sinusoidal wave, and set the
       \textbf{amplitude} to be \(1\) and
       the \textbf{frequency} to be \(\SI{0.5}{Hz}.\)
-      \label{lab1:p2:2}
     }
     \item{
       \textbf{Run} the script \texttt{generate\_lab\_1\_plot.m} and inspect
       Figure 1, which depicts the input and output signal.
     }
     \item{
+      \label{lab1:p2:4}
       \textbf{Measure the amplitudes} of the output signal
       when the system is in steady-state.
-      \label{lab1:p2:4}
     }
     \item{
       If the amplitude isn't what you want, repeat Steps~\ref{lab1:p2:2} through~\ref{lab1:p2:4} with a different frequency. Increase or decrease
@@ -228,6 +234,7 @@ Having acquired the bandwidth for the open loop system, we now investigate
 the closed loop system.
 %
 \begin{figure}
+  \label{fig:lab1:closing-loop}
   \centering
   \begin{tikzpicture}[x=1in, y=1in]
     \node [draw, block] (Controller) {\(K_p\)};
@@ -259,7 +266,6 @@ the closed loop system.
   \caption[Closed-Loop Diagram for Lab 1]{
     Closing the loop around the Plant \(P(s)\) for Lab 1.
   }
-  \label{fig:lab1:closing-loop}
 \end{figure}
 %
 \begin{procedure}[label={proc:lab1:p3}]
@@ -294,6 +300,7 @@ response. The \(2\%\)-settling time and the time constant.
 \end{definition}
 %
 \begin{figure}
+  \label{fig:lab1:settling-time}
   \centering
   \subfloat[Complete step response.\label{fig:lab1:settling-time:a}]{%
     \includegraphics{images/Lab_1_SettlingTime_1.eps}%
@@ -308,7 +315,6 @@ response. The \(2\%\)-settling time and the time constant.
     the \(2\%\) region, demarcated by the broken lines,
     after the settling time of \(\SI{391.4}{ms}\) is attained.
   }
-  \label{fig:lab1:settling-time}
 \end{figure}
 %
 The settling time is a measure of long-term behaviour.
@@ -321,18 +327,33 @@ value, depicted as the broken lines in Figure
 \ref{fig:lab1:settling-time:b}. Notice how the signal \emph{stays} in the
 settling region after the settling time.
 The next characteristic of the step response worthy of measurement is the
-time constant.
+time constant. First let us define the standard first order form for a first
+order transfer function.
+%
+\begin{definition}[]{Standard First-Order Form}
+  The standard first order form for a strictly proper, first-order transfer
+  function \(P(s)\) is
+  \[
+    P(s) = \frac{K}{\tau s + 1},
+  \]
+  where \(\tau, K \in \Real.\) The number \(\tau\) is called the \textbf{time
+  constant}.
+\end{definition}
+%
+It can be verified that the number \(K\) in the standard first order form
+is simply the DC gain. The time constant can be estimated experimentally
+in an easy way.
 %
 \begin{definition}[]{The Time Constant}
   For a first order plant \(P(s)\) and step input \(U(s) = \frac{1}{s},\)
-  the \textbf{time constant} is the time \(\tau > 0\) it takes for
-  the output \(y(t)\) to reach \(63\%\) of its final value.
+  the time constant is the time \(\tau > 0\) it takes for
+  the output \(y(t)\) to reach \(1-e^{-1} \approx 63\%\) of its final value.
 \end{definition}
 %
 The time constant is a measure of transient, short-term behaviour. Note that,
 unlike the settling time, the time constant only has meaning for a
-first-order system of the form \(\frac{K}{s + p}.\) You will derive the
-relationship as one of your deliverables.
+first-order system. You will derive the relationship as one of your
+deliverables.
 %
 \begin{procedure}[label={proc:lab1:p4}]
   In this procedure you will acquire the settling time and time constant
@@ -425,13 +446,14 @@ Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab1:report}]
   \begin{enumerate}[label={(\arabic*)}]
     \item{
+      \label{lab1:report:q1}
       \textbf{Derive} a formula for the DC gain of \(P(s)\) in terms of
       \(a, b, T.\)
       \emph{Hint: Recall that the DC gain for a stable system \(G(s)\)
       is just \(G(0).\)}
-      \label{lab1:report:q1}
     }
     \item{
+      \label{lab1:report:q2}
       You know that your plant takes the form
       \[
         P(s) = \frac{b T}{s + a T}\quad ,
@@ -448,30 +470,30 @@ Make sure to leverage your other deliverables in your answers!
       \emph{Solve the expression for \(\omega.\) As
       an additional hint, you should get a polynomial in \(\omega^2\) which
       you can solve.}
-      \label{lab1:report:q2}
     }
     \item{
+      \label{lab1:report:q3}
       Using the formulas you derived in~\ref{lab1:report:q1} and
       \ref{lab1:report:q2} and the estimates of your bandwidth and DC gain
       in Procedures~\ref{proc:lab1:p1} and~\ref{proc:lab1:p2},
       \textbf{estimate} \(a, b, T.\) Recall that \(T\) can only take on
       values \(10\) or \(100.\)
-      \label{lab1:report:q3}
     }
     \item{
+      \label{lab1:report:q4}
       \textbf{Compare} the estimates of \(a, b, T\) made in
       \ref{lab1:report:q3} to your actual parameters.
       \textbf{Open} the ``\texttt{Lab\_1\_Data.sldd}'' to see your plant
       parameters. If there are discrepencies, explain why.
-      \label{lab1:report:q4}
     }
     \item{
+      \label{lab1:report:q5}
       \textbf{Find} a formula for the time constant of \(P(s)\) in terms of
       \(a, b, T.\) \emph{Hint: If you put \(P(s)\) in standard first order
       form, can you see what the time constant is?}
-      \label{lab1:report:q5}
     }
     \item{
+      \label{lab1:report:q6}
       \textbf{Find} the formula for the \(2\%\) settling time of \(P(s)\) in terms of \(a, b, T.\)
       \emph{Hint: You know \(P(s),\) the input \(U(s) = \frac{1}{s}\) and that
       the output is}
@@ -481,21 +503,21 @@ Make sure to leverage your other deliverables in your answers!
       \emph{Solve for an explicit expression for \(y(t)\) in the time domain.
       Then find how long it takes to reach \(2\%\) of the DC gain (the steady
       state value for a unit step)}
-      \label{lab1:report:q6}
     }
     \item{
+      \label{lab1:report:q7}
       Using the formulas you derived in~\ref{lab1:report:q5} and
       \ref{lab1:report:q6} and the estimates of your settling time and
       time constant in Procedure~\ref{proc:lab1:p4},
       \textbf{estimate} \(a, b, T.\)
-      \label{lab1:report:q7}
     }
     \item{
+      \label{lab1:report:q8}
       \textbf{Compare} the estimates of \(a, b, T\) made in
       \ref{lab1:report:q7} to your actual parameters.
-      \label{lab1:report:q8}
     }
     \item{
+      \label{lab1:report:q9}
       \textbf{Find} the transfer
       function from the input to the output when the system is in
       closed-loop, treating \(a, b, T, K_p\) as just unknown parameters.
@@ -505,27 +527,26 @@ Make sure to leverage your other deliverables in your answers!
       Figure~\ref{fig:lab1:closing-loop}. Combine this with \(Y(s) = P(s)U(s)\)
       and isolate \(Y(s)\) to get an expression \(Y(s) = G(s) R(s)\) where
       \(G(s)\) is some transfer function. Put \(G(s)\) in standard first order form.}
-      \label{lab1:report:q9}
     }
     \item{
+      \label{lab1:report:q10}
       \textbf{Discuss} how closing the loop, in Procedure
       \ref{proc:lab1:p3}, affected the bandwidth and DC gain.
       \textbf{Justify} your answer using the transfer function
       found in~\ref{lab1:report:q9}.
-      \label{lab1:report:q10}
     }
     \item{
+      \label{lab1:report:q11}
       \textbf{Discuss} how closing the loop, in Procedure
       \ref{proc:lab1:p5}, affected the settling time and time constant.
       \textbf{Justify} your answer using the transfer function
       found in~\ref{lab1:report:q9}.
-      \label{lab1:report:q11}
     }
     \item{
+      \label{lab1:report:q12}
       \textbf{Discuss} why we want to know the saturator limits. What would
       happen if we performed control design without verifying our control
       stayed within limits?
-      \label{lab1:report:q12}
     }
   \end{enumerate}
 \end{deliverable}
@@ -536,6 +557,7 @@ your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
 \begin{table}
+\label{tab:lab1:grading}
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
@@ -562,6 +584,5 @@ Report Subtotal&  & 28 \\ \hhline{=|=|=}
   Total &                       & 40
 \end{tabular}
 \caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
-\label{tab:lab1:grading}
 \end{table}
 %
