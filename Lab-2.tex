@@ -56,18 +56,19 @@ This entire lab will be done using the ``\texttt{Lab\_2.slx}'' Simulink model.
 In there you will
 find a number of blocks already placed for you in an open loop configuration:
 \begin{itemize}
-  \item{a signal generator,}
+  \item{a step input,}
   \item{a summing junction,}
   \item{an adjustable gain block,}
-  \item{a ``fill-in'' disturbance block,}
+  \item{a ``fill-in'', zero disturbance block,}
   \item{a ``plant'', the system we are going to analyze, and}
   \item{a terminator.}
 \end{itemize}
-This time, we will \emph{not} use the signal generator and instead leverage
+This time we will \emph{not} use the signal generator and instead leverage
 the Model Linearizer App. Its usage is described in Appendix
 \ref{App:Simulink:ModelLinearizer}. You may acquire the step response
 using the techniques described in Lab~\ref{Lab:1} but to acquire the frequency
-response you will have to use the Model Linearizer app. In future, we will primarily rely on the Model Linearizer app as it'll
+response you will have to use the Model Linearizer app. In future, we will
+primarily rely on the Model Linearizer app as it'll
 unify all your data collection
 requirements and is far easier to use than modifying a script and turning
 on/off logging. For this lab, the input signal starts off configured
@@ -77,11 +78,9 @@ in the lab.
 The plant --- labelled \(P(s)\) in the Simulink diagram --- can be assumed
 to be a transfer function taking the form
 \[
-  P(s) = \frac{K}{s^2 + a s + b},
+  P(s) = \frac{\hat{K}\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}.
 \]
-where \(a, b, K > 0\) are the parameters of your specific group's system.
-Equivalently, we can express \(P(s)\) in what is known
-as the standard second order form.
+This form has a special name.
 %
 \begin{definition}[]{Standard Second-Order Form}
   The standard second-order order form for a strictly proper, second-order
@@ -93,8 +92,8 @@ as the standard second order form.
   \(\zeta\) is the \textbf{damping ratio}.
 \end{definition}
 %
-The primary goal of this experiment is to (1) estimate \(a,\)\(b,\) and
-\(K,\) (2) explore the characteristics of your system and
+The primary goal of this experiment is to (1) estimate \(\zeta,\)\(\omega_n,\)
+and \(\hat{K},\) (2) explore the characteristics of your system and
 (3) see how the characteristics change under a proportional error controller.
 When analyzing the \emph{closed loop system}, we put our system in the form
 depicted by Figure~\ref{fig:lab2:closing-loop}.
@@ -157,8 +156,8 @@ characterize a second order plant.
 Your deliverable for this section is
 %
 \begin{deliverable}[label={lab2:d1}]
-  \textbf{Capture a figure} showing your step response. \textbf{Measure} and
-  \textbf{record}
+  \textbf{Capture a figure} showing your system's open loop step response.
+  \textbf{Measure} and \textbf{record}
   \begin{enumerate}[label=(\arabic*)]
     \item{the steady-state value \(y_{\mathrm{ss}},\)}
     \item{
@@ -173,7 +172,6 @@ Your deliverable for this section is
   value and steady-state value.
 \end{deliverable}
 %
-
 You are already familiar with most of these measurements. The new measurements
 are the peak related measurements. For us, the following definition suffices.
 %
@@ -274,24 +272,26 @@ deliverables.
 \end{deliverable}
 %
 \begin{deliverable}[label={lab2:d2b}]
-  \textbf{Fill} the table
+  \textbf{Fill} three rows of the table
   \begin{center}
   \begin{tabular}{c|c|c|c|c}
     \(K_p\)
       & \(y_\mathrm{ss}\)
       & \(y_\mathrm{max}\)
       & \(T_\mathrm{peak}\)
-      & \(\%\) \\
+      & \(\%\mathrm{OS}\) \\
     Gain
       & Steady-State Value
       & Peak Value
       & Time-To-Peak
       & Overshoot \\ \hline
-    & & & & \\ \hline
-    & & & & \\ \hline
+    \(1\) & & & & \\ \hline
+    Any & & & & \\ \hline
+    Any & & & & \\ \hline
     & & & &
   \end{tabular}
   \end{center}
+  for the closed loop system.
   Note that the overshoot is computed from \(y_\mathrm{ss}\) and
   \(y_\mathrm{max}.\)
 \end{deliverable}
@@ -326,7 +326,7 @@ to complete the following deliverables.
 \begin{deliverable}[label={lab2:d3a}]
   \textbf{Capture} a figure of the Bode plot for the open loop system.
   \textbf{Include} a cursor at the bandwidth frequency on the magnitude
-  plot.
+  plot and a cursor where you estimated the DC gain.
 \end{deliverable}
 %
 \begin{deliverable}[label={lab2:d3}]
@@ -350,6 +350,7 @@ to complete the following deliverables.
       like Figure~\ref{fig:lab2:bode}. Note that, for some of you, you may
       have a little peak in the magnitude plot like in
       Figure~\ref{fig:lab2:bode:b}; this is normal!
+      \label{proc:lab2:p3:3}
     }
     \item{
       \textbf{Measure} the DC gain on the Magnitude plot using a cursor.
@@ -361,6 +362,7 @@ to complete the following deliverables.
       (magnitude plot) drops to a value \(\SI{3}{dB}\)
       below the DC gain measured in the previous step. This frequency
       is called the \textbf{bandwidth}.
+      \label{proc:lab2:p3:5}
     }
   \end{enumerate}
 \end{procedure}
@@ -373,14 +375,16 @@ to complete the following deliverables.
       \textbf{Ensure} the gain \(K_p\) is set to \(1.\)
     }
     \item{
-      \textbf{Acquire} a Bode plot. \emph{Did you know you can overlay
-      this Bode plot on top of the Bode plot of Procedure~\ref{proc:lab2:p3}?
-      This is not required, but you can do so if you like.
-      To do so, take the Bode plot of the open loop system. Then, change the
-      configuration. Finally, instead of pressing ``\texttt{Bode Plot}'' press
-      a new button with the title of the plot. In my case it was
-      ``\texttt{Bode Plot 1}.'' You will have something replicating that of
-      Figure~\ref{fig:lab2:bodeclosed}}
+      Repeat steps~\ref{proc:lab2:p3:3}--\ref{proc:lab2:p3:5} of
+      Procedure~\ref{proc:lab2:p3}.
+      %\emph{Did you know you can overlay
+      %this Bode plot on top of the Bode plot of Procedure~\ref{proc:lab2:p3}?
+      %This is not required, but you can do so if you like.
+      %To do so, take the Bode plot of the open loop system. Then, change the
+      %configuration. Finally, instead of pressing ``\texttt{Bode Plot}'' press
+      %a new button with the title of the plot. In my case it was
+      %``\texttt{Bode Plot 1}.'' You will have something replicating that of
+      %Figure~\ref{fig:lab2:bodeclosed}}
     }
   \end{enumerate}
 \end{procedure}
@@ -400,14 +404,14 @@ to complete the following deliverables.
   \label{fig:lab2:bode}
 \end{figure}
 %
-\begin{figure}
-  \centering
-  \includegraphics{images/Lab_2_Bode_ClosedLoop.eps}%
-  \caption[Sample Overlayed Bode Plots of a Second Order System]{
-    Sample overlayed Bode plots of a second order system.
-  }
-  \label{fig:lab2:bodeclosed}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics{images/Lab_2_Bode_ClosedLoop.eps}%
+%   \caption[Sample Overlayed Bode Plots of a Second Order System]{
+%     Sample overlayed Bode plots of a second order system.
+%   }
+%   \label{fig:lab2:bodeclosed}
+% \end{figure}
 %
 
 \subsection{Disturbance Rejection}
@@ -423,6 +427,9 @@ all. The only deliverable for this section is
 \begin{deliverable}[label={lab2:d4}]
   \textbf{Include} a Bode plot illustrating the response from the
   \emph{disturbance input signal} \(d(t)\) to the output signal \(y(t).\)
+  \textbf{Include} a cursor on the magnitude plot at \emph{the bandwidth
+  frequency of the closed loop system.} (The frequency found in
+  Deliverable~\ref{lab2:d3})
 \end{deliverable}
 %
 To fulfill this deliverable, you must acquire a Bode plot of the input to
@@ -486,13 +493,12 @@ Make sure to leverage your other deliverables in your answers!
         P(s) = \frac{\hat{K} \omega_n^2}{s^2 + 2 \zeta \omega_n s + \omega_n^2}
         .
       \]
-      From this, deduce the system's parameters \(a,\) \(b,\) and \(K.\)
-      \emph{Things to Remember: This time you drove the system with a unit
-      step input. As a result, the steady-state value is equal to the DC gain
-      \(\hat{K}.\) The 2\% settling time for a underdamped, standard second
-      order system is
+      \emph{Notes: This time you drove the system with a unit
+      step input. As a result, the steady-state value \(y_\mathrm{ss}\)
+      is equal to the DC gain \(\hat{K}.\) The \(2\%\) settling time for a
+      underdamped, standard second order system is approximated by the expression
       \[
-        T_{2\%} = \frac{4}{\zeta \omega_n}
+        T_{2\%} \approx \frac{4}{\zeta \omega_n}
       \]
       and the percent overshoot is given by the formula
       \[
@@ -500,50 +506,64 @@ Make sure to leverage your other deliverables in your answers!
           \frac{-\zeta \pi}{\sqrt{1-\zeta^2}}
         \right)}.
       \]
+      So you should be able to solve for \(\hat{K}\) and \(\zeta\) first, then
+      use them to solve for \(\omega_n.\)
       }
       \label{lab2:report:q1}
     }
-    % \item{
-    %   \textbf{Identify} one another way you could compute \(\omega_n\)
-    %   experimentally given the data you've collected already.
-    %   \label{lab2:report:q2}
-    % }
     \item{
-      For the closed-loop diagram of Figure~\ref{fig:lab2:closing-loop},
-      \textbf{compute} the transfer function from \(r\) to \(y.\)
-      To simplify your analysis later on, assume the original plant takes
-      the form
+      It can be shown that the time-to-peak, another measurement you
+      acquired, is equal to
       \[
-        P(s) = \frac{\hat{K} \omega_n^2}{s^2 + 2 \zeta \omega_n s +\omega_n^2}.
+        T_p = \frac{\pi}{\omega_n \sqrt{1-\zeta^2}}.
       \]
-      \textbf{Compute} the damping ratio and natural frequency of the
-      closed-loop second-order system in terms of \(\hat{K},\) \(\omega_n\)
-      and \(\zeta.\)
+      Using your already acquired estimate of \(\zeta,\) \textbf{estimate}
+      \(\omega_n\) using the time-to-peak.
+      Based on your estimates, \textbf{explain} which you would rather use to
+      estimate \(\omega_n:\) the time-to-peak or the \(2\%\) settling time.
       \label{lab2:report:q2}
     }
     \item{
-      Given the open-loop damping ratio and natural frequency found in
-      \ref{lab2:report:q1} and closed-loop damping ratio and natural
-      frequency derived in~\ref{lab2:report:q2},
-      \textbf{discuss} how closing the loop with unity feeback (\(K_p = 1\))
-      affects the damping ratio and natural frequency of the
-      second order system.
+      For the closed-loop diagram of Figure~\ref{fig:lab2:closing-loop},
+      \textbf{compute} the transfer function from \(r\) to \(y.\)
+      \textbf{Compute} the damping ratio, DC gain, and natural frequency of the
+      closed-loop second-order system in terms of your plant's
+      \(\hat{K},\) \(\omega_n\) and \(\zeta.\)
       \label{lab2:report:q3}
     }
+    % \item{
+    %   Given the open-loop damping ratio and natural frequency found in
+    %   \ref{lab2:report:q1} and closed-loop damping ratio and natural
+    %   frequency derived in~\ref{lab2:report:q2},
+    %   \textbf{discuss} how closing the loop with unity feeback (\(K_p = 1\))
+    %   affects the damping ratio and natural frequency of the
+    %   second order system.
+    %   \label{lab2:report:q3}
+    % }
     \item{
-      Using the table filled out in Deliverable~\ref{lab2:d2b},
+      Using the table filled out in Deliverable~\ref{lab2:d2b} and the
+      formulas you derived in~\ref{lab2:report:q2},
       \textbf{discuss} how changing the
-      gain \(K_p\) affects the various characteristics of the second order
-      system. Justify your answer using the formulas you derived in
-      \ref{lab2:report:q2}.
+      gain \(K_p\) affects the steady-state value \(y_\mathrm{ss},\) the
+      time-to-peak \(T_p\) and the percent overshoot \(\%\mathrm{OS}.\)
+      of the closed-loop second order step response.
+      Also \textbf{discuss} how the settling time theoretically changes in the
+      closed loop as a function of \(K_p\) using the estimate formula shown in
+      \ref{lab2:report:q1}.
       \emph{\textbf{Ensure} you discuss every characteristic
       you've collected; if there is no trend, say so; if the trend is
       complicated (not simply linear in \(K_p\)), say so.}
       \label{lab2:report:q4}
     }
     \item{
+      By leveraging your answer for~\ref{lab2:report:q4}, \textbf{explain} why
+      proportional error feedback control is not sufficient to control a
+      physical system.
+      \label{lab2:report:q4b}
+    }
+    \item{
       Using the bandwidth frequencies found in Procedures~\ref{proc:lab2:p3}
-      and~\ref{proc:lab2:p4}, \textbf{discuss} how closing the loop
+      and~\ref{proc:lab2:p4}, \textbf{state} how closing the loop
       changed the bandwidth frequency.
       \label{lab2:report:q5}
     }
@@ -554,9 +574,10 @@ Make sure to leverage your other deliverables in your answers!
     % }
     \item{
       Leveraging Deliverable~\ref{lab2:d4}, \textbf{discuss} how well the
-      closed loop rejects disturbance signals.
+      closed loop system rejects disturbance signals.
       \emph{Your answer should depend on the disturbance input frequency
-      \(\omega.\)}
+      \(\omega\) and the closed loop bandwidth frequency which you marked
+      on your plot.}
       \label{lab2:report:q6}
     }
     % \item{
@@ -570,7 +591,28 @@ Make sure to leverage your other deliverables in your answers!
       \textbf{Derive} the closed-loop transfer function from the
       disturbance \(d\) to the output \(y.\) How do the disturbance rejection
       properties change as you increase \(K_p\)? Do they improve or degrade?
-      If so, at what frequencies?
+      \emph{Hint: You should get a transfer function in the form
+      \[
+        \frac{s^2 + A s + B}{s^2 + A s + D}
+      \]
+      where \(A, B, D\) depend on the plant parameters and \(K_p.\)
+      \(K_p\) should only appear in \(D.\) You can then split the
+      above system into two subsystems
+      \[
+        \left[s^2 + A s + B\right]
+        \left[\frac{1}{D}\frac{D}{s^2 + A s + D}\right]
+      \]
+      and recognize that \(K_p\) only affects the Bode plot of the latter
+      system. This means it suffices to analyze the frequency response of
+      \[
+        \frac{1}{D}\frac{D}{s^2 + A s + D}
+      \]
+      as \(K_p\) varies. You can put this subsystem into standard second order
+      form to aid in your analysis. You already should be able to argue how the
+      DC gain and natural frequency of this new subsystem is affected by
+      \(K_p,\) so it remains to connect this knowledge with how the Bode plot
+      of this subsystem would be affected.
+      }
       \label{lab2:report:q8}
     }
   \end{enumerate}
@@ -585,21 +627,22 @@ questions where it is shown per question.
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
-        & \ref{lab2:d1}         & 4       \\ \hline
-        & \ref{lab2:d2}         & 4       \\ \hline
-        & \ref{lab2:d3a}        & 4       \\ \hline
-        & \ref{lab2:d3}         & 4       \\ \hline
-        & \ref{lab2:d4}         & 4       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 20      \\ \hhline{=|=|=}
+        & \ref{lab2:d1}         & 5       \\ \hline
+        & \ref{lab2:d2}         & 5       \\ \hline
+        & \ref{lab2:d3a}        & 5       \\ \hline
+        & \ref{lab2:d3}         & 5       \\ \hline
+        & \ref{lab2:d4}         & 5       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 25      \\ \hhline{=|=|=}
         & \ref{lab2:report}~\ref{lab2:report:q1}  & 3       \\ \hline
-        & \ref{lab2:report}~\ref{lab2:report:q2}  & 3       \\ \hline
-        & \ref{lab2:report}~\ref{lab2:report:q3}  & 2       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q2}  & 2       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q3}  & 3       \\ \hline
         & \ref{lab2:report}~\ref{lab2:report:q4}  & 4       \\ \hline
+        & \ref{lab2:report}~\ref{lab2:report:q4b} & 1       \\ \hline
         & \ref{lab2:report}~\ref{lab2:report:q5}  & 1      \\ \hline
         & \ref{lab2:report}~\ref{lab2:report:q6}  & 3      \\ \hline
         & \ref{lab2:report}~\ref{lab2:report:q8}  & 4       \\ \hhline{=|=|=}
-Report Subtotal&  & 20 \\ \hhline{=|=|=}
-  Total &                       & 40
+Report Subtotal&  & 21 \\ \hhline{=|=|=}
+  Total &                       & 46
 \end{tabular}
 \caption[Grading Scheme for Lab 2]{Grading scheme for Lab 2.}
 \label{tab:lab2:grading}

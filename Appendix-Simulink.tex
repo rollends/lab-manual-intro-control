@@ -3,7 +3,7 @@
 \section{Model Linearizer Tools}\label{App:Simulink:ModelLinearizer}
 The model linearizer tools is an ``App'' in Simulink that allows an engineer to
 (1) linearize a system and (2) perform linear system analyses such as Bode
-plots and Step Responses. We won't be needing the first feature, since our
+plots and Step Responses. We won't be needing the first feature since our
 systems are already linear. This section is a brief tutorial on how to use
 the tools to acquire step responses, Bode plots and Nyquist plots.
 
@@ -18,7 +18,7 @@ window and click the ``\texttt{APPS}'' button like so
 \end{center}
 %
 Then proceed to opening the application by clicking the ``\texttt{Model
-Linearizer}'' button,
+Linearizer}'' button
 %
 \begin{center}
   \includegraphics[width=0.8\linewidth]{%
@@ -26,8 +26,8 @@ Linearizer}'' button,
   }
 \end{center}
 %
-If you cannot find it located in the toolbar depicted above, then press the
-dropdown on the far right of the toolbar,
+If you cannot find it located in the toolbar depicted above, press the
+dropdown on the far right of the toolbar
 %
 \begin{center}
   \includegraphics[width=0.8\linewidth]{%
@@ -35,6 +35,7 @@ dropdown on the far right of the toolbar,
   }
 \end{center}
 %
+to view a larger list of options.
 If you still cannot find it, you must not have the \texttt{Control Systems
 Toolbox} installed. Ensure you've installed the toolboxes listed in the
 Introduction. Upon opening the Model Linearizer app, you
@@ -58,8 +59,8 @@ the system we want to analyze. The Model Linearizer tool doesn't know what
 we consider an ``input'' and what we consider an ``output'' just from our
 Simulink diagram. But you do! Whenever you want to take a step response, you
 know where you input the step and what measurements you want to observe.
-The goal of the following steps is to show you how to indicate to the
-Model Linearizer this fact.
+The goal of the following steps is to show you how to give the Model
+Linearizer App this information.
 
 First pull up the Simulink model of concern. I'll use the Lab 1 diagram as
 an example,
@@ -68,9 +69,10 @@ an example,
   \includegraphics[width=0.8\linewidth]{images/app-model-linearizer-io-1.png}
 \end{center}
 %
-Suppose we wanted to analyze the relationship between the input to the gain
-to the output after the plant \(P(s).\) Right click the signal prior to the
-gain and you will have a menu like that of Figure~\ref{fig:app1:io-menu:a}.
+Suppose we wanted to analyze the relationship between the signals
+labelled \(u\) and \(y.\)
+Right click the signal wire labelled \(u\) and hover over ``Linear Analysis
+Points'' as depicted in Figure~\ref{fig:app1:io-menu:a}.
 %
 \begin{figure}
   \centering
@@ -90,13 +92,15 @@ gain and you will have a menu like that of Figure~\ref{fig:app1:io-menu:a}.
   \label{fig:app1:io-menu:b}
 \end{figure}
 %
-Since we would like to indicate to the Model Linearizer that the input to the
-gain is an input signal, we select ``\texttt{Input Perturbation}.'' We repeat
-the \emph{same} process for the output
-of \(P(s)\) except we select ``\texttt{Output Measurement}.'' The result is
-depicted in Figure~\ref{fig:app1:io-signals}. Note the little annotations
-above the signal. A ``down'' arrow denotes an input and an ``up'' arrow denotes
-an output signal.
+This context menu has a number of options of which we will only avail ourselves
+to two.
+Since we would like to indicate to the Model Linearizer App that this wire
+is where the input appears, we select ``\texttt{Input Perturbation}.'' We
+repeat the \emph{same exact} process for the desired output signal wire \(y\)
+except we select ``\texttt{Output Measurement}.'' The result is
+depicted in Figure~\ref{fig:app1:io-signals}. \emph{Note the little annotations
+above the signal.}
+A ``down'' arrow denotes an input and an ``up'' arrow denotes an output signal.
 %
 \begin{figure}
   \centering
@@ -110,11 +114,12 @@ an output signal.
 %
 You will have to repeat this process whenever you want to change where you
 apply your input or when you want to observe a different output. Note that
-the choice of ``\texttt{Input Perturbation}'' and
-``\texttt{Output Measurement}'' is not arbitrary; it is intentional! This
-allows us to quickly change the configuration of the system (close the loop)
-and get closed loop measurements as well without having to change the
-what the input is!
+the placement of the ``\texttt{Input Perturbation}'' and
+``\texttt{Output Measurement}'' annotations is not arbitrary;
+it is intentional! This
+allows us to quickly change the configuration of the system, closing the loop
+for example, and get closed loop measurements without having to change our
+annotations!
 
 \FloatBarrier
 \subsection{Acquiring Plots}
@@ -139,7 +144,7 @@ curve, allowing you to get accurate readings. Use this feature!
 Similarly, one can capture a Bode plot, as depicted in Figure
 \ref{fig:app1:bodeplot}, by pressing the ``\texttt{Bode}'' button.
 
-Now that we can acquire these plots, how do we \emph{save} them! Notice that
+Now that we can acquire these plots, how do we \emph{save} them? Notice that
 above every plot is a name. For example, Figure~\ref{fig:app1:bodeplot} is
 in a tab named ``Bode Plot 1.'' With this selected, you will see in the top
 bar a larger tab with the same name. This is depicted in Figure
