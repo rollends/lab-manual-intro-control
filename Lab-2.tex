@@ -387,6 +387,61 @@ to complete the following deliverables.
   plot.
 \end{deliverable}
 %
+First of all, let us briefly review what a Bode plot depicts.
+Given a \emph{real, rational and stable} transfer function \(G(s)\) and
+(co)sinusoidal input
+\(U(s) = \frac{s}{s^2 +\omega^2}\) of frequency \(\omega,\) the
+output \(Y(s) = G(s)U(s)\) can be written as
+\[
+  y(t) = \left\|G(j\omega)\right\| \cos\left(\omega t + \measuredangle G(j\omega)\right)
+    +
+    d(t)
+\]
+where \(d(t)\) is some stable signal.
+It follows that the output \(y(t)\) converges towards the steady-state signal
+\[
+  y_\mathrm{ss}(t)
+    = \left\| G(j\omega) \right\| \cos(\omega t + \measuredangle G(j\omega)).
+\]
+Recognizing that input was \(u(t) = \cos(\omega t),\) we observe that the
+output \emph{in steady state} is an amplified/attenuated and phase shifted
+version of the input.
+
+The amplification or attenuation of the signal \(u(t)\) is determined by
+\(\left\|G(j\omega)\right\|.\) This is what is plotted in the \textbf{
+Magnitude Plot} of a Bode plot. Normally the standard units of this
+multiplicative factor is decibels, i.e.
+\[
+\left\|G(j\omega)\right\|_{\mathrm{dB}} = 20 \log_{10}\left( \left\|G(j\omega)\right\| \right).
+\]
+Remember when reading a Bode plot, such as in MATLAB, you will often have to
+convert from the decibel value \(\left\|G(j\omega)\right\|_{\mathrm{dB}}\) on
+the left to the unitless magnitude \(\left\|G(j\omega)\right\|\) on the right.
+We will not concern ourselves with the phase plot in this lab but normally
+the units of the phase shift is degrees.
+
+The magnitude plot can be used to measure the DC gain and bandwidth frequency.
+You will recall from Lab~\ref{Lab:1} that the DC gain can be approximated by
+the gain of \(G(s)\) at low sinusoidal frequencies. This amounts to looking
+at the value that \(\left\| G(j\omega) \right\|\) tends towards as
+\(\omega\to 0.\)
+%
+Further you will recall from Definition~\ref{def:bandwidth} that the
+bandwidth frequency \(\omega_\mathrm{bw}\) of \(G(s)\) solves the
+equation
+\[
+  \frac{1}{\sqrt{2}} = \frac{\left\|G(j\omega_\mathrm{bw})\right\|}{\left\|G(0)\right\|}.
+\]
+Converting our expression to be in decibels yields the approximate relation
+\[
+  \left\| G(j\omega_\mathrm{bw}) \right\|_{dB} = \left\|G(0)\right\|_{dB} - \SI{3}{dB}.
+\]
+This suggests that to measure the bandwidth frequency, it suffices to look
+for the point where the magnitude plot \(\left\|G(j\omega)\right\|_{dB}\)
+crosses the value \(\SI{3}{dB}\) below the DC gain
+\(\left\|G(0)\right\|_{dB}.\)
+
+%
 \begin{procedure}[label={proc:lab2:p3}]
   \begin{enumerate}[label=(\arabic*)]
     \item{
@@ -405,8 +460,8 @@ to complete the following deliverables.
     }
     \item{
       \textbf{Measure} the DC gain on the Magnitude plot using a cursor.
-      \emph{Recall: The DC gain is the value that the Magnitude Plot tends to
-      as \(\omega \to 0.\)}
+      The DC gain is the value that the Magnitude Plot tends to
+      as \(\omega \to 0.\)
     }
     \item{
       \textbf{Measure} the frequency \(\omega\) at which the gain
