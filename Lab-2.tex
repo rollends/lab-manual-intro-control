@@ -50,6 +50,57 @@ The primary objectives of this lab are to
     of a second-order system.
   }
 \end{enumerate}
+Below is a dependency graph depicting the relationships between each of the
+deliverables. If an arrow flows from A to B, that means B depends on the
+partial or full completion of A.
+\begin{center}
+\begin{tikzpicture}[x=1em, y=1em]
+  \node[deliverable] (D_2_1) {Deliverable\\\ref{lab2:d1}};
+  \node[deliverable, below = 3em of D_2_1] (D_2_3) {%
+    Deliverable\\\ref{lab2:d2b}%
+  };
+  \node[deliverable, right = 3em of D_2_3] (D_2_2) {%
+    Deliverable\\\ref{lab2:d2}%
+  };
+  \node[deliverable, right = 3em of D_2_2] (D_2_7_4) {%
+    Deliverable\\\ref{lab2:report}~\ref{lab2:report:q4}-\ref{lab2:report:q4b}%
+  };
+  \node[deliverable, at=(D_2_1-|D_2_7_4)] (D_2_7_1) {%
+    Deliverable\\\ref{lab2:report}~\ref{lab2:report:q1}--\ref{lab2:report:q3}%
+  };
+
+  \node[deliverable, below = 3em of D_2_3] (D_2_4) {%
+    Deliverable\\\ref{lab2:d3a}%
+  };
+  \node[deliverable, at = (D_2_4-|D_2_7_4)] (D_2_7_6) {%
+    Deliverable\\\ref{lab2:report}~\ref{lab2:report:q5}%
+  };
+  \node[deliverable, below = 3em of D_2_4] (D_2_5) {%
+    Deliverable\\\ref{lab2:d3}%
+  };
+  \node[deliverable, right = 6em of D_2_5] (D_2_6) {%
+    Deliverable\\\ref{lab2:d4}%
+  };
+  \node[deliverable, right = 6em of D_2_6] (D_2_7_7) {%
+    Deliverable\\\ref{lab2:report}~\ref{lab2:report:q6}%
+  };
+  \node[deliverable, below = 3em of D_2_7_7] (D_2_7_8) {%
+    Deliverable\\\ref{lab2:report}~\ref{lab2:report:q8}%
+  };
+
+
+%  \draw[signal, arrow] (D_2_1.south) -- (D_2_3.north);
+  \draw[signal, arrow] (D_2_1.east) -- (D_2_7_1.west);
+  \draw[signal, arrow] (D_2_3.east) -- (D_2_2.west);
+  \draw[signal, arrow] (D_2_2.east) -- (D_2_7_4.west);
+  \draw[signal, arrow] (D_2_7_1.south) -- (D_2_7_4.north);
+  \draw[signal, arrow] (D_2_4.east) -- (D_2_7_6.west);
+  \draw[signal, arrow] (D_2_5.east) -- (D_2_6.west);
+  \draw[signal, arrow] (D_2_5.east) -- (D_2_7_6.west);
+  \draw[signal, arrow] (D_2_6.east) -- (D_2_7_7.west);
+
+\end{tikzpicture}
+\end{center}
 
 \section{Experimental Procedure}
 This entire lab will be done using the ``\texttt{Lab\_2.slx}'' Simulink model.

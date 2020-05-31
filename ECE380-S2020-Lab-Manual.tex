@@ -101,28 +101,36 @@
 
 \tikzset{%
   block/.style={%
-    rectangle,
-    minimum width=0.5in,
-    minimum height=2.5em,
-    draw=RichBlack,
-    font={},
+    rectangle,%
+    minimum width=0.5in,%
+    minimum height=2.5em,%
+    draw=RichBlack,%
+    font={},%
     align=center%
   },
   annotate/.style={%
-    font={\small},
+    font={\small},%
   },
   summer/.style={%
-    circle,
-    minimum width=0.2in,
-    minimum height=0.2in,
+    circle,%
+    minimum width=0.2in,%
+    minimum height=0.2in,%
     draw=RichBlack,
   },
   signal/.style={%
-    color=RichBlack,
-    line join=round,
+    color=RichBlack,%
+    line join=round,%
     shorten >=0.05em%
   },
-  arrow/.style={-{Latex[length=0.5em]}}
+  arrow/.style={-{Latex[length=0.5em]}},
+  deliverable/.style={%
+    draw=RichBlack,%
+    rectangle,%
+    rounded corners,%
+    thick,%
+    fill=LiteRed,
+    align=center,%
+  },
 }
 %
 % END: TEXT/FONT CONFIGURATION
