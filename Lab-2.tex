@@ -391,20 +391,15 @@ First of all, let us briefly review what a Bode plot depicts.
 Given a \emph{real, rational and stable} transfer function \(G(s)\) and
 (co)sinusoidal input
 \(U(s) = \frac{s}{s^2 +\omega^2}\) of frequency \(\omega,\) the
-output \(Y(s) = G(s)U(s)\) can be written as
-\[
-  y(t) = \left\|G(j\omega)\right\| \cos\left(\omega t + \measuredangle G(j\omega)\right)
-    +
-    d(t)
-\]
-where \(d(t)\) is some stable signal.
-It follows that the output \(y(t)\) converges towards the steady-state signal
+output \(y(t)\) converges towards the signal
 \[
   y_\mathrm{ss}(t)
     = \left\| G(j\omega) \right\| \cos(\omega t + \measuredangle G(j\omega)).
 \]
-Recognizing that input was \(u(t) = \cos(\omega t),\) we observe that the
-output \emph{in steady state} is an amplified/attenuated and phase shifted
+Sometimes we say that the signal \(y_\mathrm{ss}(t)\) is the output of
+\(G(s)\) in \emph{steady state}.
+Recognizing that the input was \(u(t) = \cos(\omega t),\) we observe that the
+output in steady state is an amplified/attenuated and phase shifted
 version of the input.
 
 The amplification or attenuation of the signal \(u(t)\) is determined by
@@ -663,8 +658,8 @@ Make sure to leverage your other deliverables in your answers!
     }
     \item{
       By leveraging your answer for~\ref{lab2:report:q4}, \textbf{explain} why
-      proportional error feedback control is not sufficient to control a
-      physical system.
+      proportional error feedback control may not always be sufficient to
+      control a physical system.
       \label{lab2:report:q4b}
     }
     \item{
@@ -697,7 +692,9 @@ Make sure to leverage your other deliverables in your answers!
       \textbf{Derive} the closed-loop transfer function from the
       disturbance \(d\) to the output \(y.\) How do the disturbance rejection
       properties change as you increase \(K_p\)? Do they improve or degrade?
-      \emph{Hint: You should get a transfer function in the form
+      \emph{You will receive full marks if you provide a theoretical
+      justification. You will want to produce a transfer function from
+      \(d\) to \(y\) and it will have the form
       \[
         \frac{s^2 + A s + B}{s^2 + A s + D}
       \]
@@ -717,8 +714,12 @@ Make sure to leverage your other deliverables in your answers!
       form to aid in your analysis. You already should be able to argue how the
       DC gain and natural frequency of this new subsystem is affected by
       \(K_p,\) so it remains to connect this knowledge with how the Bode plot
-      of this subsystem would be affected.
-      }
+      of this subsystem would be affected.}
+
+      \emph{An empirical argument (showing the Bode plot for multiple \(K_p\))
+      will receive at most half the marks.}
+
+      \emph{A correct answer without proof of any sort will receive 1 mark.}
       \label{lab2:report:q8}
     }
   \end{enumerate}
