@@ -108,6 +108,43 @@
     font={},%
     align=center%
   },
+  smooth_area_path/.style={%
+    dashed,%
+    color=RichBlack,%
+    line join=round,%
+    shorten >=0.025in,%
+    rounded corners=0.05in,
+    thick,%
+  },
+  smooth_block/.style={%
+    draw=RichBlack,%
+    rectangle,%
+    rounded corners,%
+    thick,%
+    minimum width=0.5in,%
+    minimum height=2.5em,%
+    font={\footnotesize},%
+    align=center,%
+  },
+  smooth_sum/.style={%
+    circle,%
+    color=RichBlack,%
+    minimum width=0.2in,%
+    minimum height=0.2in,%
+    draw=RichBlack,%
+    thick,%
+  },
+  smooth_path/.style={%
+    color=RichBlack,%
+    line join=round,%
+    shorten >=0.025in,%
+    rounded corners=0.05in,
+    thick,%
+  },
+  smooth_annotate/.style={%
+    color=RichBlack,%
+    font={\small},%
+  },
   annotate/.style={%
     font={\small},%
   },
@@ -310,9 +347,7 @@ style inspires the variations made in this lab.
 \mainmatter
 \input{Lab-1}
 \input{Lab-2}
-
-% EXCLUDE FOR SUBMISSION TO LEARN
-% \input{Lab-3}
+\input{Lab-3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEG: APPENDIX

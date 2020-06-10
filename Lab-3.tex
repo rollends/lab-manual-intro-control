@@ -1,12 +1,10 @@
 \chapter{Bringing it Together: Lateral Motion Control}\label{Lab:3}
-Imagine you are a young, aspiring, junior engineer at MoonX, a
-private company in an alternate Universe, manufucturing a mining probe for the
-Moon.\footnote{This society isn't particularly concerned about environmental
-impacts. They have the technology to hop, skip and jump to another satellite
-or planet.} Because of your junior status, they have only asked you to design
-a simple controller that ensures the lunar module lands at the correct
-location. The controller you design controls the level of horizontal thrust
-to achieve a desired position relative to some point on the surface.
+Imagine you are a young, aspiring, junior engineer at VenX, a private company in an alternate Universe, manufucturing a mining probe on Venus.
+\footnote{This society isn't particularly concerned about the environmental impact. It isn't our planet, right?}
+Because of your junior status, they have only asked you to design a simple controller that ensures the lunar module lands at the correct location.
+The controller you design controls the level of horizontal thrust to achieve a desired position relative to some point on the surface.
+You may assume that all units are in standard units.
+Distances are measured in meters, time is measured in seconds, mass is measured in kilograms and all other units are such that they are consistent with that.
 
 \section{Objectives}
 \begin{enumerate}[label=(\arabic*)]
@@ -15,20 +13,361 @@ to achieve a desired position relative to some point on the surface.
     to identify parameters of an opaque, black box system.
   }
   \item{
-    \textbf{Explore} and \textbf{report} on a variety of control strategies
-    to stabilize the system and achieve objectives.
+    \textbf{Design} a proportional inner-loop controller that stabilizes the velocity and controls it to a desired value.
+  }
+  \item{
+    \textbf{Design} a proportional outer-loop controller that stabilizes the relative position of the lunar module with respect to a set point on the ground.
+  }
+  \item{
+    \textbf{Derive} a mathematical expression for your controller and use this to \textbf{achieve} a desired control objective.
+  }
+  \item{
+    \textbf{Compare and contrast} your stabilizing control design with that of Lab~\ref{Lab:2}.
+  }
+  \item{
+    \textbf{Appreciate} how your controller deals with disturbances and unmodelled dynamics.
   }
 \end{enumerate}
 
-\section{Experimental Procedure}
-This entire lab will be done using the ``\texttt{Lab\_3.slx}'' Simulink model.
-In there you will find a number of blocks already placed for you in an open
-loop configuration:
-\begin{itemize}
-  \item{a zero signal,}
-  \item{a summing junction,}
-  \item{an gain block,}
-  \item{the ``Lunar Module Dynamics'' block, which represent the plant, and}
-  \item{a terminator.}
-\end{itemize}
+\section{Experimental Procedure}\label{Lab:3:Experiment}
+Unlike previous labs, you will now work with two Simulink models.
+Moreover, this lab will involve a larger number of moving parts;
+you will introduce three feedback interconnections!
+
+In Section~\ref{Lab:3:Part:I} you will stabilize the physical plant that maps input forces to an output horizontal velocity.
+You will treat velocity as the measurement (output).
+You can then design a controller
+
+\subsection{Part I: Stabilize and Identify the Plant}\label{Lab:3:Part:I}
+Your deliverables for this subsection are
 %
+\begin{deliverable}[label={del:lab3:g1:1}]
+  \textbf{Choose} and \textbf{record} a gain value \(K_1\) for your stabilizing gain.
+\end{deliverable}
+%
+\begin{deliverable}[label={del:lab3:g1:2}]
+   \textbf{Acquire} the step response from the signal labelled \(w(t)\) to the signal \(v(t)\) when the signal \(v(t)\) is connected to the \(G_1\) loop summing junction (aptly named ``\(G_1\) Loop'').
+\end{deliverable}
+%
+\begin{deliverable}[label={del:lab3:g1:3}]
+  \textbf{Measure} the time constant \(\tau_1\) of your stabilized plant using the step response acquired in Deliverable~\ref{del:lab3:g1:2}.
+\end{deliverable}
+%
+This section concerns the Part I area of the Simulink model
+\begin{center}
+  \texttt{Lab\_3\_Velocity\_Controlled\_Landing\_Module.slx}.
+\end{center}
+In this lab, your plant is a simulated physical system.
+The system has nonlinear dynamics, but we will treat it as a linear system and you will observe the power of linear control.
+First, in order to even design a controller to achieve our objectives, we must stabilize the system.
+The reason for this is quite simple. A physical system normally integrates the input force into velocity (and then position) and, unless there are external forces such as friction, the plant is of the form
+\[
+  P(s)
+    =
+      \frac{1}{M s}
+\]
+where \(M > 0\) is the mass of the landing module.
+The step response of this system is unbounded.
+It is true that there is friction in your model but it is often hard to model friction in reality, so we will take the above equation as our model.
+To stabilize the plant, consider closing the loop in the following way
+%
+\begin{center}
+  \begin{tikzpicture}[x=1in, y=1in]
+
+    \node [draw, smooth_block] (Plant) {\(P(s)\)};
+    \node [draw, smooth_block, left = 0.75 of Plant] (Gain1) {\(K_1\)};
+    \node [draw, smooth_sum, left = 0.75 of Gain1] (Sum1) {};
+    \node [right = 0.75 of Plant] (after_plant) {};
+    \node [right = 0.75 of after_plant] (v) {};
+    \node [left = 0.75 of Sum1] (w) {};
+
+    \node [smooth_annotate, below = 0 of Gain1] {Stabilizing Gain};
+    \node [smooth_annotate, below = 0 of Plant] {Plant};
+
+    \draw [arrow, smooth_path]
+      (Plant.east) -- (after_plant.base) -- (v.base);
+    \draw [arrow, smooth_path]
+      (Plant.east)
+      --
+      (after_plant.base)
+      --
+      +(0, -0.75)
+      -|
+      (Sum1.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum1.east)
+      --
+      (Gain1.west);
+    \draw [arrow, smooth_path]
+      (Gain1.east)
+      --
+      (Plant.west);
+    \draw [arrow, smooth_path]
+      (w.base)
+      --
+      (Sum1.west);
+  \end{tikzpicture}
+\end{center}
+%
+with a randomly chosen gain \(K_1 > 0.\)
+The gain you choose is up to you but make sure you record it.
+\begin{procedure}[label={proc:lab3:stabilize}]
+  This procedure simply reiterates the steps above.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Close} the loop as described above.
+      You should connect the signal labelled \(v\) to the summing junction labelled ``\(G_1\) Loop.''%
+    }
+    \item{%
+      \textbf{Choose} and \textbf{set} a random positive gain for \(K_1.\)
+      The block is named ``Stabilizing Gain'' in the Simulink model.%
+    }
+    \item{%
+      \textbf{Acquire} a step response from the signal \(w(t)\) to the signal \(v(t).\)
+      Remember from Lab 2 that you need to set \(w\) as an input perturbation and \(v\) as an output measurement.
+    }
+    \item{%
+      \textbf{Measure} the time constant of this system using the acquired step response. We will call this time constant \(\tau_1.\)
+    }
+  \end{enumerate}
+\end{procedure}
+
+\subsection{Part II: Reference Velocity Control Design}\label{Lab:3:Part:II}
+When you performed Procedure~\ref{proc:lab3:stabilize}, you will have noticed that the step response was extremely slow.
+In particular, you should notice that it took more than a minute of simulated time to achieve a speed of \SI{1}{m/s} (\SI{3.6}{km/h})!
+If this is the response speed of our system, we will never be able to control it to a desired position.
+In this section, you will solve this problem by designing a proportional error feedback controller that controls to a \emph{desired velocity} but with a much better time constant.
+Your deliverables for this section are
+%
+\begin{deliverable}[label={del:lab3:g2:1}]
+  \textbf{Acquire} a (unit) step response from the signal \(v_r(t)\) to the signal \(v(t).\)
+  \textbf{Ensure} you have cursors that indicate the following:
+  \begin{itemize}
+    \item{the time constant is \(\frac{1}{\sqrt{50}} \approx 0.1414.\)}
+    \item{the DC gain, or steady-state value, is \(1.\)}
+  \end{itemize}
+\end{deliverable}
+%
+This section concerns the Part II area of the Simulink model
+\begin{center}
+  \texttt{Lab\_3\_Velocity\_Controlled\_Landing\_Module.slx}.
+\end{center}
+The now stabilized plant, as a transfer function from \(w(t)\) to \(v(t),\) will be referred to as \(G_1(s)\) as is depicted below.
+Verify for yourself that
+\[
+  G_1(s) = \frac{1}{\tau_1 s + 1}
+\]
+where \(\tau\) is the time constant of \(G_1(s)\) (as estimated in Deliverable~\ref{del:lab3:g1:timeconstant}).
+Close the loop around \(G_1(s)\) with a proportional error feedback controller like so
+%
+\begin{center}
+  \begin{tikzpicture}[x=1in, y=1in]
+
+    \node [draw, smooth_block] (Plant) {\(P(s)\)};
+    \node [draw, smooth_block, left = 0.25 of Plant] (Gain1) {\(K_1\)};
+    \node [draw, smooth_sum, left = 0.25 of Gain1] (Sum1) {};
+    \node [right = 0.25 of Plant] (after_plant) {};
+    \node [right = 0.50 of after_plant] (v) {};
+    \node [left = 0.50 of Sum1] (w) {};
+
+    \draw [arrow, smooth_path]
+      (Plant.east) -- (after_plant.base) -- (v.base)
+      node [above right] {\(v(t)\)};
+    \draw [arrow, smooth_path]
+      (Plant.east)
+      --
+      (after_plant.base)
+      --
+      +(0, -0.50)
+      -|
+      (Sum1.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum1.east)
+      --
+      (Gain1.west);
+    \draw [arrow, smooth_path]
+      (Gain1.east)
+      --
+      (Plant.west);
+    % \draw [arrow, smooth_path]
+    %   (w.base)
+    %   --
+    %   (Sum1.west);
+
+    \draw [smooth_area_path, fill = Blue, fill opacity = 0.50, text opacity = 1]
+      ($(w)+(0.25, 0)$) -- +(0, 0.50) -| node[midway, above, color=Blue] {\(G_1(s)\)} ($(v)+(-0.50,0)$) -- +(0, -0.75) -| ($(w)+(0.25, 0)$);
+
+    \node [draw, smooth_block, left = 0.25 of w] (Gain2) {\(K_2\)};
+    \node [draw, smooth_sum, left = 0.50 of Gain2] (Sum2) {};
+    \node [left = 0.50 of Sum2] (v_r) {};
+
+    \draw [arrow, smooth_path]
+      (Plant.east)
+      --
+      ($(v)+(-0.25,0)$)
+      --
+      +(0, -1)
+      -|
+      (Sum2.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum2.east)
+      --
+      (Gain2.west);
+    \draw [arrow, smooth_path]
+      (Gain2.east)
+      --
+      (Sum1.west);
+    \draw [arrow, smooth_path]
+      (v_r.base)
+      --
+      (Sum2.west)
+      node [midway, above] {\(v_r(t)\)};
+
+  \end{tikzpicture}
+\end{center}
+%
+Verify that, when the loop is closed, the transfer function from \(v_r(t)\) to \(v(t),\) denoted as \(G_2(s)\) in the Simulink model, takes the form
+\[
+  G_2(s)
+    = \frac{V(s)}{V_r(s)}
+    = \frac{K_3 K_2}{1 + K_2} \frac{1}{\frac{\tau_1}{1 + K_2} s + 1}.
+\]
+%
+\begin{procedure}[label={proc:lab3:speedup}]
+  In this procedure you use another closed loop to accelerate the response of your system, thereby making it usable to do position step tracking.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Close} the loop as described above.
+      You should connect the signal labelled \(v\) to the summing junction labelled ``\(G_2\) Loop.''%
+    }
+    \item{%
+      We would like to have the transfer function \(G_2(s)\) to have a time constant of \(\frac{1}{\sqrt{50}}.\)
+      This would mean that, for a step change in the \emph{reference velocity}, the \emph{actual velocity} will reach \(63.3\%\) of the reference velocity in \SI{0.1414}{s}.
+      Recognize that the time constant of this new closed loop system is
+      \[
+        \frac{\tau_1}{1 + K_2}
+      \]
+      where \(\tau_1\) is the time constant of \(G_1(s)\) that you measured earlier.
+      As a result, \textbf{solve} for the \(K_2\) you need to have this time constant equal to \(\frac{1}{\sqrt{50}}.\)%
+    }
+    \item{%
+      \textbf{Solve} for the gain \(K_3\) that ensures \(G_2(s)\) has a DC gain of \(1.\)%
+    }
+    \item{%
+      \textbf{Set} the respective blocks corresponding to \(K_2\) and \(K_3\) in the Simulink diagram.%
+    }
+    \item{%
+      \textbf{Acquire} the step response from the signal \(v_r(t)\) to the signal \(v(t).\)
+      Remember again to change which signal is the input perturbation from Part I.%
+    }
+    \item{%
+      \textbf{Place} cursors on the time constant and steady-state value to prove you met the specification.%
+    }
+  \end{enumerate}
+\end{procedure}
+
+\subsection{Part III: Reference Position Control Design}\label{Lab:3:Part:III}
+Your deliverables for this part are
+%
+\begin{deliverable}[label={del:lab3:g3:1}]
+   \textbf{Acquire} the step response from the signal labelled \(r(t)\) to the signal \(x(t)\) when the signal \(x(t)\) is connected to the \(G_3\) loop summing junction (aptly named ``\(G_3\) Loop'').
+   This is the step response of the transfer function \(G_3(s)\) depicted in the Simulink model.
+\end{deliverable}
+%
+\begin{deliverable}[label={del:lab3:g3:2}]
+   \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated.
+\end{deliverable}
+%
+This section concerns the Part III area of the Simulink model
+\begin{center}
+  \texttt{Lab\_3\_Position\_Controlled\_Landing\_Module.slx}.
+\end{center}
+You will notice that the other Simulink model you worked with is labelled \(G_2(s)\) in this model.
+Since you have designed a controller that achieves a desired reference velocity, we leverage it in this model to design an outer loop controller that achieves a desired position.
+Close the loop to arrive at a diagram
+%
+\begin{center}
+  \begin{tikzpicture}[x=1in, y=1in]
+
+    \node [draw, smooth_block] (G2) {\(G_2(s)\)};
+    \node [draw, smooth_block, right = 0.75 of G2] (Int) {\(\frac{1}{s}\)};
+    \node [draw, smooth_block, left = 0.75 of G2] (Gain4) {\(K_4\)};
+    \node [draw, smooth_sum, left = 0.75 of Gain4] (Sum3) {};
+    \node [right = 0.25 of Int] (after_int) {};
+    \node [right = 0.50 of after_int] (x) {};
+    \node [left = 0.50 of Sum3] (r) {};
+
+    \draw [arrow, smooth_path]
+      (G2.east) -- (Int.west)
+      node [above, midway] {\(v(t)\)};
+    \draw [arrow, smooth_path]
+      (Int.east) -- (after_int.base) -- (x.base)
+      node [above] {\(x(t)\)};
+    \draw [arrow, smooth_path]
+      (Int.east)
+      --
+      (after_int.base)
+      --
+      +(0, -0.50)
+      -|
+      (Sum3.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum3.east)
+      --
+      (Gain4.west);
+    \draw [arrow, smooth_path]
+      (Gain4.east)
+      --
+      (G2.west);
+    % \draw [arrow, smooth_path]
+    %   (w.base)
+    %   --
+    %   (Sum1.west);
+
+    \draw [arrow, smooth_path]
+      (r.base)
+      --
+      (Sum3.west)
+      node [midway, above] {\(r(t)\)};
+
+  \end{tikzpicture}
+\end{center}
+%
+If you performed Part II correctly, the transfer function \(G_2(s)\) takes the
+form
+\[
+  G_2(s) = \frac{1}{\frac{1}{\sqrt{50}}s + 1}.
+\]
+Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) in the Simulink model, equals
+\[
+  G_3(s) = \frac{K_4\sqrt{50}}{s^2 + \sqrt{50} s + K_4 \sqrt{50}}.
+\]
+%
+\begin{procedure}[label={proc:lab3:regulate}]
+  You will make a specific choice for \(K_4\) in this procedure and then simulate the entire non-linear system.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Close} the loop as described above.
+      You should connect the signal \(x(t)\) to the \(G_3\) loop summing junction (aptly named ``\(G_3\) loop'').%
+    }
+    \item{%
+      \textbf{Determine} and \textbf{set} the gain \(K_4\) so that the system \(G_3(s)\) is critically damped.
+      To be clear, with your choice of \(K_4\) you should find that \(\zeta = 1\) when \(G_3(s)\) is put in standard form.%
+    }
+    \item{%
+      \textbf{Acquire} the (unit) step response from the signal \(r(t)\) to the signal \(x(t).\)
+      Remember to go into the other model file and remove any annotations you have used there before setting new ones in this model file.%
+    }
+    \item{%
+      \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated.%
+      \emph{Do not be alarmed that the behaviour does not look like the step response. You will be expected to address this discrepancy in your report.}
+    }
+  \end{enumerate}
+\end{procedure}
+%
+
+\subsection{Report}
