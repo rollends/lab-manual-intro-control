@@ -281,6 +281,10 @@ Your deliverables for this part are
    \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated.
 \end{deliverable}
 %
+\begin{deliverable}[label={del:lab3:g3:3}]
+   \textbf{Acquire} the Bode plot from the signal labelled \(d(t)\) to the signal \(x(t).\)
+\end{deliverable}
+%
 This section concerns the Part III area of the Simulink model
 \begin{center}
   \texttt{Lab\_3\_Position\_Controlled\_Landing\_Module.slx}.
@@ -364,7 +368,32 @@ Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) 
     }
     \item{%
       \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated.%
-      \emph{Do not be alarmed that the behaviour does not look like the step response. You will be expected to address this discrepancy in your report.}
+      \emph{Do not be alarmed that the behaviour does not look like the step response.}
+    }
+  \end{enumerate}
+\end{procedure}
+%
+In the following procedure, be very careful where you place your annotations, and make sure to save your diagram before running the Model Linearizer.
+You must complete the previous procedure before starting this final procedure.
+%
+\begin{procedure}[label={proc:lab3:disturbance}]
+  In this procedure, you will acquire the Bode plot from the input force \(u(t)\) to the output position \(x(t).\)
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Ensure} you completed Procedure~\ref{proc:lab3:regulate}.
+    }
+    \item{%
+      \textbf{Remove} all annotations from all signals in \emph{both} Simulink models.
+    }
+    \item{%
+      \textbf{Set} the input perturbation annotation for the signal \(d(t)\) that is added into the signal right before the Plant block.
+      \(d(t)\) is the signal coming out of the ``Disturbance Signal'' block.
+    }
+    \item{%
+      \textbf{Set} the output measurement annotation for the signal \(x(t)\) right after the integrator block (found in the ``Position'' Simulink model).
+    }
+    \item{%
+      \textbf{Acquire} the Bode plot.
     }
   \end{enumerate}
 \end{procedure}
@@ -378,18 +407,184 @@ In addition to including
   \item{Deliverable~\ref{del:lab3:g1:2},}
   \item{Deliverable~\ref{del:lab3:g1:3},}
   \item{Deliverable~\ref{del:lab3:g2:1},}
-  \item{Deliverable~\ref{del:lab3:g3:1} and}
-  \item{Deliverable~\ref{del:lab3:g3:2}}
+  \item{Deliverable~\ref{del:lab3:g3:1},}
+  \item{Deliverable~\ref{del:lab3:g3:2} and}
+  \item{Deliverable~\ref{del:lab3:g3:3}}
 \end{itemize}
 in your report, you are required to answer the questions of the following deliverable.
 Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab3:report}]
   \begin{enumerate}[label={(\arabic*)}]
-    \item{
+    \item{%
+      In Part III of the lab, it was discussed that you can verify
+      the transfer function from \(r(t)\) to \(x(t)\) of the entire closed loop system equals
+      \[
+        G_3(s) = \frac{K_4\sqrt{50}}{s^2 + \sqrt{50} s + K_4 \sqrt{50}}.
+      \]
+      \textbf{Show} this computation. You may use the fact that
+      \[
+        G_2(s) = \frac{1}{\frac{1}{\sqrt{50}}s + 1}.
+      \]
+      \label{lab3:report:q1}
+    }
+    \item{%
+      The entire closed loop system can be described by the diagram in Figure~\ref{fig:lab3:entire}.
+      \textbf{Derive} the transfer function from \(r(t)\) to \(x(t)\)
+      in terms of the \emph{symbols} \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
+      Leave your answer in symbolic form.
+      \emph{It is not required, but it is wise to verify your answer with your answer in~\ref{lab3:report:q1}. They should be consistent.}
+      \label{lab3:report:q2}
+    }
+    \item{%
+      You should find that the transfer function that you derived in~\ref{lab3:report:q2} was a second-order transfer function with no zero.
+      \textbf{Write} the transfer function of~\ref{lab3:report:q2} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
+      Leave your answer in symbolic form.
+      \label{lab3:report:q3}
+    }
+    \item{%
+      Unlike in Lab 2, you can change the settling time of the final, second order transfer function from \(r(t)\) to \(y(t).\)
+      Leveraging the estimate of the \(2\%\) settling time
+      \[
+        T_{2\%} \approx \frac{4}{\zeta \omega}
+      \]
+      and your transfer function in standard form (found in~\ref{lab3:report:q3}) \textbf{identify} the two gains that affect the settling time.
+      \label{lab3:report:q4}
+    }
+    \item{%
+      To produce Deliverable~\ref{del:lab3:g3:2}, you simulated the true response of your controller against the complete, nonlinear system;
+      not a linear approximation of it!
+      The Model Linearizer performs a linear approximation of the nonlinear differential equation found in the Plant block.
+      It then gives you the step response of the corresponding linear system's transfer function.
+      As a result, you designed against only an approximation of the true system.
+      This explains why you will have observed a modest to large overshoot of the target horizontal position before the landing module settles.
+      That doesn't mean linear system theory is completely useless, however.
+      \textbf{Determine} a gain that you can change to reduce the overshoot.
+      \textbf{Justify} your explanation using your solution to~\ref{lab3:report:q3} and make sure to include whether you would increase or decrease that gain.
+      \emph{It is not required, but I highly recommend you give it a try and see if it works. You might be surprised!}
+      \label{lab3:report:q5}
+    }
+    \item{%
+      As mentioned in~\ref{lab3:report:q5}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
+      The engineers at VenX included in that model a wind force, that increases in magnitude as you get closer to the ground \emph{and} has some sinusoidal variability in speed.
+      As part of the specification, the engineers would like to know just how large of a force we can afford.
 
+      Since wind is just an additional force, and \(u(t)\) is really just an input force, we can model this wind force as simply an additional signal \(d(t)\) that is added to the input of the Plant \(u(t).\)
+      Assume
+      \[
+        d(t) = M + A\sin\left(\pi t\right),
+      \]
+      where \(M, A > 0\).
+      Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
+      \textbf{justify} why you did not notice this sinusoidal force in your response acquired in Deliverable~\ref{lab3:report:q5}.
+      \textbf{Specifically determine} how large \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
+      \label{lab3:report:q6}
+    }
+    \item{%
+      The software developers at VenX want your controller to have \(x(t),\) your horizontal position, to track perfectly any constant reference position \(r(t).\)
+
+      Does your control system (treating \(r(t)\) as the input and \(x(t)\) as the output) do this?
+      If yes, does it matter what the constants \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M\) are?
+      \textbf{Justify} using the theory learned in the course.
+      \emph{Use the transfer function you derived in~\ref{lab3:report:q3} to answer the question.}
+      \label{lab3:report:q7}
+    }
+    \item{%
+      The philosophy of this control design was to (1) design a controller that regulates a desired velocity fast enough by controlling the input force and (2) design a controller that regulates a desired position by controlling the desired velocity.
+      This is a very common technique used in aerospace since it breaks the control design into individual chunks.
+      With this philosophy in mind, answer the following question as best as you possibly can:
+
+      Your supervisor at the company VenX saw your Deliverable~\ref{del:lab3:g3:2} and was left aghast.
+      They think the g-force imparted by your controller is too large and could damage delicate components that are deployed on descent.
+      How could you decrease the g-force imparted by your controllers?
+      \label{lab3:report:q8}
     }
   \end{enumerate}
 \end{deliverable}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[x=1in, y=1in]
+    \node[smooth_block] (Plant) {\(\frac{K_1}{M s}\)};
+    \node[smooth_sum, left = 0.3 of Plant] (Sum1) {};
+    \node[smooth_block, left = 0.3 of Sum1] (K2) {\(K_2\)};
+    \node[smooth_sum, left = 0.3 of K2] (Sum2) {};
+    \node[smooth_block, left = 0.3 of Sum2] (K3K4) {\(K_4 K_3\)};
+    \node[smooth_sum, left = 0.3 of K3K4] (Sum3) {};
+    \node[left = 0.3 of Sum3] (r) {};
+    \node[right = 0.3 of Plant] (afterPlant) {};
+    \node[smooth_block, right = 0.3 of afterPlant] (Int) {\(\frac{1}{s}\)};
+    \node[right = 0.3 of Int] (afterInt) {};
+    \node[right = 0.3 of afterInt] (y) {};
+
+    \draw[smooth_path, arrow]
+      (r.base)
+      node[above] {\(r(t)\)}
+      --
+      (Sum3.west);
+    \draw[smooth_path, arrow]
+      (Sum3.east)
+      --
+      (K3K4.west);
+    \draw[smooth_path, arrow]
+      (K3K4.east)
+      --
+      (Sum2.west);
+    \draw[smooth_path, arrow]
+      (Sum2.east)
+      --
+      (K2.west);
+    \draw[smooth_path, arrow]
+      (K2.east)
+      --
+      (Sum1.west);
+    \draw[smooth_path, arrow]
+      (Sum1.east)
+      --
+      (Plant.west);
+    \draw[smooth_path, arrow]
+      (Plant.east)
+      --
+      (afterPlant.base)
+      --
+      (Int.west);
+    \draw[smooth_path, arrow]
+      (Int.east)
+      --
+      (afterInt.base)
+      --
+      (y.base)
+      node[above] {\(y(t)\)};
+    \draw[smooth_path, arrow]
+      (Int.east)
+      --
+      (afterInt.base)
+      --
+      +(0, -1)
+      -|
+      (Sum3.south);
+    \draw[smooth_path, arrow]
+      (Plant.east)
+      --
+      (afterPlant.base)
+      --
+      +(0, -0.50)
+      -|
+      (Sum1.south)
+      node[below right] {\(-\)};
+    \draw[smooth_path, arrow]
+      (Plant.east)
+      --
+      (afterPlant.base)
+      --
+      +(0, -0.75)
+      -|
+      (Sum2.south)
+      node[below right] {\(-\)};
+
+  \end{tikzpicture}
+  \caption[Closed Loop system for Lab 3]{Entire closed loop architecture for Lab 3.}
+  \label{fig:lab3:entire}
+\end{figure}
 
 \subsection{Grading Scheme}
 The grading scheme is shown in Table~\ref{tab:lab3:grading}. The breakdown of
@@ -400,25 +595,25 @@ questions where it is shown per question.
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
-        & \ref{del:lab3:g1:1}         & 5       \\ \hline
-        & \ref{del:lab3:g1:2}         & 5       \\ \hline
-        & \ref{del:lab3:g1:3}        & 5       \\ \hline
-        & \ref{del:lab3:g2:1}        & 5       \\ \hline
-        & \ref{del:lab3:g3:1}         & 5       \\ \hline
-        & \ref{del:lab3:g3:2}         & 5       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 25      \\ \hhline{=|=|=}
-        & \ref{lab3:report}~\ref{lab2:report:q1}  & 3       \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q2}  & 2       \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q3}  & 3       \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q4}  & 4       \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q4b} & 1       \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q5}  & 1      \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q6}  & 3      \\ \hline
-        & \ref{lab3:report}~\ref{lab2:report:q8}  & 4       \\ \hhline{=|=|=}
-Report Subtotal&  & 21 \\ \hhline{=|=|=}
-  Total &                       & 46
+        & \ref{del:lab3:g1:1}         & 4       \\ \hline
+        & \ref{del:lab3:g1:2}         & 4      \\ \hline
+        & \ref{del:lab3:g1:3}        & 4       \\ \hline
+        & \ref{del:lab3:g2:1}        & 4       \\ \hline
+        & \ref{del:lab3:g3:1}         & 8      \\ \hline
+        & \ref{del:lab3:g3:2}         & 4       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 28      \\ \hhline{=|=|=}
+        & \ref{lab3:report}~\ref{lab3:report:q1}  & 4       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q2}  & 4       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q3}  & 1       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q4}  & 2       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q5}  & 2      \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q6}  & 5      \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q7}  & 4      \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q8}  & 3       \\ \hhline{=|=|=}
+Report Subtotal&  & 25 \\ \hhline{=|=|=}
+  Total &                       & 53
 \end{tabular}
 \caption[Grading Scheme for Lab 3]{Grading scheme for Lab 3.}
-\label{tab:lab2:grading}
+\label{tab:lab3:grading}
 \end{table}
 %
