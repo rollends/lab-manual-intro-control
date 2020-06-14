@@ -416,30 +416,18 @@ Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab3:report}]
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      In Part III of the lab, it was discussed that you can verify
-      the transfer function \(G_3(s)\) from \(r(t)\) to \(x(t)\) of the entire closed loop system equals
-      \[
-        G_3(s) = \frac{K_4\sqrt{50}}{s^2 + \sqrt{50} s + K_4 \sqrt{50}}.
-      \]
-      \textbf{Show} this computation. You may use the fact that
-      \[
-        G_2(s) = \frac{1}{\frac{1}{\sqrt{50}}s + 1}.
-      \]
-      \label{lab3:report:q1}
-    }
-    \item{%
       The entire closed loop system \(G_3(s)\) can be described by the diagram in Figure~\ref{fig:lab3:entire}.
       \textbf{Derive} the transfer function from \(r(t)\) to \(x(t)\)
       in terms of the \emph{symbols} \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
       Leave your answer in symbolic form.
-      \emph{It is not required, but it is wise to verify your answer with your answer in~\ref{lab3:report:q1}. They should be consistent.}
-      \label{lab3:report:q2}
+      \emph{It is not required, but it is wise to verify your answer against the transfer functions discussed throughout the lab. They should be consistent.}
+      \label{lab3:report:q1}
     }
     \item{%
       You should find that the transfer function that you derived in~\ref{lab3:report:q2} was a second-order transfer function with no zero.
       \textbf{Write} the transfer function of~\ref{lab3:report:q2} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
       Leave your answer in symbolic form.
-      \label{lab3:report:q3}
+      \label{lab3:report:q2}
     }
     \item{%
       Unlike in Lab 2, you can change the settling time of the final, second order transfer function from \(r(t)\) to \(y(t).\)
@@ -447,8 +435,8 @@ Make sure to leverage your other deliverables in your answers!
       \[
         T_{2\%} \approx \frac{4}{\zeta \omega}
       \]
-      for a transfer function in standard form \textbf{identify} the two gains that affect the settling time of your transfer function \(G_3(s)\) (use the standard form derived in~\ref{lab3:report:q3}) .
-      \label{lab3:report:q4}
+      for a transfer function in standard form \textbf{identify} the two gains that affect the settling time of your transfer function \(G_3(s)\) (use the standard form derived in~\ref{lab3:report:q2}) .
+      \label{lab3:report:q3}
     }
     \item{%
       To produce Deliverable~\ref{del:lab3:g3:2}, you simulated the true response of your controller against the complete, nonlinear system;
@@ -459,9 +447,9 @@ Make sure to leverage your other deliverables in your answers!
       This explains why you will have observed a modest to large overshoot of the target horizontal position before the landing module settles.
       That doesn't mean linear system theory is completely useless, however.
       \textbf{Determine} a gain that you can change to reduce the overshoot.
-      \textbf{Justify} your explanation using your solution to~\ref{lab3:report:q3} and make sure to include whether you would increase or decrease that gain.
+      \textbf{Justify} your explanation using your solution to~\ref{lab3:report:q2} and make sure to include whether you would increase or decrease that gain.
       \emph{It is not required, but I highly recommend you give it a try and see if it works. You might be surprised!}
-      \label{lab3:report:q5}
+      \label{lab3:report:q4}
     }
     \item{%
       As mentioned in~\ref{lab3:report:q5}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
@@ -475,9 +463,9 @@ Make sure to leverage your other deliverables in your answers!
       \]
       where \(M, A > 0\).
       Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
-      \textbf{justify} why you did not notice this sinusoidal force in your response acquired in Deliverable~\ref{lab3:report:q5}.
+      \textbf{justify} why you did not notice this sinusoidal force in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
       \textbf{Specifically determine} how large \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
-      \label{lab3:report:q6}
+      \label{lab3:report:q5}
     }
     \item{%
       The software developers at VenX want your controller to have \(x(t),\) your horizontal position, to track perfectly any constant reference position \(r(t).\)
@@ -485,18 +473,18 @@ Make sure to leverage your other deliverables in your answers!
       Does your control system (treating \(r(t)\) as the input and \(x(t)\) as the output) do this?
       If yes, does it matter what the constants \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M\) are?
       \textbf{Justify} using the theory learned in the course.
-      \emph{Use the transfer function you derived in~\ref{lab3:report:q3} to answer the question.}
-      \label{lab3:report:q7}
+      \emph{Use the transfer function \(G_3(s)\) put in standard form (as derived in~\ref{lab3:report:q3}) to answer the question.}
+      \label{lab3:report:q6}
     }
     \item{%
       The philosophy of this control design was to (1) design a controller that regulates a desired velocity fast enough by controlling the input force and (2) design a controller that regulates a desired position by controlling the desired velocity.
-      This is a very common technique used in aerospace since it breaks the control design into individual chunks.
-      With this philosophy in mind, answer the following question as best as you possibly can:
+      This is a very common technique used in aerospace since it breaks the control design into smaller, easier chunks that aim to solve different problems.
+      With this philosophy in mind, the data you have at hand, and the answers to all the previous questions, answer the following question as best as you possibly can:
 
-      Your supervisor at the company VenX saw your Deliverable~\ref{del:lab3:g3:2} and was left aghast.
-      They think the g-force imparted by your controller is too large and could damage delicate components that are deployed on descent.
-      How could you decrease the g-force imparted by your controllers?
-      \label{lab3:report:q8}
+      Your supervisor at the company VenX was alarmed by your Deliverable~\ref{del:lab3:g3:2}.
+      They think the acceleration imparted by your controller is too large and could damage delicate components that are deployed on descent.
+      How could you decrease the acceleration imparted by your controllers?
+      \label{lab3:report:q7}
     }
   \end{enumerate}
 \end{deliverable}
@@ -600,17 +588,16 @@ questions where it is shown per question.
         & \ref{del:lab3:g1:3}        & 4       \\ \hline
         & \ref{del:lab3:g2:1}        & 4       \\ \hline
         & \ref{del:lab3:g3:1}         & 4      \\ \hline
-        & \ref{del:lab3:g3:2}         & 8       \\ \hline
+        & \ref{del:lab3:g3:2}         & 4       \\ \hline
         & \ref{del:lab3:g3:3}         & 4       \\ \hhline{=|=|=}
 Lab Subtotal&                       & 28      \\ \hhline{=|=|=}
         & \ref{lab3:report}~\ref{lab3:report:q1}  & 4       \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q2}  & 4       \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q3}  & 1       \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q4}  & 2       \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q5}  & 2      \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q6}  & 5      \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q7}  & 4      \\ \hline
-        & \ref{lab3:report}~\ref{lab3:report:q8}  & 3       \\ \hhline{=|=|=}
+        & \ref{lab3:report}~\ref{lab3:report:q3}  & 4       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q4}  & 4       \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q5}  & 3      \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q6}  & 3      \\ \hline
+        & \ref{lab3:report}~\ref{lab3:report:q7}  & 3      \\ \hhline{=|=|=}
 Report Subtotal&  & 25 \\ \hhline{=|=|=}
   Total &                       & 53
 \end{tabular}
