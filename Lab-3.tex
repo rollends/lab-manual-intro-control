@@ -1,7 +1,7 @@
 \chapter{Bringing it Together: Lateral Motion Control}\label{Lab:3}
 Imagine you are a young, aspiring, junior engineer at VenX, a private company in an alternate Universe, manufucturing a mining probe on Venus%
 \footnote{This society isn't particularly concerned about the environmental impact. It isn't our planet, right?}.
-Because of your junior status, they have only asked you to design a simple controller that ensures the lunar module lands at the correct location.
+Because of your junior status, they have only asked you to design a simple controller that ensures the landing module lands at the correct location.
 The controller you design controls the level of horizontal thrust to achieve a desired position relative to some point on the surface.
 You may assume that all units are in standard units.
 Distances are measured in meters, time is measured in seconds, mass is measured in kilograms and all other units are such that they are consistent with that.
@@ -16,18 +16,60 @@ Distances are measured in meters, time is measured in seconds, mass is measured 
     \textbf{Design} a proportional inner-loop controller that stabilizes the velocity and controls it to a desired value.
   }
   \item{
-    \textbf{Design} a proportional outer-loop controller that stabilizes the relative position of the lunar module with respect to a set point on the ground.
+    \textbf{Design} a proportional outer-loop controller that stabilizes the relative position of the landing module with respect to a set point on the ground.
   }
   \item{
-    \textbf{Derive} a mathematical expression for your controller and use this to \textbf{achieve} a desired control objective.
-  }
-  \item{
-    \textbf{Compare and contrast} your stabilizing control design with that of Lab~\ref{Lab:2}.
+    \textbf{Compare and contrast} your design with that of Lab~\ref{Lab:2}.
   }
   \item{
     \textbf{Appreciate} how your controller deals with disturbances and unmodelled dynamics.
   }
 \end{enumerate}
+Unfortunately this lab is quite serial.
+Here is a dependency graph outlining the order in which you should progress through the lab.
+Note that the lab report questions~\ref{lab3:report:q1}--\ref{lab3:report:q3} are not dependent on any of the simulations.
+It suffices to have read the lab, understand the components and how they connect. 
+\begin{center}
+\begin{tikzpicture}[x=1em, y=1em]
+  \node[deliverable] (D1) {Deliverable\\\ref{del:lab3:g1:1}};
+  \node[deliverable, below = 2 of D1] (D2) {Deliverable\\\ref{del:lab3:g1:2}};
+  \node[deliverable, below = 2 of D2] (D3) {Deliverable\\\ref{del:lab3:g1:3}};
+  \draw[signal, arrow] (D1.south) -- (D2.north);
+  \draw[signal, arrow] (D2.south) -- (D3.north);
+
+  \node[deliverable, below = 2 of D3] (D4) {Deliverable\\\ref{del:lab3:g2:1}};
+  \draw[signal, arrow] (D3.south) -- (D4.north);
+
+  \node[deliverable, below = 2 of D4] (D5) {Deliverable\\\ref{del:lab3:g3:1}};
+  \node[deliverable, right = 2 of D5] (D6) {Deliverable\\\ref{del:lab3:g3:2}};
+  \node[deliverable, below = 2 of D5] (D7) {Deliverable\\\ref{del:lab3:g3:3}};
+  \draw[signal, arrow] (D4.south) -- (D5.north);
+  \draw[signal, arrow] (D5.east) -- (D6.west);
+  \draw[signal, arrow] (D5.south) -- (D7.north);
+
+  \node[deliverable, right = 2 of D6] (D8_Q7) {%
+    Deliverable\\\ref{lab3:report}~\ref{lab3:report:q7}%
+  };
+  \node[deliverable, above = 2 of D8_Q7] (D8_Q4) {%
+    Deliverable\\\ref{lab3:report}~\ref{lab3:report:q4}%
+  };
+  \node[deliverable, above = 2 of D8_Q4] (D8_Q1) {%
+    Deliverable\\\ref{lab3:report}~\ref{lab3:report:q1}--\ref{lab3:report:q3}%
+  };
+  \node[deliverable, right = 2 of D8_Q1] (D8_Q6) {%
+    Deliverable\\\ref{lab3:report}~\ref{lab3:report:q6}%
+  };
+  \node[deliverable, right = 2 of D7] (D8_Q5) {%
+    Deliverable\\\ref{lab3:report}~\ref{lab3:report:q5}%
+  };
+  \draw[signal, arrow] (D7.east) -- (D8_Q5.west);
+  \draw[signal, arrow] (D6.south) -- (D8_Q5.north);
+  \draw[signal, arrow] (D6.east) -| ($(D8_Q4.west) + (-1, 0)$) -- (D8_Q4.west);
+  \draw[signal, arrow] (D6.east) -- (D8_Q7.west);
+  \draw[signal, arrow] (D8_Q1.south) -- (D8_Q4.north);
+  \draw[signal, arrow] (D8_Q1.east) -- (D8_Q6.west);
+\end{tikzpicture}
+\end{center}
 
 \section{Experimental Procedure}\label{Lab:3:Experiment}
 Unlike previous labs, you will now work with two Simulink models.
@@ -36,7 +78,10 @@ you will introduce three feedback interconnections!
 
 In Section~\ref{Lab:3:Part:I} you will stabilize the physical plant that maps input forces to an output horizontal velocity.
 You will treat velocity as the measurement (output).
-You can then design a controller
+Once stabilized, you will design a controller in Section~\ref{Lab:3:Part:II} that, again using velocity as a measurement, ensures perfect tracking of a reference velocity.
+We call this the inner loop controller since it corresponds to the inner most loops of the system (ignoring the stabilizing loop).
+Finally, in Section~\ref{Lab:3:Part:III} you will design a controller that uses the inner loop and negative feedback to achieve perfect tracking to a desired reference position.
+The end result is that you will have a closed loop system that stabilizes the nonlinear landing module dynamics to achieve a desired horizontal position against disturbances!
 
 \subsection{Part I: Stabilize and Identify the Plant}\label{Lab:3:Part:I}
 Your deliverables for this subsection are
@@ -158,7 +203,7 @@ Verify for yourself that
 \[
   G_1(s) = \frac{1}{\tau_1 s + 1}
 \]
-where \(\tau\) is the time constant of \(G_1(s)\) (as estimated in Deliverable~\ref{del:lab3:g1:timeconstant}).
+where \(\tau\) is the time constant of \(G_1(s)\) (as estimated in Deliverable~\ref{del:lab3:g1:3}).
 Close the loop around \(G_1(s)\) with a proportional error feedback controller like so
 %
 \begin{center}
@@ -446,9 +491,10 @@ Make sure to leverage your other deliverables in your answers!
       As a result, you designed against only an approximation of the true system.
       This explains why you will have observed a modest to large overshoot of the target horizontal position before the landing module settles.
       That doesn't mean linear system theory is completely useless, however.
-      \textbf{Determine} a gain that you can change to reduce the overshoot.
-      \textbf{Justify} your explanation using your solution to~\ref{lab3:report:q2} and make sure to include whether you would increase or decrease that gain.
-      \emph{It is not required, but I highly recommend you give it a try and see if it works. You might be surprised!}
+
+      Using the transfer function \(G_3(s)\) found in~\ref{lab3:report:q2}, \textbf{determine} a gain that you can change to reduce the overshoot.
+      \textbf{Justify} your explanation using the relevant overshoot formula (see Lab~\ref{Lab:2}) and make sure to include whether you would increase or decrease that gain.
+      \emph{It is not required for your submission but I highly recommend you give your answer a try in simulation. You might be surprised!}
       \label{lab3:report:q4}
     }
     \item{%
@@ -462,6 +508,7 @@ Make sure to leverage your other deliverables in your answers!
         d(t) = M + A\sin\left(\pi t\right),
       \]
       where \(M, A > 0\).
+
       Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
       \textbf{justify} why you did not notice this sinusoidal force in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
       \textbf{Specifically determine} how large \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
@@ -534,6 +581,7 @@ Make sure to leverage your other deliverables in your answers!
       --
       (afterPlant.base)
       --
+      node[midway, above] {\(v(t)\)}
       (Int.west);
     \draw[smooth_path, arrow]
       (Int.east)
@@ -541,7 +589,7 @@ Make sure to leverage your other deliverables in your answers!
       (afterInt.base)
       --
       (y.base)
-      node[above] {\(y(t)\)};
+      node[above] {\(x(t)\)};
     \draw[smooth_path, arrow]
       (Int.east)
       --
@@ -549,7 +597,8 @@ Make sure to leverage your other deliverables in your answers!
       --
       +(0, -1)
       -|
-      (Sum3.south);
+      (Sum3.south)
+      node[below right] {\(-\)};
     \draw[smooth_path, arrow]
       (Plant.east)
       --
@@ -583,14 +632,14 @@ questions where it is shown per question.
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
-        & \ref{del:lab3:g1:1}         & 4       \\ \hline
+        & \ref{del:lab3:g1:1}         & 1       \\ \hline
         & \ref{del:lab3:g1:2}         & 4      \\ \hline
-        & \ref{del:lab3:g1:3}        & 4       \\ \hline
-        & \ref{del:lab3:g2:1}        & 4       \\ \hline
+        & \ref{del:lab3:g1:3}        & 2       \\ \hline
+        & \ref{del:lab3:g2:1}        & 6       \\ \hline
         & \ref{del:lab3:g3:1}         & 4      \\ \hline
         & \ref{del:lab3:g3:2}         & 4       \\ \hline
         & \ref{del:lab3:g3:3}         & 4       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 28      \\ \hhline{=|=|=}
+Lab Subtotal&                       & 25      \\ \hhline{=|=|=}
         & \ref{lab3:report}~\ref{lab3:report:q1}  & 4       \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q2}  & 4       \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q3}  & 4       \\ \hline
@@ -599,7 +648,7 @@ Lab Subtotal&                       & 28      \\ \hhline{=|=|=}
         & \ref{lab3:report}~\ref{lab3:report:q6}  & 3      \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q7}  & 3      \\ \hhline{=|=|=}
 Report Subtotal&  & 25 \\ \hhline{=|=|=}
-  Total &                       & 53
+  Total &                       & 50
 \end{tabular}
 \caption[Grading Scheme for Lab 3]{Grading scheme for Lab 3.}
 \label{tab:lab3:grading}
