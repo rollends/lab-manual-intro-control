@@ -203,7 +203,7 @@ Verify for yourself that
 \[
   G_1(s) = \frac{1}{\tau_1 s + 1}
 \]
-where \(\tau\) is the time constant of \(G_1(s)\) (as estimated in Deliverable~\ref{del:lab3:g1:3}).
+where \(\tau_1\) is the time constant of \(G_1(s)\) (as estimated in Deliverable~\ref{del:lab3:g1:3}).
 Close the loop around \(G_1(s)\) with a proportional error feedback controller like so
 %
 \begin{center}
@@ -244,9 +244,10 @@ Close the loop around \(G_1(s)\) with a proportional error feedback controller l
     \draw [smooth_area_path, fill = Blue, fill opacity = 0.50, text opacity = 1]
       ($(w)+(0.25, 0)$) -- +(0, 0.50) -| node[midway, above, color=Blue] {\(G_1(s)\)} ($(v)+(-0.50,0)$) -- +(0, -0.75) -| ($(w)+(0.25, 0)$);
 
-    \node [draw, smooth_block, left = 0.25 of w] (Gain2) {\(K_2\)};
-    \node [draw, smooth_sum, left = 0.50 of Gain2] (Sum2) {};
-    \node [left = 0.50 of Sum2] (v_r) {};
+    \node [draw, smooth_block, left = 0.10 of w] (Gain2) {\(K_2\)};
+    \node [draw, smooth_sum, left = 0.25 of Gain2] (Sum2) {};
+    \node [draw, smooth_block, left = 0.25 of Sum2] (Gain3) {\(K_3\)};
+    \node [left = 0.25 of Gain3] (v_r) {};
 
     \draw [arrow, smooth_path]
       (Plant.east)
@@ -266,19 +267,28 @@ Close the loop around \(G_1(s)\) with a proportional error feedback controller l
       --
       (Sum1.west);
     \draw [arrow, smooth_path]
-      (v_r.base)
+      (Gain3.east)
       --
-      (Sum2.west)
-      node [midway, above] {\(v_r(t)\)};
+      (Sum2.west);
+    \draw [arrow, smooth_path]
+      (v_r.base)
+      node [above] {\(v_r(t)\)}
+      --
+      (Gain3.west);
 
   \end{tikzpicture}
 \end{center}
 %
-Verify that, when the loop is closed, the transfer function from \(v_r(t)\) to \(v(t),\) denoted as \(G_2(s)\) in the Simulink model, takes the form
+Suppose we close the loop.
+As in Lab~\ref{Lab:1}, you should observe that the new time constant \(\tau_2\) of the transfer function from \(v_r(t)\) to \(v(t),\) denoted by \(G_2(s),\) is given by
+\[
+  \tau_2 = \frac{\tau_1}{1 + K_2}
+\]
+and that, in particular,
 \[
   G_2(s)
     = \frac{V(s)}{V_r(s)}
-    = \frac{K_3 K_2}{1 + K_2} \frac{1}{\frac{\tau_1}{1 + K_2} s + 1}.
+    = \frac{K_3 K_2}{1 + K_2} \frac{1}{\tau_2 s + 1}.
 \]
 %
 \begin{procedure}[label={proc:lab3:speedup}]
@@ -431,8 +441,13 @@ You must complete the previous procedure before starting this final procedure.
       \textbf{Remove} all annotations from all signals in \emph{both} Simulink models.
     }
     \item{%
-      \textbf{Set} the input perturbation annotation for the signal \(d(t)\) that is added into the signal right before the Plant block.
+      In Part I of the Simulink model
+      \begin{center}
+        \texttt{Lab\_3\_Velocity\_Controlled\_Landing\_Module.slx}.
+      \end{center}
+      \textbf{set} the input perturbation annotation for the signal \(d(t)\) that is added into the signal right before the Plant block.
       \(d(t)\) is the signal coming out of the ``Disturbance Signal'' block.
+      Make sure to \textbf{save} your changes before proceeding.
     }
     \item{%
       \textbf{Set} the output measurement annotation for the signal \(x(t)\) right after the integrator block (found in the ``Position'' Simulink model).
@@ -469,7 +484,7 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab3:report:q1}
     }
     \item{%
-      You should find that the transfer function that you derived in~\ref{lab3:report:q2} was a second-order transfer function with no zero.
+      You should find that the transfer function that you derived in~\ref{lab3:report:q1} was a second-order transfer function with no zero.
       \textbf{Write} the transfer function of~\ref{lab3:report:q2} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
       Leave your answer in symbolic form.
       \label{lab3:report:q2}
