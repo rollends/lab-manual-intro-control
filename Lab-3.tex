@@ -4,7 +4,7 @@ Imagine you are a young, aspiring, junior engineer at VenX, a private company in
 Because of your junior status, they have only asked you to design a simple controller that ensures the landing module lands at the correct location.
 The controller you design controls the level of horizontal thrust to achieve a desired position relative to some point on the surface.
 You may assume that all units are in standard units.
-Distances are measured in meters, time is measured in seconds, mass is measured in kilograms and all other units are such that they are consistent with that.
+Distances are measured in meters, time is measured in seconds, mass is measured in kilograms and all other units are such that they are consistent.
 
 \section{Objectives}
 \begin{enumerate}[label=(\arabic*)]
@@ -76,11 +76,11 @@ Unlike previous labs, you will now work with two Simulink models.
 Moreover, this lab will involve a larger number of moving parts;
 you will introduce three feedback interconnections!
 
-In Section~\ref{Lab:3:Part:I} you will stabilize the physical plant that maps input forces to an output horizontal velocity.
+In Part I you will stabilize the physical plant that maps input forces to an output horizontal velocity.
 You will treat velocity as the measurement (output).
-Once stabilized, you will design a controller in Section~\ref{Lab:3:Part:II} that, again using velocity as a measurement, ensures perfect tracking of a reference velocity.
+Once stabilized, you will design a controller in Part II that, again using velocity as a measurement, ensures perfect tracking of a reference velocity.
 We call this the inner loop controller since it corresponds to the inner most loops of the system (ignoring the stabilizing loop).
-Finally, in Section~\ref{Lab:3:Part:III} you will design a controller that uses the inner loop and negative feedback to achieve perfect tracking to a desired reference position.
+Finally, in Part III you will design a controller that uses the inner loop and negative feedback to achieve perfect tracking to a desired reference position.
 The end result is that you will have a closed loop system that stabilizes the nonlinear landing module dynamics to achieve a desired horizontal position against disturbances!
 
 \subsection{Part I: Stabilize and Identify the Plant}\label{Lab:3:Part:I}
@@ -114,7 +114,7 @@ The reason for this is quite simple. A physical system normally integrates the i
 where \(M > 0\) is the mass of the landing module.
 The step response of this system is unbounded.
 It is true that there is friction in your model but it is often hard to model friction in reality, so we will take the above equation as our model.
-To stabilize the plant, consider closing the loop in the following way
+To stabilize the plant, close the loop in the following way
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
@@ -166,24 +166,27 @@ The gain you choose is up to you but make sure you record it.
     }
     \item{%
       \textbf{Choose} and \textbf{set} a random positive gain for \(K_1.\)
-      The block is named ``Stabilizing Gain'' in the Simulink model.%
+      The block is named ``Stabilizing Gain'' in the Simulink model.
+      \textbf{Record} the chosen gain for Deliverable~\ref{del:lab3:g1:1}.%
     }
     \item{%
       \textbf{Acquire} a step response from the signal \(w(t)\) to the signal \(v(t).\)
       Remember from Lab 2 that you need to set \(w\) as an input perturbation and \(v\) as an output measurement.
+      \textbf{Save} the figure for Deliverable~\ref{del:lab3:g1:2}.%
     }
     \item{%
       \textbf{Measure} the time constant of this system using the acquired step response. We will call this time constant \(\tau_1.\)
+      \textbf{Record} \(\tau_1\) for Deliverable~\ref{del:lab3:g1:3}.%
     }
   \end{enumerate}
 \end{procedure}
 
 \subsection{Part II: Reference Velocity Control Design}\label{Lab:3:Part:II}
-When you performed Procedure~\ref{proc:lab3:stabilize}, you will have noticed that the step response was extremely slow.
-In particular, you should notice that it took more than a minute of simulated time to achieve a speed of \SI{1}{m/s} (\SI{3.6}{km/h})!
+Upon performing Procedure~\ref{proc:lab3:stabilize}, you notice that the step response is extremely slow.
+It took more than a minute of simulated time to achieve a speed of \SI{1}{m/s} (\SI{3.6}{km/h})!
 If this is the response speed of our system, we will never be able to control it to a desired position.
 In this section, you will solve this problem by designing a proportional error feedback controller that controls to a \emph{desired velocity} but with a much better time constant.
-Your deliverables for this section are
+Your deliverable for this section is
 %
 \begin{deliverable}[label={del:lab3:g2:1}]
   \textbf{Acquire} a (unit) step response from the signal \(v_r(t)\) to the signal \(v(t).\)
@@ -198,7 +201,7 @@ This section concerns the Part II area of the Simulink model
 \begin{center}
   \texttt{Lab\_3\_Velocity\_Controlled\_Landing\_Module.slx}.
 \end{center}
-The now stabilized plant, as a transfer function from \(w(t)\) to \(v(t),\) will be referred to as \(G_1(s)\) as is depicted below.
+The now stabilized plant, as a transfer function from \(w(t)\) to \(v(t),\) will be referred to as \(G_1(s)\) and is depicted below in the block diagram.
 Verify for yourself that
 \[
   G_1(s) = \frac{1}{\tau_1 s + 1}
@@ -279,8 +282,7 @@ Close the loop around \(G_1(s)\) with a proportional error feedback controller l
   \end{tikzpicture}
 \end{center}
 %
-Suppose we close the loop.
-As in Lab~\ref{Lab:1}, you should observe that the new time constant \(\tau_2\) of the transfer function from \(v_r(t)\) to \(v(t),\) denoted by \(G_2(s),\) is given by
+As in Lab~\ref{Lab:1}, you should observe that the new time constant \(\tau_2\) of the transfer function from \(v_r(t)\) to \(v(t),\) which we denote \(G_2(s),\) is given by
 \[
   \tau_2 = \frac{\tau_1}{1 + K_2}
 \]
@@ -290,6 +292,7 @@ and that, in particular,
     = \frac{V(s)}{V_r(s)}
     = \frac{K_3 K_2}{1 + K_2} \frac{1}{\tau_2 s + 1}.
 \]
+Your task is to ensure that \(G_2(s)\) has the desired time constant of \(\frac{1}{\sqrt{50}}\) and has a DC gain of \(1.\)
 %
 \begin{procedure}[label={proc:lab3:speedup}]
   In this procedure you use another closed loop to accelerate the response of your system, thereby making it usable to do position step tracking.
@@ -299,14 +302,13 @@ and that, in particular,
       You should connect the signal labelled \(v\) to the summing junction labelled ``\(G_2\) Loop.''%
     }
     \item{%
-      We would like to have the transfer function \(G_2(s)\) to have a time constant of \(\frac{1}{\sqrt{50}}.\)
+      We would like the time constant of \(G_2(s),\) denoted \(\tau_2,\) to be equal to \(\frac{1}{\sqrt{50}}.\)
       This would mean that, for a step change in the \emph{reference velocity}, the \emph{actual velocity} will reach \(63.3\%\) of the reference velocity in \SI{0.1414}{s}.
-      Recognize that the time constant of this new closed loop system is
+      Using the fact that
       \[
-        \frac{\tau_1}{1 + K_2}
+        \tau_2 = \frac{\tau_1}{1 + K_2}
       \]
-      where \(\tau_1\) is the time constant of \(G_1(s)\) that you measured earlier.
-      As a result, \textbf{solve} for the \(K_2\) you need to have this time constant equal to \(\frac{1}{\sqrt{50}}.\)%
+      where \(\tau_1\) is the time constant of \(G_1(s)\) you measured earlier, \textbf{solve} for the \(K_2\) you need to achieve the specification \(\tau_2 = \frac{1}{\sqrt{50}}.\)%
     }
     \item{%
       \textbf{Solve} for the gain \(K_3\) that ensures \(G_2(s)\) has a DC gain of \(1.\)%
@@ -316,15 +318,19 @@ and that, in particular,
     }
     \item{%
       \textbf{Acquire} the step response from the signal \(v_r(t)\) to the signal \(v(t).\)
-      Remember again to change which signal is the input perturbation from Part I.%
+      Remember again to change which signal is the input perturbation from Part I.
+      Your input is now \(v_r(t).\)%
     }
     \item{%
-      \textbf{Place} cursors on the time constant and steady-state value to prove you met the specification.%
+      \textbf{Place} cursors on the time constant and steady-state value to prove you met the specification.
+      \textbf{Save} your figure for Deliverable~\ref{del:lab3:g2:1}.%
     }
   \end{enumerate}
 \end{procedure}
 
 \subsection{Part III: Reference Position Control Design}\label{Lab:3:Part:III}
+You have made it to the final experimental part of this lab.
+In this part, you will ensure perfect tracking of a constant position reference by closing the loop around our newly stabilizing velocity control system.
 Your deliverables for this part are
 %
 \begin{deliverable}[label={del:lab3:g3:1}]
@@ -401,7 +407,7 @@ form
 \[
   G_2(s) = \frac{1}{\frac{1}{\sqrt{50}}s + 1}.
 \]
-Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) in the Simulink model, equals
+Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) in the Simulink model, is
 \[
   G_3(s) = \frac{K_4\sqrt{50}}{s^2 + \sqrt{50} s + K_4 \sqrt{50}}.
 \]
@@ -419,20 +425,23 @@ Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) 
     }
     \item{%
       \textbf{Acquire} the (unit) step response from the signal \(r(t)\) to the signal \(x(t).\)
-      Remember to go into the other model file and remove any annotations you have used there before setting new ones in this model file.%
+      Remember to go into the other model file and remove any annotations you have used there before setting new ones in this model file.
+      \textbf{Save} your figure for Deliverable~\ref{del:lab3:g3:1}.%
     }
     \item{%
-      \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated.%
-      \emph{Do not be alarmed that the behaviour does not look like the step response.}
+      \textbf{Run} the ``\texttt{visualize\_landing.m}'' script and \textbf{save} both Figures that are generated for Deliverable~\ref{del:lab3:g3:2}.
+      \emph{Do not be alarmed that the behaviour does not look like the step response.}%
     }
   \end{enumerate}
 \end{procedure}
 %
+Now that you have designed a control system that regulates position and simulated the entire nonlinear system, you are almost ready to do analysis.
+We require you to generate one more plot, a Bode plot, that will help you in analyzing how well your system deals with the approximate model.
 In the following procedure, be very careful where you place your annotations, and make sure to save your diagram before running the Model Linearizer.
 You must complete the previous procedure before starting this final procedure.
 %
 \begin{procedure}[label={proc:lab3:disturbance}]
-  In this procedure, you will acquire the Bode plot from the input force \(u(t)\) to the output position \(x(t).\)
+  In this procedure, you will acquire the Bode plot from the input disturbance force \(d(t)\) to the output position \(x(t).\)
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       \textbf{Ensure} you completed Procedure~\ref{proc:lab3:regulate}.
@@ -453,7 +462,7 @@ You must complete the previous procedure before starting this final procedure.
       \textbf{Set} the output measurement annotation for the signal \(x(t)\) right after the integrator block (found in the ``Position'' Simulink model).
     }
     \item{%
-      \textbf{Acquire} the Bode plot.
+      \textbf{Acquire} the Bode plot and \textbf{save} the figure for Deliverable~\ref{del:lab3:g3:3}.
     }
   \end{enumerate}
 \end{procedure}
@@ -485,7 +494,7 @@ Make sure to leverage your other deliverables in your answers!
     }
     \item{%
       You should find that the transfer function that you derived in~\ref{lab3:report:q1} was a second-order transfer function with no zero.
-      \textbf{Write} the transfer function of~\ref{lab3:report:q2} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
+      \textbf{Write} the transfer function of~\ref{lab3:report:q1} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
       Leave your answer in symbolic form.
       \label{lab3:report:q2}
     }
@@ -513,11 +522,12 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab3:report:q4}
     }
     \item{%
-      As mentioned in~\ref{lab3:report:q5}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
-      The engineers at VenX included in that model a wind force, that increases in magnitude as you get closer to the ground \emph{and} has some sinusoidal variability in speed.
-      As part of the specification, the engineers would like to know just how large of a force we can afford.
+      As mentioned in~\ref{lab3:report:q4}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
+      The engineers at VenX included in that model a variable wind force that increases in magnitude as you get closer to the ground \emph{and} has some sinusoidal variability.
+      As part of the specification, the engineers would like to know just how large of a force they can afford.
 
-      Since wind is just an additional force, and \(u(t)\) is really just an input force, we can model this wind force as simply an additional signal \(d(t)\) that is added to the input of the Plant \(u(t).\)
+      Since wind is just an additional force to the input force \(u(t)\), we can model it as \(d(t)\);
+      \(d(t)\) is an input disturbance.
       Assume
       \[
         d(t) = M + A\sin\left(\pi t\right),
@@ -525,17 +535,17 @@ Make sure to leverage your other deliverables in your answers!
       where \(M, A > 0\).
 
       Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
-      \textbf{justify} why you did not notice this sinusoidal force in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
-      \textbf{Specifically determine} how large \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
+      \textbf{justify} why you did not notice large sinusoidal disturbances in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
+      \textbf{Specifically determine} how large the constant \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
       \label{lab3:report:q5}
     }
     \item{%
-      The software developers at VenX want your controller to have \(x(t),\) your horizontal position, to track perfectly any constant reference position \(r(t).\)
+      The software developers at VenX want your controller to have \(x(t),\) your horizontal position, track perfectly any constant reference position \(r(t).\)
 
       Does your control system (treating \(r(t)\) as the input and \(x(t)\) as the output) do this?
       If yes, does it matter what the constants \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M\) are?
       \textbf{Justify} using the theory learned in the course.
-      \emph{Use the transfer function \(G_3(s)\) put in standard form (as derived in~\ref{lab3:report:q3}) to answer the question.}
+      %\emph{Use the transfer function \(G_3(s)\) put in standard form (as derived in~\ref{lab3:report:q3}) to answer the question.}
       \label{lab3:report:q6}
     }
     \item{%
