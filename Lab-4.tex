@@ -3,12 +3,12 @@ You are now a slightly more experienced junior engineer at VenX.
 This time, you are designing an unmanned aerial vehicle that is dropped into the atmosphere and performs powered glides along predefined paths over the surface.
 The purpose is to do surveillance\footnote{Don't worry. The CEO of VenX, Lone Dusk, has assured you that the FBI are not using your technology for surveilling citizens in protests. Should you trust him? Probably not. But in this lab, you live in a utopia where people and the government are very honourable.} of the planet's surface to map out the landscape.
 
-The controller you design controls the turning rate \SI{}{rad/s} and the output you measure is the distance to the straight line path \(y(t).\)
+The controller you design controls the turning rate (\SI{}{rad/s}) and the output you measure is the distance to the straight line path \(y(t)\) (\SI{}{m}).
 In practice the transfer function from this input to \(y(t)\) is highly nonlinear, but the senior engineers have designed an inner loop controller that makes the plant \(P(s)\) look like
 \[
   P(s) = \frac{1}{s^2}.
 \]
-Take \texttt{ECE 486} if you are interested in how to do this.
+Take \texttt{ECE 486}\footnote{In the robotics course you will learn about a technique called Feedback Linearization. You just cancel the nonlinearities out!} if you are interested in how to do this.
 %
 \begin{figure}
   \centering
