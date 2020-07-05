@@ -1,6 +1,14 @@
 \chapter{PID Analysis}\label{Lab:4}
 You are now a slightly more experienced junior engineer at VenX.
 This time, you are designing an unmanned aerial vehicle that is dropped into the atmosphere and performs powered glides along predefined paths over the surface.
+%
+\begin{center}
+  %\centering
+  \input{Lab_4_UAV_PF.pdf_tex}%
+  %\caption{Unmanned Aerial Vehicle (UAV) moving with respect to some line.}
+  %\label{fig:lab4:uav}
+\end{center}
+%
 The purpose is to do surveillance\footnote{Don't worry. The CEO of VenX, Lone Dusk, has assured you that the FBI are not using your technology for surveilling citizens in protests. Should you trust him? Probably not. But in this lab, you live in a utopia where people and the government are very honourable.} of the planet's surface to map out the landscape.
 
 The controller you design controls the turning rate (\SI{}{rad/s}) and the output you measure is the distance to the straight line path \(y(t)\) (\SI{}{m}).
@@ -8,19 +16,13 @@ In practice the transfer function from this input to \(y(t)\) is highly nonlinea
 \[
   P(s) = \frac{1}{s^2}.
 \]
-Take \texttt{ECE 486}\footnote{In the robotics course you will learn about a technique called Feedback Linearization. You just cancel the nonlinearities out!} if you are interested in how to do this.
-%
-\begin{figure}
-  \centering
-  \input{Lab_4_UAV_PF.pdf_tex}
-  \caption{Unmanned Aerial Vehicle (UAV) moving with respect to some line.}
-  \label{fig:lab4:uav}
-\end{figure}
-%
+Take \texttt{ECE 486}\footnote{In the robotics course you will learn to just cancel the nonlinearities out.} if you are interested in how to do this.
+
 \section{Objectives}\label{Lab:4:Objectives}
+This goals of this lab are to
 \begin{enumerate}[label=(\arabic*)]
   \item{
-    \textbf{Learn} how the derivative and integral terms of a PID controller affect performance.
+    \textbf{Learn} how the derivative and integral terms of a PID controller affect performance (desireably and undesireably).
   }
   \item{
     \textbf{Tune} a proportional-integral-derivative (PID) controller.
@@ -32,6 +34,30 @@ Take \texttt{ECE 486}\footnote{In the robotics course you will learn about a tec
     \textbf{Recognize} how zero dynamics can be introduced by controllers and how they can severely impact performance and analysis.
   }
 \end{enumerate}
+The deliverable dependency graph is
+\begin{center}
+\begin{tikzpicture}[x=1em, y=1em]
+  \node[deliverable] (D1) {Deliverable\\\ref{del:lab4:p1:1}};
+  \node[deliverable, below = 2 of D1] (D2) {Deliverable\\\ref{del:lab4:p2:1}--\ref{del:lab4:p2:3}};
+  \node[deliverable, below = 2 of D2] (D3) {Deliverable\\\ref{del:lab4:p3:1}--\ref{del:lab4:p3:3}};
+  \node[deliverable, right = 2 of D3] (Q1) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q1}--\ref{lab4:report:q2}};
+  \node[deliverable, below = 2 of Q1] (Q4) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q4}};
+  \node[deliverable, right = 2 of Q4] (Q5) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q5}};
+  \node[deliverable, at = {(Q5|-D1)}] (Q3) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q3}};
+  \node[deliverable, right = 2 of Q5] (Q6) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q6}};
+  \node[deliverable, left = 2 of D3] (Q7) {Deliverable\\\ref{lab4:report}~\ref{lab4:report:q7}};
+
+  \draw[signal, arrow] (D1.south) -- (D2.north);
+  \draw[signal, arrow] (D2.south) -- (D3.north);
+  \draw[signal, arrow] (D3.east) -- (Q1.west);
+  \draw[signal, arrow] (D3.south) |- (Q4.west);
+  \draw[signal, arrow] (Q4.east) -- (Q5.west);
+  \draw[signal, arrow] (Q3.south) -- (Q5.north);
+  \draw[signal, arrow] (Q5.east) -- (Q6.west);
+  \draw[signal, arrow] (D3.west) -- (Q7.east);
+
+\end{tikzpicture}
+\end{center}
 
 \section{Experimental Procedure}\label{Lab:4:Experiment}
 This lab is split into three parts.
@@ -133,14 +159,14 @@ and next procedure describes how to go about this.
 \end{procedure}
 
 \subsection{Part II: Introducing an Integral Component}
-We would like to eliminate the constant steady-state error.
+We would like to eliminate the observed constant steady-state error.
 How do we do this?
 First we must determine why this error appears.
-You may have the question ``If our plant already has an integrator, how is it that there is constant steady-state error?''
+It is fair to ask:
+``If our plant already has an integrator, how is it that there is constant steady-state error?''
 In this simulation there is a constant \emph{input} disturbance similar to the \(d(t)\) of Lab~\ref{Lab:3}.
-As you verified in Lab~\ref{Lab:3}, even an integrator in the plant cannot perfectly reject this error and can only attenuate it under proportional error feedback.
-If we introduce a pole at the origin, i.e. an integrator, the controller can perfectly reject this error.
-This is the virtue of using the integrator term of PID control.
+As you verified in Lab~\ref{Lab:3}, even an integrator in the plant cannot perfectly reject this input disturbance and can only attenuate it under proportional error feedback.
+If we introduce a pole at the origin, i.e. an integrator, in the controller we can perfectly reject this error.
 Unfortunately, there is a constraint on how large the integrator term can be.
 Your deliverable for this part is to simply choose an integrator gain.
 %
@@ -226,7 +252,7 @@ Your complete PID control system looks like
 \end{center}
 %
 where you have determined \(K_p\) and \(K_d\) already.
-The poles of this system\footnote{Read very carefully here. I am \textbf{not} saying the zeros or the DC gain are the same. Just the poles!} are the same as the poles of the closed loop system
+The closed loop poles of this system\footnote{Notice what I do not say. I am \textbf{not} saying the closed loop zeros or the DC gain are the same.} are the same as the poles of the closed loop system
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
@@ -274,7 +300,7 @@ The next procedure guides you through these steps.
   In this procedure you will produce a root locus and make an initial choice for the gain \(K_i.\)
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      \textbf{Run} the ``part\_2.m'' MATLAB script and \textbf{inspect} Figure 3.
+      \textbf{Run} the ``part\_2.m'' MATLAB script with the variables \texttt{Kp} and \texttt{Kd} set to your chosen gains from Part I and \textbf{inspect} Figure 3.
     }
     \item{%
       \textbf{Observe} that if \(K_i\) is too large, the system will be rendered unstable. \textbf{Place a cursor} on one such point on the root locus.
@@ -383,18 +409,19 @@ Make sure to leverage your other deliverables in your answers!
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       Like in Lab~\ref{Lab:3}, the primary output was a (relative) position \(y(t).\)
-      Unlike Lab~\ref{Lab:3}, we do not observe the velocity explicitly but, instead, use the differentiator in the PID controller (derivative of the relative position is velocity) to estimate velocity and apply that in closed loop feedback.
-      The explicit use of a differentiator introduced zeros in the final transfer function \(G(s)\) from \(r(t)\) to \(y(t).\)
+      Unlike Lab~\ref{Lab:3}, we do not observe the velocity explicitly but, instead, use the differentiator in the PID controller to estimate velocity (derivative of the relative position is velocity) and apply that in closed loop feedback.
+      Unfortunately, the explicit use of a differentiator in parallel to the proportional error feedback introduced zeros in the final transfer function \(G(s)\) from \(r(t)\) to \(y(t).\)
       In particular
       \[
         G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
       \]
-      For the \emph{final value} of \(K_p,\) \(K_i\) and \(K_d\) you chose, \textbf{determine} where the zeros of \(G(s)\) are located.
+      For your final choice of \(K_p,\) \(K_i\) and \(K_d,\) \textbf{determine} where the zeros of \(G(s)\) are located.
       \label{lab4:report:q1}
     }
     \item{%
-      As discussed briefly in the lab, if the zeros are sufficiently fast (i.e. large negative real part) compared to the poles, we can approximate the behaviour of the system as simply the system without the zeros.
+      If the zeros are sufficiently fast (i.e. large negative real part) compared to the poles, we can approximate the behaviour of the system as simply the system where the zeros are in steady-state.
       Using the zeros you determined in~\ref{lab4:report:q1}, \textbf{determine} if the zeros affected your system's response.
+      \textbf{Where} in the response of Figure 2 would it affect your system?
       You may assume that ``sufficiently fast'' means that the zeros is atleast one order of magnitude farther away in real part than any of the poles.
       \label{lab4:report:q2}
     }
@@ -451,28 +478,32 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab4:report:q3}
     }
     \item{%
-      Using the statement you proved in~\ref{lab4:report:q3}, any other relevant deliverables, your experience in this lab and the definition of \(P(s),\) \textbf{justify} why you would \textbf{not} introduce an integrator term when you know for a fact that there are no step input disturbances.
+      Using the root locuses of Deliverable~\ref{del:lab4:p3:1}, \textbf{explain} how the gains \(K_p,\) \(K_i\) and \(K_d\) theoretically affect the performance of your system as you vary them.
+      Ensure you discuss each gain as well as discuss if those gains affect the qualities you discuss universally (does increasing a certain gain always result in the quality improving?).
       \label{lab4:report:q4}
     }
     \item{%
-      Suppose your plant \(P(s)\) was, instead,
-      \[
-        P(s) = \frac{s + 1}{s^2 + 2 s + 3}
-      \]
-      and that \(d(t) = 0.\)
-      Could you achieve perfect step tracking when \(K_i = 0\)?
+      The engineers at VenX claim that there are no input disturbances.
+      Input disturbances, in this context, are caused by poor mechanical trimming of the aircraft (it doesn't ``naturally'' fly straight).
+      Suppose you agreed with this statement\footnote{at the end of the day, you aren't a mechanical/aerospace engineer}.
+      However, they argue that you should include the integrator term \emph{anyway} since they claim it improves the performance of your controller by guaranteeing that you converge onto the path (no steady-state error).
+
+      Using the statement you proved in~\ref{lab4:report:q3}, any other relevant deliverables, your experience in this lab and the definition of \(P(s),\) \textbf{determine} if it is true that you should keep the integrator term and \textbf{explain} your reasoning. Ensure to explain both the positives and negatives of including an integrator term.
       \label{lab4:report:q5}
     }
     \item{%
-      Using the root locuses of Deliverable~\ref{del:lab4:p3:1}, \textbf{explain} how the gains \(K_p,\) \(K_i\) and \(K_d\) theoretically affect the performance of your system as you vary them.
-      Ensure you discuss each gain as well as discuss if those gains affect the qualities you discuss universally (does increasing a certain gain always result in the quality improving?).
+      Repeat question~\ref{lab4:report:q5} except assuming that the plant was
+      \[
+        P(s) = \frac{s + 1}{s^2 + 2 s + 3}.
+      \]
+      Would this change your answer?
       \label{lab4:report:q6}
     }
     \item{%
       \textbf{State} what characteristic you aimed to improve in Part III.
       \textbf{Why} did you choose to change the gains you changed?
       A theoretical justification is not required but you should explain yourself clearly.
-      If no change improved the characteristics, explain what changes you tried, why you tried them, and why you think they did not work.
+      If no change improved the characteristic, explain what changes you tried, why you tried them, and why you think they did not work.
       \label{lab4:report:q7}
     }
   \end{enumerate}
@@ -498,9 +529,9 @@ Lab Subtotal&                       & 30      \\ \hhline{=|=|=}
         & \ref{lab4:report}~\ref{lab4:report:q1}  & 2       \\ \hline
         & \ref{lab4:report}~\ref{lab4:report:q2}  & 2       \\ \hline
         & \ref{lab4:report}~\ref{lab4:report:q3}  & 4       \\ \hline
-        & \ref{lab4:report}~\ref{lab4:report:q4}  & 2       \\ \hline
+        & \ref{lab4:report}~\ref{lab4:report:q4}  & 6       \\ \hline
         & \ref{lab4:report}~\ref{lab4:report:q5}  & 2      \\ \hline
-        & \ref{lab4:report}~\ref{lab4:report:q6}  & 6      \\ \hline
+        & \ref{lab4:report}~\ref{lab4:report:q6}  & 2      \\ \hline
         & \ref{lab4:report}~\ref{lab4:report:q7}  & 2      \\ \hhline{=|=|=}
 Report Subtotal&  & 20 \\ \hhline{=|=|=}
   Total &                       & 50
