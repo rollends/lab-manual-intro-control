@@ -629,24 +629,60 @@ Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab5:report}]
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
+      In both the Lead and Lag design procedures, your design procedure involves adding more phase than what the phase margin specification demands.
+      Using a Bode plot of your Lead and Lag compensators, \textbf{explain why}.
       \label{lab5:report:q1}
     }
     \item{%
+      What are the qualitative differences between the Lag compensated and Lead compensated systems, as simulated for Deliverables~\ref{del:lab5:p4:1} and~\ref{del:lab5:p4:2}.
+      Touch on characteristics like
+      \begin{itemize}
+        \item{
+          the overshoot,
+        }
+        \item{
+          the settling time and
+        }
+        \item{
+          the time to peak.
+        }
+      \end{itemize}
       \label{lab5:report:q2}
     }
     \item{%
+      Using the observations made in~\ref{lab5:report:q2} and your experience, \textbf{describe} how you would choose between a Lead compensator or Lag compensator.
       \label{lab5:report:q3}
     }
     \item{%
+      Using the original phase margin \(\phi\) and gain crossover \(\omega_\mathrm{gc}\) of \(K P(s)\) --- both of which can be found by looking at the Bode plot of Deliverable~\ref{del:lab5:p1:3} --- \textbf{compute} the maximum delay
+      \[
+        \tau_\mathrm{max} = \frac{\phi}{\omega_\mathrm{gc}}
+      \]
+      the uncompensated system could afford before becoming unstable.
       \label{lab5:report:q4}
     }
     \item{%
+      A local WiFi network usually sees a round trip time for network packets of around \SI{1}{\milli\second} to \SI{3}{\milli\second}.
+
+      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over WiFi?
       \label{lab5:report:q5}
     }
     \item{%
+      The delay in the real system of Part IV was a total of \SI{60}{\milli\second}:
+      there was a send delay of \SI{30}{\milli\second} and a receive delay of \SI{30}{\milli\second}.
+
+      In 4G/LTE communication networks the mean round trip time of a packet is around \SI{50}{\milli\second}.
+
+      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over 4G/LTE?
       \label{lab5:report:q6}
     }
     \item{%
+      Using the Nyquist plot of the \emph{delayed} system acquired in Deliverable~\ref{del:lab5:p1:2}, \textbf{determine} if there exists an additional proportional feedback gain \(\hat{K}\) that would stabilize the system \(K P(s)\) even in the presence of the \SI{60}{\milli\second} delay.
+
+      If it exists, consider the loop transfer function \(\hat{K} K P(s).\)
+      Does the closed loop system have a larger or smaller steady-state error in comparison to \(K P(s).\)
+
+      What does this suggest about the effect of delays on performance?
       \label{lab5:report:q7}
     }
   \end{enumerate}
