@@ -28,13 +28,13 @@ This is quite common in practice for plants that are difficult to model or for p
 This goals of this lab are to
 \begin{enumerate}[label=(\arabic*)]
   \item{
-    \textbf{Practice} the Lead and Lag Design Procedures.
+    \textbf{Practice} the Lead and Lag Design Procedures as you've learned them in your course.
   }
   \item{
     \textbf{Learn} how delays in the loop can affect stability.
   }
   \item{
-    \textbf{Learn} about the robustness specification imposed on the Nyquist plot of \(L(s)\) that determines the maximum delay \(L(s)\) can afford before losing stability.
+    \textbf{Learn} how a phase margin specification determines the maximum delay \(L(s)\) can afford before losing stability.
   }
 \end{enumerate}
 The deliverable dependency graph is
@@ -171,7 +171,7 @@ This notion (if put formally) allows us to translate the earlier delay specifica
 \end{quote}
 This is the primary specification you will meet.
 Note that this translation of specification only makes sense when \(L(s)\) is already stable.
-Also note that changes in the phase margin could change the gain crossover and thereby change what delays you can afford.
+Also note that changes in the phase margin could change the gain crossover and thereby change what delays \(L(s)\) can afford.
 
 \subsection{Part I: Delays and Stability}
 Consider the simple proportional feedback loop
@@ -220,7 +220,7 @@ where \(P(s)\) is the dynamics of line-following drone.
 Your first task is to
 %
 \begin{deliverable}[label={del:lab5:p1:1}]
-  \textbf{Choose} a loop gain \(K\) so that the steady-state step tracking error is less than or equal to \(1\%.\)
+  \textbf{Choose} a loop gain \(0 < K < 1000\) so that the steady-state step tracking error is less than or equal to \(1\%.\)
 \end{deliverable}
 %
 You will then acquire a Nyquist plot to verify stability of the closed loop system when there are no delays as well as acquire a Nyquist plot to demonstrate instability when the delay is introduced.
@@ -233,9 +233,15 @@ You will then acquire a Nyquist plot to verify stability of the closed loop syst
   \end{itemize}
 \end{deliverable}
 %
+Finally, you will need to acquire a Bode plot of the undelayed open loop system in order to perform the Lead and Lag design procedures.
+%
+\begin{deliverable}[label={del:lab5:p1:3}]
+  \textbf{Acquire} a Bode plot (using the Model Linearizer app) of the undelayed open loop system.
+\end{deliverable}
+%
 To complete these tasks, follow the next procedure.
 %
-\begin{procedure}[label={proc:lab4:kpkd}]
+\begin{procedure}[label={proc:lab5:1}]
   In this procedure you will determine a gain \(K\) and acquire the required Nyquist plots.
   You will also get a chance to simulate the system.
   \begin{enumerate}[label={(\arabic*)}]
@@ -256,9 +262,18 @@ To complete these tasks, follow the next procedure.
       \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path without the ``Delay.''
     }
     \item{%
+      The model should already be correctly configured with the ``Open Loop Input'' set to the signal \(e(t)\) and the ``Open Loop Output'' set to signal \(y(t).\)
+      \textbf{Verify} this.
+    }
+    \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
       This produces part of Deliverable~\ref{del:lab5:p1:2}.
       Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you have closed loop stability.
+    }
+    \item{%
+      \textbf{Open} the Model Linearizer App and \textbf{acquire} a Bode plot.
+      \textbf{Identify} the \SI{0}{\decibel} gain crossover and the phase margin.
+      This completes Deliverable~\ref{del:lab5:p1:3}.
     }
     \item{%
       \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path \textbf{with} the ``Delay.''
@@ -271,56 +286,24 @@ To complete these tasks, follow the next procedure.
   \end{enumerate}
 \end{procedure}
 
-\subsection{Part II: Introducing an Integral Component}
-We would like to eliminate the observed constant steady-state error.
-How do we do this?
-First we must determine why this error appears.
-It is fair to ask:
-``If our plant already has an integrator, how is it that there is constant steady-state error?''
-In this simulation there is a constant \emph{input} disturbance similar to the \(d(t)\) of Lab~\ref{Lab:3}.
-As you verified in Lab~\ref{Lab:3}, even an integrator in the plant cannot perfectly reject this input disturbance and can only attenuate it under proportional error feedback.
-If we introduce a pole at the origin, i.e. an integrator, in the controller we can perfectly reject this error.
-Unfortunately, there is a constraint on how large the integrator term can be.
-Your deliverable for this part is to simply choose an integrator gain.
-%
-\begin{deliverable}[label={del:lab4:p2:1}]
-  \textbf{Choose} and \textbf{record} a gain \(K_i > 0\) that perfectly rejects the step disturbance while ensuring closed loop stability.
-\end{deliverable}
-%
-To do this we will make use of the root locus method.
-As such, you are required to also produce a relevant root locus.
-%
-\begin{deliverable}[label={del:lab4:p2:2}]
-  \textbf{Acquire} the root locus generated by the ``part\_2.m'' MATLAB script.
-  \textbf{Place} a cursor on a point where the system is unstable so that you recognize how large \(K_i\) is allowed to be.
-  \textbf{Save} the figure.
-\end{deliverable}
-%
-Finally you will acquire the complete system response.
-%
-\begin{deliverable}[label={del:lab4:p2:3}]
-  \textbf{Acquire} Figure 2 by running the ``visualize\_uav.m'' MATLAB script and \textbf{save} it.
-\end{deliverable}
-%
-Your complete PID control system looks like
+\subsection{Part II: Design a Lag controller}
+One way to increase the phase margin of a loop transfer function is to introduce a Lag controller.
+Lag controllers decrease the gain so as to change the gain crossover;
+changing the gain crossover in turn changes the phase margin.
+In this part the closed loop system takes the form
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
 
-    \node [draw, smooth_block] (Plant) {%
-      \(\frac{1}{s^2}\)%
-    };
-    \node [draw, smooth_sum, left = 0.25 of Plant] (Sum2) {};
-    \node [draw, smooth_block, left = 0.25 of Sum2] (Gain1) {%
-      \(K_p + K_d s\)%
-    };
-    \node [draw, smooth_block, above = 0.25 of Gain1] (Gain2) {%
-      \(\frac{K_i}{s}\)%
-    };
+    \node [draw, smooth_block] (Plant) {\(K P(s)\)};
+    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lag}(s)\)};
     \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
-    \node [right = 0.75 of Plant] (after_plant) {};
-    \node [right = 0.75 of after_plant] (y) {};
-    \node [left = 0.75 of Sum1] (r) {};
+    \node [right = 0.50 of Plant] (after_plant) {};
+    \node [right = 0.50 of after_plant] (y) {};
+    \node [left = 0.50 of Sum1] (r) {};
+
+    \node [smooth_annotate, below = 0 of Gain1] {Controller};
+    \node [smooth_annotate, below = 0 of Plant] {Plant};
 
     \draw [arrow, smooth_path]
       (Plant.east) -- (after_plant.base) -- (y.base) node [below right] {\(y\)};
@@ -335,65 +318,7 @@ Your complete PID control system looks like
       node [below right] {\(-\)};
     \draw [arrow, smooth_path]
       (Sum1.east)
-      --
-      (Gain1.west);
-    \draw [arrow, smooth_path]
-      (Sum1.east)
-      --
-      +(0.25, 0)
-      |-
-      (Gain2.west);
-    \draw [arrow, smooth_path]
-      (Gain1.east)
-      --
-      (Sum2.west);
-    \draw [arrow, smooth_path]
-      (Gain2.east)
-      -|
-      (Sum2.north);
-    \draw [arrow, smooth_path]
-      (Sum2.east)
-      --
-      (Plant.west)
-      node [below left] {\(u\)};
-    \draw [arrow, smooth_path]
-      (r.base)
-      node [below left] {\(r\)}
-      --
-      (Sum1.west);
-  \end{tikzpicture}
-\end{center}
-%
-where you have determined \(K_p\) and \(K_d\) already.
-The closed loop poles of this system\footnote{Notice what I do not say. I am \textbf{not} saying the closed loop zeros or the DC gain are the same.} are the same as the poles of the closed loop system
-%
-\begin{center}
-  \begin{tikzpicture}[x=1in, y=1in]
-
-    \node [draw, smooth_block] (Plant) {%
-      \(\frac{1}{s(s^2 + K_d s + K_p)}\)%
-    };
-    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {%
-      \(K_i\)%
-    };
-    \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
-    \node [right = 0.50 of Plant] (after_plant) {};
-    \node [right = 0.50 of after_plant] (y) {};
-    \node [left = 0.50 of Sum1] (r) {};
-
-    \draw [arrow, smooth_path]
-      (Plant.east) -- (after_plant.base) -- (y.base);
-    \draw [arrow, smooth_path]
-      (Plant.east)
-      --
-      (after_plant.base)
-      --
-      +(0, -0.50)
-      -|
-      (Sum1.south)
-      node [below right] {\(-\)};
-    \draw [arrow, smooth_path]
-      (Sum1.east)
+      node [above right] {\(e\)}
       --
       (Gain1.west);
     \draw [arrow, smooth_path]
@@ -402,143 +327,333 @@ The closed loop poles of this system\footnote{Notice what I do not say. I am \te
       (Plant.west);
     \draw [arrow, smooth_path]
       (r.base)
+      node [below left] {\(r\)}
       --
       (Sum1.west);
   \end{tikzpicture}
 \end{center}
-It follows that if we plot the (positive gain) root locus of \(\frac{1}{s(s^2 + K_d s + K_p)}\) and choose a gain so that the poles of this system meet our desired specifications, we can use this very same gain as \(K_i\) in our closed loop system to produce the same poles that meet the same specifications.
-The next procedure guides you through these steps.
 %
-\begin{procedure}[label={proc:lab4:ki}]
-  In this procedure you will produce a root locus and make an initial choice for the gain \(K_i.\)
-  \begin{enumerate}[label={(\arabic*)}]
-    \item{%
-      \textbf{Modify} the ``part\_2.m`` MATLAB script so that the variables \texttt{Kp} and \texttt{Kd} match your chosen gains from Part I.
-      \textbf{Run} the ``part\_2.m'' MATLAB script.
-      \textbf{Inspect} Figure 3.
-    }
-    \item{%
-      \textbf{Observe} that if \(K_i\) is too large, the system will be rendered unstable. \textbf{Place a cursor} on one such point on the root locus.
-      \textbf{Save} this Figure for Deliverable~\ref{del:lab4:p2:2}.
-    }
-    \item{%
-      \textbf{Take note} of the gain depicted by your cursor in the previous step.
-      If \(K_i\) takes on a value larger than this gain, your system may be rendered unstable!
-    }
-    \item{%
-      \textbf{Pick any} value of \(K_i\) between \(0\) and the maximum gain defined by the previous step.
-    }
-    \item{%
-      \textbf{Read} the cursor to find out what the gain value is.
-      \textbf{Record} this gain value as the value you choose for \(K_i\) producing Deliverable~\ref{del:lab4:p2:1}.
-    }
-  \end{enumerate}
-\end{procedure}
+where
+\[
+  C_\mathrm{lag}(s)
+    =
+      \frac{\alpha T s + 1}{T s + 1}
+  ,
+  \;
+  0 < \alpha < 1
+  ,
+  \;
+  T > 0.
+\]
+is a Lag compensator with unit DC gain.
+Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lag control design.
 %
-Now that you have chosen \(K_i\) you are ready to test out whether it worked.
-There is no deliverable for the next procedure as it is only a verification that the previous procedures went smoothly.
-%
-\begin{procedure}[label={proc:lab4:verify}]
-  You will now verify your choice of \(K_i.\)
-  \begin{enumerate}[label={(\arabic*)}]
-    \item{%
-      \textbf{Set} the integrator gain with your chosen value of \(K_i.\)
-    }
-    \item{%
-      \textbf{Run} the ``visualize\_uav.m'' MATLAB script and \textbf{inspect} Figures 1 and 2.
-      \textbf{Observe} that the UAV continues to track the path but now does so without steady-state error.
-      \textbf{Save} Figure 2 for Deliverable~\ref{del:lab4:p2:3}.
-    }
-  \end{enumerate}
-\end{procedure}
-
-\subsection{Part III: Tune your Controller}
-Now that we have eliminated the steady-state error, you may observe more extreme oscillations or a large overshoot.
-In this part, you will make an attempt to improve the performance of your controller.
-Your deliverable for this section is
-%
-\begin{deliverable}[label={del:lab4:p3:1}]
-  \textbf{Acquire} the root locus plots generated by the ``part\_3.m'' MATLAB script with your PID gains determined at the end of Part II.
-  \textbf{Save} the figures.
+\begin{deliverable}[label={del:lab5:p2:1}]
+  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
+  This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
+  \textbf{Design} a Lag compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
 \end{deliverable}
 %
-and you will use this information, alongside your other intuitions, to guide another choice of gains.
+You will then acquire plots that show that the delayed system has been stabilized with the Lag compensator.
 %
-\begin{deliverable}[label={del:lab4:p3:2}]
-  \textbf{Determine} a new set of gains \(K_p,\) \(K_i\) and \(K_d\) that in some way improve the performance of your UAV.
-  This may be in reduced overshoot, or reduced settling time, for example.
-  You may consider any characteristic you consider undesireable.
+\begin{deliverable}[label={del:lab5:p2:2}]
+  \textbf{Acquire} a Nyquist plot demonstrating the Lag compensated system \emph{with delay} is closed loop stable.
 \end{deliverable}
 %
-Finally, you will acquire and save Figure 2 generated by ``visualize\_uav.m'' to prove you have achieved perfect tracking.
-%
-\begin{deliverable}[label={del:lab4:p3:3}]
-  \textbf{Acquire} Figure 2 by running the ``visualize\_uav.m'' MATLAB script and \textbf{save} it to depict the improved performance.
-  If there is no improvement, \textbf{acquire} atleast three simulations (of three different gain choices) producing Figure 2 and \textbf{save all of them}. \textbf{Record} the changes you made.
-\end{deliverable}
-%
-\begin{procedure}[label={proc:lab4:tune}]
-  There is no explicit procedure to tune your controller but this high-level series of steps can help you make your initial changes.
+\begin{procedure}[label={proc:lab5:2}]
+  In this procedure you will design a Lag compensator, using the content you learned in your course, and simulate the delayed closed loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      \textbf{Modify} the ``part\_3.m`` MATLAB script so that the variables \texttt{Kp}, \texttt{Kd} and \texttt{Ki} match the gains you chose in Part II.
-      \textbf{Run} the ``part\_3.m'' MATLAB script.
-      \textbf{Save} the figures (4, 5, 6) for Deliverable~\ref{del:lab4:p3:1}.
+      Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} the engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
+      \[
+        \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
+      \]
+      Using the Bode plot in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required gain crossover to achieve this specification.
     }
     \item{%
-      \textbf{Inspect} the root locus plots generated.
-      Each root locus depicts your current closed loop poles with filled black circles.
-      You can therefore see how changing any gain would change the location of the closed loop poles and thereby change the behaviour of your final closed loop system.
-      The settling time of your system is determined primarily by the real part of the pole closest to the imaginary axis.
-      The overshoot is determined primarily by the largest angle of the poles relative to the negative real axis.
-      You can also see exactly what a pole will contribute to your system by clicking on the root locus to produce a cursor.
+      \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
+      This produces Deliverable~\ref{del:lab5:p2:1}.
     }
     \item{%
-      Guided by the location of the poles currently and the root locus plots produced, \textbf{decide} on a gain to change to improve atleast one characteristic of your system.
-      \textbf{Make} the change to that gain. 
+      \textbf{Change} the variable \texttt{alpha} and \texttt{T} \emph{in the MATLAB script} ``procedure\_5\_2.m'' to match your chosen parameters.
+      \textbf{Run} the script.
     }
     \item{%
-      \textbf{Acquire} Figure 2 by running the ``visualize\_uav.m'' MATLAB script and \textbf{verify} that you did improve the characteristic you set out to improve.
-      If successful, \textbf{save} it for Deliverable~\ref{del:lab4:p3:3} and \textbf{record} your gain choices for Deliverable~\ref{del:lab4:p3:2}.
-      If not successful explore the range of parameters available to see what changes you can make happen.
-      \emph{If no improvement is possible, save three simulations (Figure 2, in particular) of \textbf{atleast three distinct choices you trialed}. \textbf{Record} what those choices were.}
+      \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path \textbf{with} the ``Delay.''
+    }
+    \item{%
+      \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
+      This completes Deliverable~\ref{del:lab5:p2:2}.
+      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do not have closed loop stability.
     }
   \end{enumerate}
 \end{procedure}
 
-\section{Report Deliverable}\label{Lab:4:Report}
-Another lab nearly complete!
+\subsection{Part III: Design a Lead controller}
+Another way to increase the phase margin of a loop transfer function is to introduce a Lead controller.
+Lead controllers add phase at the crossover frequency.
+In this part the closed loop system takes the form
+%
+\begin{center}
+  \begin{tikzpicture}[x=1in, y=1in]
+
+    \node [draw, smooth_block] (Plant) {\(K P(s)\)};
+    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lead}(s)\)};
+    \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
+    \node [right = 0.50 of Plant] (after_plant) {};
+    \node [right = 0.50 of after_plant] (y) {};
+    \node [left = 0.50 of Sum1] (r) {};
+
+    \node [smooth_annotate, below = 0 of Gain1] {Controller};
+    \node [smooth_annotate, below = 0 of Plant] {Plant};
+
+    \draw [arrow, smooth_path]
+      (Plant.east) -- (after_plant.base) -- (y.base) node [below right] {\(y\)};
+    \draw [arrow, smooth_path]
+      (Plant.east)
+      --
+      (after_plant.base)
+      --
+      +(0, -0.75)
+      -|
+      (Sum1.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum1.east)
+      node [above right] {\(e\)}
+      --
+      (Gain1.west);
+    \draw [arrow, smooth_path]
+      (Gain1.east)
+      --
+      (Plant.west);
+    \draw [arrow, smooth_path]
+      (r.base)
+      node [below left] {\(r\)}
+      --
+      (Sum1.west);
+  \end{tikzpicture}
+\end{center}
+%
+where
+\[
+  C_\mathrm{lead}(s)
+    =
+      \frac{\alpha T s + 1}{T s + 1}
+  ,
+  \;
+  \alpha > 1
+  ,
+  \;
+  T > 0.
+\]
+is a Lead compensator with unit DC gain.
+Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lead control design.
+%
+\begin{deliverable}[label={del:lab5:p3:1}]
+  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
+  This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
+  \textbf{Design} a Lead compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
+\end{deliverable}
+%
+You will then acquire plots that show that the delayed system has been stabilized with the Lead compensator.
+%
+\begin{deliverable}[label={del:lab5:p3:2}]
+  \textbf{Acquire} a Nyquist plot demonstrating the Lead compensated system \emph{with delay} is closed loop stable.
+\end{deliverable}
+%
+\begin{procedure}[label={proc:lab5:3}]
+  In this procedure you will design a Lag compensator, using the content you learned in your course, and simulate the delayed closed loop system.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} the engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
+      \[
+        \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
+      \]
+      Using the Bode plot in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required phase addition to meet this specification.
+    }
+    \item{%
+      \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
+      This produces Deliverable~\ref{del:lab5:p3:1}.
+    }
+    \item{%
+      \textbf{Change} the variable \texttt{alpha} and \texttt{T} \emph{in the MATLAB script} ``procedure\_5\_3.m'' to match your chosen parameters.
+      \textbf{Change} the gain \texttt{K} in that same script if your design procedure demands it.
+      \textbf{Run} the script.
+    }
+    \item{%
+      \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path \textbf{with} the ``Delay.''
+    }
+    \item{%
+      \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
+      This completes Deliverable~\ref{del:lab5:p3:2}.
+      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do not have closed loop stability.
+    }
+  \end{enumerate}
+\end{procedure}
+
+\subsection{Part IV: Simulating the Real System}
+In Parts II and III you designed Lag and Lead compensators that ensured the closed loop system was stable even under a delay;
+this was verified using the Nyquist plots of Deliverable~\ref{del:lab5:p2:2} and~\ref{del:lab5:p3:2}.
+In this part, you will simulate the real closed loop system with delays.
+Consider the closed loop system
+%
+\begin{center}
+  \begin{tikzpicture}[x=1in, y=1in]
+
+    \node [draw, smooth_block] (Plant) {\(P(s)\)};
+    \node [draw, smooth_block, left = 0.40 of Plant] (delay1) {%
+      \(e^{-\frac{\tau}{2} s}\)
+    };
+    \node [draw, smooth_block, right = 0.40 of Plant] (delay2) {%
+      \(e^{-\frac{\tau}{2} s}\)
+    };
+    \node [draw, smooth_block, left = 0.40 of delay1] (Gain1) {%
+      \(K\frac{\alpha T s + 1}{T s + 1}\)%
+    };
+    \node [draw, smooth_sum, left = 0.40 of Gain1] (Sum1) {};
+    \node [right = 0.40 of delay2] (after_plant) {};
+    \node [right = 0.40 of after_plant] (y) {};
+    \node [left = 0.40 of Sum1] (r) {};
+
+    \node [smooth_annotate, below = 0 of Gain1] {Controller};
+    \node [smooth_annotate, below = 0 of Plant] {Plant};
+    \node [smooth_annotate, below = 0 of delay1] {Send Delay};
+    \node [smooth_annotate, below = 0 of delay2] {Receive Delay};
+
+    \draw [arrow, smooth_path]
+      (Plant.east)
+      --
+      (delay2.west);
+    \draw [arrow, smooth_path]
+      (delay2.east) -- (after_plant.base) -- (y.base) node [below right] {\(y\)};
+    \draw [arrow, smooth_path]
+      (delay2.east)
+      --
+      (after_plant.base)
+      --
+      +(0, -0.75)
+      -|
+      (Sum1.south)
+      node [below right] {\(-\)};
+    \draw [arrow, smooth_path]
+      (Sum1.east)
+      node [above right] {\(e\)}
+      --
+      (Gain1.west);
+    \draw [arrow, smooth_path]
+      (Gain1.east)
+      --
+      (delay1.west);
+    \draw [arrow, smooth_path]
+      (delay1.east)
+      --
+      (Plant.west);
+    \draw [arrow, smooth_path]
+      (r.base)
+      node [below left] {\(r\)}
+      --
+      (Sum1.west);
+  \end{tikzpicture}
+\end{center}
+%
+The ``Send Delay'' captures the amount of time the plant has to wait to see an update from the controller on the ground while the ``Receive Delay'' captures the amount of time the controller has to wait to see an updated output.
+From a networking perspective, this is lower bounded by the ping time\footnote{lower bounded since it ignores any computational delays!}.
+If you designed your Lag and Lead compensators correctly in Parts II and III, then you should expect them to perform adequately.
+Remember, stability is the primary characteristic of concern in this discussion.
+Do not be alarmed if the settling time or overshoot is undesireable.
+
+There are precisely two deliverables for this part.
+First you will simulate the real system against the Lag compensator to produce
+%
+\begin{deliverable}[label={del:lab5:p4:1}]
+  \textbf{Acquire} Figure 542 generated by ``procedure\_5\_4\_simulate.m.''
+\end{deliverable}
+%
+Second, you will simulate the real system against the Lead compensator to produce
+%
+\begin{deliverable}[label={del:lab5:p4:2}]
+  \textbf{Acquire} Figure 552 generated by ``procedure\_5\_5\_simulate.m.''
+\end{deliverable}
+%
+To do so, follow the next couple procedures.
+%
+\begin{procedure}[label={proc:lab5:4}]
+  In this procedure you will simulate the real closed loop system with your Lag compensator.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Run} ``procedure\_5\_4\_simulate.m.''
+    }
+    \item{%
+      \textbf{Save} Figure 542.
+      \textbf{Verify} the simulatation ran to completion (\SI{240}{\second}) and that the error settles.
+      If there are oscillations, they should decay.
+      This produces Deliverable~\ref{del:lab5:p4:1}.
+    }
+  \end{enumerate}
+\end{procedure}
+%
+\begin{procedure}[label={proc:lab5:5}]
+  In this procedure you will simulate the real closed loop system with your Lead compensator.
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      \textbf{Run} ``procedure\_5\_5\_simulate.m.''
+    }
+    \item{%
+      \textbf{Save} Figure 552.
+      \textbf{Verify} the simulatation ran to completion (\SI{240}{\second}) and that the error settles.
+      If there are oscillations, they should decay.
+      This produces Deliverable~\ref{del:lab5:p4:2}.
+    }
+  \end{enumerate}
+\end{procedure}
+
+
+\section{Report Deliverable}\label{Lab:5:Report}
+You are almost done the lab component of this course!
 As usual, you are expected to submit a report demonstrating that you completed the lab and that you understand the tasks performed.
 In addition to including
 \begin{itemize}
-  \item{Deliverable~\ref{del:lab4:p1:1},}
-  \item{Deliverable~\ref{del:lab4:p2:1},}
-  \item{Deliverable~\ref{del:lab4:p2:2},}
-  \item{Deliverable~\ref{del:lab4:p2:3},}
-  \item{Deliverable~\ref{del:lab4:p3:1},}
-  \item{Deliverable~\ref{del:lab4:p3:2} and}
-  \item{Deliverable~\ref{del:lab4:p3:3}}
+  \item{Deliverable~\ref{del:lab5:p1:1},}
+  \item{Deliverable~\ref{del:lab5:p1:2},}
+  \item{Deliverable~\ref{del:lab5:p1:3},}
+  \item{Deliverable~\ref{del:lab5:p2:1},}
+  \item{Deliverable~\ref{del:lab5:p2:2},}
+  \item{Deliverable~\ref{del:lab5:p3:1},}
+  \item{Deliverable~\ref{del:lab5:p3:2},}
+  \item{Deliverable~\ref{del:lab5:p4:1},}
+  \item{Deliverable~\ref{del:lab5:p4:2},}
 \end{itemize}
 in your report, you are required to answer the questions of the following deliverable.
 Make sure to leverage your other deliverables in your answers!
-\begin{deliverable}[label={lab4:report}]
+\begin{deliverable}[label={lab5:report}]
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      Like in Lab~\ref{Lab:3}, the primary output was a (relative) position \(y(t).\)
-      Unlike Lab~\ref{Lab:3}, we do not observe the velocity explicitly but, instead, use the differentiator in the PID controller to estimate velocity (derivative of the relative position is velocity) and apply that in closed loop feedback.
-      Unfortunately, the explicit use of a differentiator in parallel to the proportional error feedback introduced zeros in the final transfer function \(G(s)\) from \(r(t)\) to \(y(t).\)
-      In particular
-      \[
-        G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
-      \]
-      For your final choice of \(K_p,\) \(K_i\) and \(K_d,\) \textbf{determine} where the zeros of \(G(s)\) are located.
       \label{lab5:report:q1}
+    }
+    \item{%
+      \label{lab5:report:q2}
+    }
+    \item{%
+      \label{lab5:report:q3}
+    }
+    \item{%
+      \label{lab5:report:q4}
+    }
+    \item{%
+      \label{lab5:report:q5}
+    }
+    \item{%
+      \label{lab5:report:q6}
+    }
+    \item{%
+      \label{lab5:report:q7}
     }
   \end{enumerate}
 \end{deliverable}
 
 \subsection{Grading Scheme}
-The grading scheme is shown in Table~\ref{tab:lab4:grading}. The breakdown of
+The grading scheme is shown in Table~\ref{tab:lab5:grading}. The breakdown of
 your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
@@ -546,22 +661,24 @@ questions where it is shown per question.
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
-        & \ref{del:lab4:p1:1}         & 4       \\ \hline
-        & \ref{del:lab4:p2:1}         & 4       \\ \hline
-        & \ref{del:lab4:p2:2}         & 4      \\ \hline
-        & \ref{del:lab4:p2:3}         & 4      \\ \hline
-        & \ref{del:lab4:p3:1}         & 6       \\ \hline
-        & \ref{del:lab4:p3:2}         & 4       \\ \hline
-        & \ref{del:lab4:p3:3}         & 4       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 30      \\ \hhline{=|=|=}
-        & \ref{lab5:report}~\ref{lab4:report:q1}  & 2       \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q2}  & 2       \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q3}  & 4       \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q4}  & 6       \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q5}  & 2      \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q6}  & 2      \\ \hline
-        & \ref{lab5:report}~\ref{lab4:report:q7}  & 2      \\ \hhline{=|=|=}
-Report Subtotal&  & 20 \\ \hhline{=|=|=}
+        & \ref{del:lab5:p1:1}         & 4       \\ \hline
+        & \ref{del:lab5:p1:2}         & 4       \\ \hline
+        & \ref{del:lab5:p1:3}         & 4      \\ \hline
+        & \ref{del:lab5:p2:1}         & 4      \\ \hline
+        & \ref{del:lab5:p2:2}         & 4       \\ \hline
+        & \ref{del:lab5:p3:1}         & 4       \\ \hline
+        & \ref{del:lab5:p3:2}         & 4       \\ \hline
+        & \ref{del:lab5:p4:1}         & 4       \\ \hline
+        & \ref{del:lab5:p4:2}         & 4       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 36      \\ \hhline{=|=|=}
+        & \ref{lab5:report}~\ref{lab5:report:q1}  & 2       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q2}  & 2       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q3}  & 2       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q4}  & 2      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q5}  & 2      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q6}  & 2      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q7}  & 2      \\ \hhline{=|=|=}
+Report Subtotal&  & 14 \\ \hhline{=|=|=}
   Total &                       & 50
 \end{tabular}
 \caption[Grading Scheme for Lab 5]{Grading scheme for Lab 5.}
