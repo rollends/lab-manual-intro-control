@@ -1,28 +1,26 @@
 \chapter{Lead and Lag Compensator Design}\label{Lab:5}
-Now that you have 
-This time, you are designing an unmanned aerial vehicle that is dropped into the atmosphere and performs powered glides along predefined paths over the surface.
+Your exploration into the line-following, unmanned aerial vehicle (UAV), developed in Lab~\ref{Lab:4}, convinced VenX engineers that the inner-outer loop structure, described in Lab~\ref{Lab:3}, was much easier to work with and it was all they ever needed.
+Recall that the drone achieved perfect step tracking of a desired \emph{distance} away from a line segment in space.
+In other words, if the reference was equal to \(2\mathbf{1}(t)\) then the drone would track the line segment with an error of \SI{2}{\meter}.
+Engineers did this to provide the ability to tune an offset.
 %
 \begin{center}
-  %\centering
-  \input{Lab_4_UAV_PF.pdf_tex}%
-  %\caption{Unmanned Aerial Vehicle (UAV) moving with respect to some line.}
-  %\label{fig:lab4:uav}
+  \input{Lab_5_UAV_PF_Ground.pdf_tex}
 \end{center}
 %
-The purpose is to do surveillance\footnote{Don't worry. The CEO of VenX, Lone Dusk, has assured you that the FBI are not using your technology for surveilling citizens in protests. Should you trust him? Probably not. But in this lab, you live in a utopia where people and the government are very honourable.} of the planet's surface to map out the landscape.
+Now, engineers would like to ``trim'' the distance remotely with a control law located at a remotely deployed ground station.
+The ground station monitors weather patterns and information relayed by specialists on Earth to decide on a desired offset from the preplanned path.
+The station then communicates with the drone.
+The station sends reference commands and receives an observed output distance from the path.
+The observed output distance is used in closed loop feedback on the ground station to update what the commanded reference offset should be.
 
-The controller you design controls the turning rate (\SI{}{rad/s}) and the output you measure is the distance to the straight line path \(y(t)\) (\SI{}{m}).
-In practice the transfer function from this input to \(y(t)\) is highly nonlinear, but the senior engineers have designed an inner loop controller that makes the plant \(P(s)\) look like
-\[
-  P(s) = \frac{1}{s^2}.
-\]
-Take \texttt{ECE 486}\footnote{In the robotics course you will learn to just cancel the nonlinearities out.} if you are interested in how to do this.
-
- --- a very similar system to the one you created in Lab~\ref{Lab:4}.
-In this lab, you do not have access to the transfer function for \(P(s)\) directly.
-Instead you will acquire the frequency response (Bode plot) empirically via MATLAB and perform your design against this.
-You will also verify closed loop stability using an empirically acquired Nyquist plot.
-This is quite common in practice for plants that are difficult to model or for plants where it is hard to perform parameter estimation due to the large number of parameters and sensitivity.
+Normally, proportional error feedback would preserve the stability of an already stable \emph{second-order} system.
+Unfortunately, communication delays can actually destabilize such a system.
+Your task is to design a control law that achieves the desired specifications:
+\begin{itemize}
+  \item{track a reference offset with \(1\%\) error and}
+  \item{preserve closed loop stability under the presence of communication delays.}
+\end{itemize}
 
 \section{Objectives}\label{Lab:4:Objectives}
 This goals of this lab are to
@@ -64,13 +62,10 @@ The deliverable dependency graph is
 
 \section{Experimental Procedure}\label{Lab:4:Experiment}
 This lab is split into four parts.
-In Part I you will simulate 
-In Part II you will analyze how the integral term affects the performance of your system.
-Finally in Part III you make an incremental change to your PID controller to improve your system's performance qualitatively.
-The plant for this lab will be
-\[
-  P(s) = \frac{1}{s^2}.
-\]
+In Part I you will pick a proportional error gain \(K\) to achieve the tracking specification and then observe how closed loop stability is lost upon introducing a delay.
+In Part II and Part III you will design a Lag and Lead compensator respectively, using the Bode plot acquired in Part I, to stabilize the closed loop system even in the presence of the delay.
+You will verify this using a Nyquist plot.
+Finally in Part IV you will observe the Lag and Lead compensators do stabilize the simulated system.
 
 \subsection{Preamble: Delays}
 A ``perfect'' delay by time \(\tau\) from an input signal \(u(t)\) to an output signal \(y(t)\) is determined by the static equation
@@ -172,6 +167,9 @@ This notion (if put formally) allows us to translate the earlier delay specifica
 This is the primary specification you will meet.
 Note that this translation of specification only makes sense when \(L(s)\) is already stable.
 Also note that changes in the phase margin could change the gain crossover and thereby change what delays \(L(s)\) can afford.
+The lag compensator in particular changes the gain crossover in order to increase the phase margin.
+In your lag compensator you \emph{must} decrease the gain crossover frequency in order to increase the phase margin.
+For some other systems (such as those with zeros) it may be required to increase the gain crossover frequency to improve the phase margin.
 
 \subsection{Part I: Delays and Stability}
 Consider the simple proportional feedback loop
@@ -220,7 +218,7 @@ where \(P(s)\) is the dynamics of line-following drone.
 Your first task is to
 %
 \begin{deliverable}[label={del:lab5:p1:1}]
-  \textbf{Choose} a loop gain \(0 < K < 1000\) so that the steady-state step tracking error is less than or equal to \(1\%.\)
+  \textbf{Choose} a loop gain \(0 < K < 400\) so that the steady-state step tracking error is less than or equal to \(1\%.\)
 \end{deliverable}
 %
 You will then acquire a Nyquist plot to verify stability of the closed loop system when there are no delays as well as acquire a Nyquist plot to demonstrate instability when the delay is introduced.
@@ -237,6 +235,7 @@ Finally, you will need to acquire a Bode plot of the undelayed open loop system 
 %
 \begin{deliverable}[label={del:lab5:p1:3}]
   \textbf{Acquire} a Bode plot (using the Model Linearizer app) of the undelayed open loop system.
+  \textbf{Place} a cursor at the gain crossover frequency on the magnitude plot.
 \end{deliverable}
 %
 To complete these tasks, follow the next procedure.
@@ -273,6 +272,7 @@ To complete these tasks, follow the next procedure.
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Bode plot.
       \textbf{Identify} the \SI{0}{\decibel} gain crossover and the phase margin.
+      \textbf{Place} a cursor on the gain crossover frequency on the magnitude plot.
       This completes Deliverable~\ref{del:lab5:p1:3}.
     }
     \item{%
@@ -352,6 +352,7 @@ Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specificati
   Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
   This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
   \textbf{Design} a Lag compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
+  \textbf{You must show the use of the design equations for full marks.}
 \end{deliverable}
 %
 You will then acquire plots that show that the delayed system has been stabilized with the Lag compensator.
@@ -454,6 +455,7 @@ Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specificati
   Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
   This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
   \textbf{Design} a Lead compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
+  \textbf{You must show the use of the design equations for full marks.}
 \end{deliverable}
 %
 You will then acquire plots that show that the delayed system has been stabilized with the Lead compensator.
@@ -463,7 +465,7 @@ You will then acquire plots that show that the delayed system has been stabilize
 \end{deliverable}
 %
 \begin{procedure}[label={proc:lab5:3}]
-  In this procedure you will design a Lag compensator, using the content you learned in your course, and simulate the delayed closed loop system.
+  In this procedure you will design a Lead compensator, using the content you learned in your course, and simulate the delayed closed loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} the engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
@@ -630,11 +632,11 @@ Make sure to leverage your other deliverables in your answers!
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       In both the Lead and Lag design procedures, your design procedure involves adding more phase than what the phase margin specification demands.
-      Using a Bode plot of your Lead and Lag compensators, \textbf{explain why}.
+      Acquire a Bode plot of your Lead and Lag compensators to \textbf{explain why}.
       \label{lab5:report:q1}
     }
     \item{%
-      What are the qualitative differences between the Lag compensated and Lead compensated systems, as simulated for Deliverables~\ref{del:lab5:p4:1} and~\ref{del:lab5:p4:2}.
+      \textbf{Describe} the qualitative differences between the Lag compensated and Lead compensated systems.
       Touch on characteristics like
       \begin{itemize}
         \item{
@@ -647,10 +649,13 @@ Make sure to leverage your other deliverables in your answers!
           the time to peak.
         }
       \end{itemize}
+      Use the simulations in Deliverables~\ref{del:lab5:p4:1} and~\ref{del:lab5:p4:2} in your discussion.
       \label{lab5:report:q2}
     }
     \item{%
-      Using the observations made in~\ref{lab5:report:q2} and your experience, \textbf{describe} how you would choose between a Lead compensator or Lag compensator.
+      \textbf{Describe} how you would choose between a Lead compensator or Lag compensator.
+
+      Ensure to leverage the Nyquist plots in Deliverables~\ref{del:lab5:p2:2} and~\ref{del:lab5:p3:2} as well as your answers to~\ref{lab5:report:q1} and~\ref{lab5:report:q2} in your discussion.
       \label{lab5:report:q3}
     }
     \item{%
@@ -664,7 +669,8 @@ Make sure to leverage your other deliverables in your answers!
     \item{%
       A local WiFi network usually sees a round trip time for network packets of around \SI{1}{\milli\second} to \SI{3}{\milli\second}.
 
-      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over WiFi?
+      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over a similar wireless network with comparable delays?
+      If not, would the compensated system be stable?
       \label{lab5:report:q5}
     }
     \item{%
@@ -673,7 +679,8 @@ Make sure to leverage your other deliverables in your answers!
 
       In 4G/LTE communication networks the mean round trip time of a packet is around \SI{50}{\milli\second}.
 
-      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over 4G/LTE?
+      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over a similar wireless network with comparable delays?
+      If not, would the compensated system be stable?
       \label{lab5:report:q6}
     }
     \item{%
