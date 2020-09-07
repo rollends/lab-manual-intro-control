@@ -45,18 +45,16 @@ The primary objectives of this lab are to
     Understand how to \textbf{identify} a first-order low-pass system.
   }
 \end{enumerate}
-This is not a particularly long lab, but you may have trouble as it is
-very likely your first encounter with Simulink. As a result, I suggest you
-give you and your partner time to work through the lab and the problems.
-I also recommend you spend some time by yourself exploring Simulink so as to
-reduce the amount of time you spend on future labs.
+This lab may take a long time as it is very likely your first encounter with Simulink.
+As a result, I suggest you give you and your partner time to work through the lab and the problems.
+I also recommend you spend some time by yourself exploring Simulink so as to reduce the amount of time you spend on future labs.
 
 \section{Experimental Procedure}
 This entire lab will be done using the ``\texttt{Lab\_1.slx}'' Simulink model.
 First extract the ``\texttt{Lab\_1\_Data.zip}'' file available from Learn.
 Inside there you will find zip files created for each individual group. Extract
 the zip file associated to your group, and there you will find the relevant
-``\texttt{Lab\_1.slx}'' file. The R2018 version may be found in a nested
+``\texttt{Lab\_1.slx}'' file. The R2019 version may be found in a nested
 directory.
 
 In the Simulink model you will
@@ -83,7 +81,28 @@ of the system we wish to control?
 
 \subsection{Acquiring the Bandwidth in Time-Domain}
 The goal of this portion of the lab is to acquire the bandwidth of the
-given linear system. What is the bandwidth? To understand and acquire it,
+given linear system in both open and closed loop configuration.
+The result of this subsection will be the following deliverables.
+%
+\begin{deliverable}[label={lab1:d1}]
+  \textbf{Record} your estimated DC gain and \textbf{capture} the generated
+  figure with the cursors you used to measure the amplitudes.
+  Your figure should like Figure~\ref{fig:lab1:lowfreq}.
+\end{deliverable}
+%
+\begin{deliverable}[label={lab1:d2}]
+  At the bandwidth frequency,
+  \textbf{capture a figure} of the input and output signal. It should look
+  like Figure~\ref{fig:lab1:bandwidth}. Pay close attention to the time
+  axis; it has been scaled to make the signal easy to measure and to visualize.
+\end{deliverable}
+%
+\begin{deliverable}[label={lab1:d3}]
+  Repeat Deliverables~\ref{lab1:d1} and~\ref{lab1:d2} for the closed-loop
+  system (described in Procedure~\ref{proc:lab1:p3}).
+\end{deliverable}
+%
+What is the bandwidth? To understand and acquire it,
 we must first know what the DC gain of a system is.
 %
 \begin{definition}[label={def:lab1:dcgain}]{DC Gain}
@@ -128,6 +147,10 @@ input, we take a different approach.
       by the input amplitude. \emph{Remember, we chose the input amplitude
       to be \(1\)!}
     }
+    \item{
+      \textbf{Capture} the figure and save it.
+      This produces Deliverable~\ref{lab1:d1}.
+    }
   \end{enumerate}
 \end{procedure}
 %
@@ -145,12 +168,6 @@ input, we take a different approach.
   Can you see why this is the bandwidth frequency for my plant?}
   \label{fig:lab1:bandwidth}
 \end{figure}
-%
-\begin{deliverable}[label={lab1:d1}]
-  \textbf{Record} your estimated DC gain and \textbf{capture} the generated
-  figure with the cursors you used to measure the amplitudes.
-  Your figure should like Figure~\ref{fig:lab1:lowfreq}.
-\end{deliverable}
 %
 For low-pass systems, as we increase the frequency of the input, we will
 observe, the output amplitude \emph{decreases}. The bandwidth frequency
@@ -222,16 +239,10 @@ with lower frequencies.
     \item{
       If the amplitude is what you predicted, \textbf{record} the frequency
       of the input you used to achieve the result.
+      \textbf{Capture} this Figure and save it to produce Deliverable~\ref{lab1:d2}.
     }
   \end{enumerate}
 \end{procedure}
-%
-\begin{deliverable}[label={lab1:d2}]
-  At the bandwidth frequency,
-  \textbf{capture a figure} of the input and output signal. It should look
-  like Figure~\ref{fig:lab1:bandwidth}. Pay close attention to the time
-  axis; it has been scaled to make the signal easy to measure and to visualize.
-\end{deliverable}
 %
 Having acquired the bandwidth for the open loop system, we now investigate
 the closed loop system.
@@ -278,16 +289,25 @@ the closed loop system.
   \(1.\)
   Repeat Procedures~\ref{proc:lab1:p1} and~\ref{proc:lab1:p2} for the
   closed-loop system depicted in Figure~\ref{fig:lab1:closing-loop}.
+  Remember to acquire the Figures in both procedures for Deliverable~\ref{lab1:d3}.
 \end{procedure}
-%
-\begin{deliverable}[label={lab1:d3}]
-  Repeat Deliverables~\ref{lab1:d1} and~\ref{lab1:d2} for the closed-loop
-  system discussed in Procedure~\ref{proc:lab1:p3}
-\end{deliverable}
 
 \subsection{Acquiring the Settling Time and Time Constant}
 In this section of Lab 1 we take a different approach to estimating the plant
-parameters. Instead of feeding in a sinusoid of low and high frequency, we
+parameters.
+To establish you have completed this section, you must produce the following deliverables.
+%
+\begin{deliverable}[label={lab1:d4}]
+  \textbf{Capture the figure} you used to measure the settling time and
+  time constant in Procedure~\ref{proc:lab1:p4}. \textbf{Show} your cursors.
+\end{deliverable}
+%
+\begin{deliverable}[label={lab1:d5}]
+  \textbf{Capture the figure} you used to measure the settling time and
+  time constant in Procedure~\ref{proc:lab1:p5}. \textbf{Show} your cursors.
+\end{deliverable}
+%
+Instead of feeding in a sinusoid of low and high frequency, we
 acquire what is known as the \textbf{step response}. The step response of
 a plant \(P(s)\) is the output \(Y(s) = P(s) U(s)\) when \(U(s)\) is the unit
 step function, i.e. \(U(s) = \frac{1}{s}.\) In practice, we often feed
@@ -389,23 +409,18 @@ deliverables.
     \item{
       Using cursors, \textbf{measure} the time constant and settling times.
     }
+    \item{
+      \textbf{Capture} your Figure and save it to produce Deliverable~\ref{lab1:d4}.
+      Make sure to show your cursors.
+    }
   \end{enumerate}
 \end{procedure}
-%
-\begin{deliverable}[label={lab1:d4}]
-  \textbf{Capture the figure} you used to measure the settling time and
-  time constant in Procedure~\ref{proc:lab1:p4}. \textbf{Show} your cursors.
-\end{deliverable}
 %
 \begin{procedure}[label={proc:lab1:p5}]
   Repeat Procedure~\ref{proc:lab1:p4} for the closed-loop system described in
   Procedure~\ref{proc:lab1:p3}.
+  The Figure you generate in the last step produces Deliverable~\ref{lab1:d5}.
 \end{procedure}
-%
-\begin{deliverable}[label={lab1:d5}]
-  \textbf{Capture the figure} you used to measure the settling time and
-  time constant in Procedure~\ref{proc:lab1:p5}. \textbf{Show} your cursors.
-\end{deliverable}
 %
 
 \subsection{On Saturation or Clipping}
@@ -456,8 +471,8 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab1:report:q1}
       \textbf{Derive} a formula for the DC gain of \(P(s)\) in terms of
       \(a, b, T.\)
-      \emph{Hint: Recall that the DC gain for a stable system \(G(s)\)
-      is just \(G(0).\)}
+      %\emph{Hint: Recall that the DC gain for a stable system \(G(s)\)
+      %is just \(G(0).\)}
     }
     \item{
       \label{lab1:report:q2}
@@ -474,8 +489,7 @@ Make sure to leverage your other deliverables in your answers!
         =
         \frac{1}{\sqrt{2}}.
       \]
-      \emph{Solve the expression for \(\omega.\) As
-      an additional hint, you should get a polynomial in \(\omega^2\) which
+      \emph{Solve the expression for \(\omega.\) You should get a polynomial in \(\omega^2\) which
       you can solve.}
     }
     \item{
@@ -565,13 +579,13 @@ questions where it is shown per question.
 \centering
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
-        & \ref{lab1:d1}         & 2       \\ \hline
-        & \ref{lab1:d2}         & 2       \\ \hline
-        & \ref{lab1:d3}         & 2       \\ \hline
-        & \ref{lab1:d4}         & 2       \\ \hline
-        & \ref{lab1:d5}         & 2       \\ \hline
-        & \ref{lab1:d6}         & 2       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 12      \\ \hhline{=|=|=}
+        & \ref{lab1:d1}         & 4       \\ \hline
+        & \ref{lab1:d2}         & 4       \\ \hline
+        & \ref{lab1:d3}         & 4       \\ \hline
+        & \ref{lab1:d4}         & 4       \\ \hline
+        & \ref{lab1:d5}         & 4       \\ \hline
+        & \ref{lab1:d6}         & 4       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 24      \\ \hhline{=|=|=}
         & \ref{lab1:report}~\ref{lab1:report:q1}  & 1       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q2}  & 1       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q3}  & 3       \\ \hline
@@ -585,7 +599,7 @@ Lab Subtotal&                       & 12      \\ \hhline{=|=|=}
         & \ref{lab1:report}~\ref{lab1:report:q11} & 5       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q12} & 1       \\ \hhline{=|=|=}
 Report Subtotal&  & 28 \\ \hhline{=|=|=}
-  Total &                       & 40
+  Total &                       & 52
 \end{tabular}
 \caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
 \label{tab:lab1:grading}
