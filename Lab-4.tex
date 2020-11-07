@@ -74,7 +74,7 @@ The closed loop system under PD control takes the form
   \begin{tikzpicture}[x=1in, y=1in]
 
     \node [draw, smooth_block] (Plant) {\(\frac{1}{s^2}\)};
-    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(K_d s + K_p\)};
+    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(K_d \frac{s}{\frac{s}{N} + 1} + K_p\)};
     \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
     \node [right = 0.50 of Plant] (after_plant) {};
     \node [right = 0.50 of after_plant] (y) {};
@@ -110,27 +110,31 @@ The closed loop system under PD control takes the form
       (Sum1.west);
   \end{tikzpicture}
 \end{center}
+where \(N\) is called the filter coefficient and \(K_p\) and \(K_d\) are the proportional (P) and derivative (D) gains.
 If you compute the closed loop transfer function \(G(s)\) from \(r(t)\) to \(y(t)\) you will find
 \[
-  G(s) = \frac{K_d s + K_p}{s^2 + K_d s + K_p}.
+  G(s) = \frac{\left(N K_d + K_p\right)s + N K_p}{s^3 + N s^2 + \left(N K_d + K_p\right) s + N K_p}.
 \]
-As long as \(K_p, K_d > 0\) the closed loop system is stable.
+% As long as \(K_p, K_d > 0\) the closed loop system is stable.
+Stability is held as long as \(N, K_p > 0\) and \(K_d > \left(1 - \frac{1}{N}\right) K_p.\)
 Note that we have a zero appearing in the transfer function.
-Assuming that the zero dynamics are fast, i.e. \(K_p \gg K_d,\) we can approximate the system by the transfer function
+Assuming that the zero dynamics are fast, i.e. \(K_p \gg K_d,\) and we have an ideal differentiator, i.e. \(N \to \infty,\) we can approximate the system by the transfer function
 \[
   \tilde{G}(s) = \frac{K_p}{s^2 + K_d s + K_p}.
 \]
 It then should not surprise you that the intuition used for designing the gains in Lab~\ref{Lab:2} apply somewhat to the gains \(K_p\) and \(K_d.\)
 You can see that decreasing (increasing) \(K_d\) while fixing \(K_p\) will result in a larger (smaller) settling time and larger (smaller) overshoot.
 Decreasing (increasing) \(K_p\) while fixing \(K_d\) will result in smaller (larger) overshoot.
-Of course, a real PID controller also has a non-zero integrator which can, at times, throw a wrench in this sort of analysis.
+Of course, a real PD controller has the effects of a zero and the effects of the practical differentiator to consider.
+The complete PID controller also has a non-zero integrator term which can also throw a wrench in this sort of analysis.
 Your deliverable for this section is to
 %
 \begin{deliverable}[label={del:lab4:p1:1}]
   \textbf{Choose} and \textbf{record} a pair of gains \(K_p\) and \(K_d.\)
 \end{deliverable}
 %
-and next procedure describes how to go about this.
+using the above intuition.
+The next procedure describes how to go about this.
 %
 \begin{procedure}[label={proc:lab4:kpkd}]
   In this procedure you will determine a pair \(K_p\) and \(K_d.\)
@@ -145,6 +149,7 @@ and next procedure describes how to go about this.
     \item{%
       \textbf{Run} the ``visualize\_uav.m'' MATLAB script and \textbf{inspect} Figure 2.
       If there are persistent oscillations in your response or if they don't dissipate around \SI{30}{s}, \textbf{repeat} step~\ref{proc:lab4:kpkd:2} with a different choice.
+      Aim to have oscillations that have a magnitude much less than \(1\) by \SI{40}{s}.
       Use your understanding of Lab~\ref{Lab:3} to motivate whether you should increase or decrease \(K_d\) or \(K_p.\)
     }
     \item{%
@@ -196,7 +201,7 @@ Your complete PID control system looks like
     };
     \node [draw, smooth_sum, left = 0.25 of Plant] (Sum2) {};
     \node [draw, smooth_block, left = 0.25 of Sum2] (Gain1) {%
-      \(K_p + K_d s\)%
+      \(K_d \frac{s}{\frac{s}{N} + 1} + K_p\)%
     };
     \node [draw, smooth_block, above = 0.25 of Gain1] (Gain2) {%
       \(\frac{K_i}{s}\)%
@@ -255,7 +260,7 @@ The closed loop poles of this system\footnote{Notice what I do not say. I am \te
   \begin{tikzpicture}[x=1in, y=1in]
 
     \node [draw, smooth_block] (Plant) {%
-      \(\frac{1}{s(s^2 + K_d s + K_p)}\)%
+      \(\frac{1}{s\left(\frac{s^3}{N} + s^2 + \left(K_d + \frac{K_p}{N}\right) s + K_p\right)}\)%
     };
     \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {%
       \(K_i\)%
@@ -290,7 +295,7 @@ The closed loop poles of this system\footnote{Notice what I do not say. I am \te
       (Sum1.west);
   \end{tikzpicture}
 \end{center}
-It follows that if we plot the (positive gain) root locus of \(\frac{1}{s(s^2 + K_d s + K_p)}\) and choose a gain so that the poles of this system meet our desired specifications, we can use this very same gain as \(K_i\) in our closed loop system to produce the same poles that meet the same specifications.
+It follows that if we plot the (positive gain) root locus of \[\frac{1}{s\left(\frac{s^3}{N} + s^2 + \left(K_d + \frac{K_p}{N}\right) s + K_p\right)}\] and choose a gain so that the poles of this system meet our desired specifications, we can use this very same gain as \(K_i\) in our closed loop system to produce the same poles that meet the same specifications.
 The next procedure guides you through these steps.
 %
 \begin{procedure}[label={proc:lab4:ki}]
@@ -302,12 +307,12 @@ The next procedure guides you through these steps.
       \textbf{Inspect} Figure 3.
     }
     \item{%
-      \textbf{Observe} that if \(K_i\) is too large, the system will be rendered unstable. \textbf{Place a cursor} on one such point on the root locus.
+      \textbf{Observe} that if \(K_i\) is too large, the system will be rendered unstable. \textbf{Place a cursor} on one point of the root locus where the system is marginally stable (crosses from stable to unstable).
       \textbf{Save} this Figure for Deliverable~\ref{del:lab4:p2:2}.
     }
     \item{%
       \textbf{Take note} of the gain depicted by your cursor in the previous step.
-      If \(K_i\) takes on a value larger than this gain, your system may be rendered unstable!
+      If \(K_i\) takes on a value larger than this gain, your system will be rendered unstable!
     }
     \item{%
       \textbf{Pick any} value of \(K_i\) between \(0\) and the maximum gain defined by the previous step.
@@ -409,13 +414,20 @@ Make sure to leverage your other deliverables in your answers!
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       Like in Lab~\ref{Lab:3}, the primary output was a (relative) position \(y(t).\)
-      Unlike Lab~\ref{Lab:3}, we do not observe the velocity explicitly but, instead, use the differentiator in the PID controller to estimate velocity (derivative of the relative position is velocity) and apply that in closed loop feedback.
+      Unlike Lab~\ref{Lab:3}, we do not observe the velocity explicitly but, instead, use the (practical) differentiator in the PID controller to estimate velocity (derivative of the relative position is velocity) and apply that in closed loop feedback.
       Unfortunately, the explicit use of a differentiator in parallel to the proportional error feedback introduced zeros in the final transfer function \(G(s)\) from \(r(t)\) to \(y(t).\)
       In particular
       \[
-        G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
+      %  G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
+        G(s) =
+          \frac{
+            (N K_d + K_p) s^2 + K_p s + K_i
+          }{
+            s^4 + N s^3 + (N K_d + K_p) s^2 + N K_p s + N K_i
+          }.
       \]
       For your final choice of \(K_p,\) \(K_i\) and \(K_d,\) \textbf{determine} where the zeros of \(G(s)\) are located.
+      \emph{You can inspect the MATLAB scripts or Simulink model to find \(N.\)}
       \label{lab4:report:q1}
     }
     \item{%
@@ -423,13 +435,18 @@ Make sure to leverage your other deliverables in your answers!
       You may assume that ``sufficiently fast'' means that the zeros is atleast four times farther away in real part than any of the poles.
 
       Using the zeros you determined in~\ref{lab4:report:q1}, \textbf{determine} if the zeros affected your system's response.
-      \textbf{Acquire} the impulse response of
-      \[
-        G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
-      \]
+      \textbf{Acquire} the impulse response of the \(G(s)\) in~\ref{lab4:report:q1}
+      % \[
+      %   G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
+      % \]
       and of
       \[
-        \tilde{G}(s)  = \frac{K_i}{s^3 + K_d s^2 + K_p s + K_i}.
+        \tilde{G}(s)
+          =
+            \frac{K_i}{
+              s^4 + N s^3 + (N K_d + K_p) s^2 + N K_p s + N K_i
+              % s^3 + K_d s^2 + K_p s + K_i
+            }.
       \]
       Compare these and determine \textbf{where} in the output response (Figure 2 in the last procedure) would it affect your system?
       \emph{Note: The reason why we are looking at the impulse response as opposed to the step response is because we have a non-zero initial condition. You can make a similar argument if you look at the step response.}
@@ -447,7 +464,16 @@ Make sure to leverage your other deliverables in your answers!
           \node [draw, smooth_block] (Plant) {\(\frac{1}{s^2}\)};
           \node [draw, smooth_sum, left = 0.50 of Plant] (Sum2) {};
           \node [above = 0.25 of Sum2] (d) {};
-          \node [draw, smooth_block, left = 0.50 of Sum2] (Gain1) {\(\frac{K_d s^2 + K_p s + K_i}{s}\)};
+          \node [draw, smooth_block, left = 0.50 of Sum2] (Gain1) {
+            \(
+              \frac{
+                \left(K_d + \frac{K_p}{N}\right) s^2 + \left(K_p + \frac{K_i}{N}\right) s + K_i
+              }{
+                s\left(\frac{s}{N} + 1\right)
+              }
+            \)
+            %\(\frac{K_d s^2 + K_p s + K_i}{s}\)
+          };
           \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
           \node [right = 0.50 of Plant] (after_plant) {};
           \node [right = 0.50 of after_plant] (y) {};
@@ -508,6 +534,7 @@ Make sure to leverage your other deliverables in your answers!
       \[
         P(s) = \frac{s + 1}{s^2 + 2 s + 3}.
       \]
+      instead of \(\frac{1}{s^2}.\)
       In what way would it change your answer?
       \label{lab4:report:q6}
     }
