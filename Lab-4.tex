@@ -9,7 +9,8 @@ This time, you are designing an unmanned aerial vehicle that is dropped into the
 The purpose is to do surveillance\footnote{Don't worry. The CEO of VenX, Lone Dusk, has assured you that the FBI are not using your technology for surveilling citizens in protests. Should you trust him? Probably not. But in this lab, you live in a utopia where people and the government are very honourable.} of the planet's surface to map out the landscape.
 
 The controller you design controls the turning rate (\SI{}{rad/s}) and the output you measure is the distance to the straight line path \(y(t)\) (\SI{}{m}).
-In practice the transfer function from this input to \(y(t)\) is highly nonlinear, but the senior engineers have designed an inner loop controller that makes the plant \(P(s)\) look like
+The controller must track a prespecified distance away from this path (constant references).
+In practice the transfer function from the input to \(y(t)\) is highly nonlinear, but the senior engineers have designed an inner loop controller that makes the plant \(P(s)\) look like
 \[
   P(s) = \frac{1}{s^2}.
 \]
@@ -115,8 +116,7 @@ If you compute the closed loop transfer function \(G(s)\) from \(r(t)\) to \(y(t
 \[
   G(s) = \frac{\left(N K_d + K_p\right)s + N K_p}{s^3 + N s^2 + \left(N K_d + K_p\right) s + N K_p}.
 \]
-% As long as \(K_p, K_d > 0\) the closed loop system is stable.
-Stability is held as long as \(N, K_p > 0\) and \(K_d > \left(1 - \frac{1}{N}\right) K_p.\)
+As long as \(N, K_p, K_d > 0\) the closed loop system is stable.
 Note that we have a zero appearing in the transfer function.
 Assuming that the zero dynamics are fast, i.e. \(K_p \gg K_d,\) and we have an ideal differentiator, i.e. \(N \to \infty,\) we can approximate the system by the transfer function
 \[
@@ -143,7 +143,7 @@ The next procedure describes how to go about this.
       \textbf{Ensure} the loop of the Simulink model is closed as in the block diagram above.
     }
     \item{%
-      \textbf{Pick} a random \(K_p\) and \(K_d\) in the slider range given in the Simulink model.
+      \textbf{Pick} a random \(0 < K_p < 10\) and \(0 < K_d < 10.\)
       \label{proc:lab4:kpkd:2}
     }
     \item{%
@@ -161,7 +161,10 @@ The next procedure describes how to go about this.
 \end{procedure}
 
 \subsection{Part II: Introducing an Integral Component}
-We would like to eliminate the observed constant steady-state error.
+The reference to the control system is \SI{1}{\meter}.
+That is, engineers would like the drone to be able to perfectly track a constant distance away from the path.
+Unfortunately there is some steady-state error, so we do not achieve this specification.
+We would like to eliminate the observed steady-state error.
 How do we do this?
 First we must determine why this error appears.
 It is fair to ask:
@@ -253,14 +256,14 @@ Your complete PID control system looks like
   \end{tikzpicture}
 \end{center}
 %
-where you have determined \(K_p\) and \(K_d\) already.
+where you have determined \(N,\)\(K_d\) and \(K_p\) already.
 The closed loop poles of this system\footnote{Notice what I do not say. I am \textbf{not} saying the closed loop zeros or the DC gain are the same.} are the same as the poles of the closed loop system
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
 
     \node [draw, smooth_block] (Plant) {%
-      \(\frac{1}{s\left(\frac{s^3}{N} + s^2 + \left(K_d + \frac{K_p}{N}\right) s + K_p\right)}\)%
+      \(\frac{s + N}{s^4 + N s^3 + (N K_d + K_p)s^2 + N K_p s}\)%
     };
     \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {%
       \(K_i\)%
@@ -295,7 +298,11 @@ The closed loop poles of this system\footnote{Notice what I do not say. I am \te
       (Sum1.west);
   \end{tikzpicture}
 \end{center}
-It follows that if we plot the (positive gain) root locus of \[\frac{1}{s\left(\frac{s^3}{N} + s^2 + \left(K_d + \frac{K_p}{N}\right) s + K_p\right)}\] and choose a gain so that the poles of this system meet our desired specifications, we can use this very same gain as \(K_i\) in our closed loop system to produce the same poles that meet the same specifications.
+It follows that if we plot the (positive gain) root locus of
+\[
+  \frac{s + N}{s^4 + N s^3 + (N K_d + K_p)s^2 + N K_p s}
+\]
+and choose a gain so that the poles of this system meet our desired specifications, we can use this very same gain as \(K_i\) in our closed loop system to produce the same poles that meet the same specifications.
 The next procedure guides you through these steps.
 %
 \begin{procedure}[label={proc:lab4:ki}]
@@ -342,8 +349,8 @@ There is no deliverable for the next procedure as it is only a verification that
 \end{procedure}
 
 \subsection{Part III: Tune your Controller}
-Now that we have eliminated the steady-state error, you may observe more extreme oscillations or a large overshoot.
-In this part, you will make an attempt to improve the performance of your controller.
+Now that we have eliminated the steady-state error, you may observe more extreme oscillations, large overshoot or other unusual behaviour!
+In this part, you will make an attempt to improve the performance of your controller in any way you desire.
 Your deliverable for this section is
 %
 \begin{deliverable}[label={del:lab4:p3:1}]
@@ -384,7 +391,7 @@ Finally, you will acquire and save Figure 2 generated by ``visualize\_uav.m'' to
     }
     \item{%
       Guided by the location of the poles currently and the root locus plots produced, \textbf{decide} on a gain to change to improve atleast one characteristic of your system.
-      \textbf{Make} the change to that gain. 
+      \textbf{Make} the change to that gain in the Simulink model. 
     }
     \item{%
       \textbf{Acquire} Figure 2 by running the ``visualize\_uav.m'' MATLAB script and \textbf{verify} that you did improve the characteristic you set out to improve.
@@ -418,16 +425,15 @@ Make sure to leverage your other deliverables in your answers!
       Unfortunately, the explicit use of a differentiator in parallel to the proportional error feedback introduced zeros in the final transfer function \(G(s)\) from \(r(t)\) to \(y(t).\)
       In particular
       \[
-      %  G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
         G(s) =
           \frac{
-            (N K_d + K_p) s^2 + K_p s + K_i
+            (N K_d + K_p) s^2 + (N K_p + K_i) s + N K_i
           }{
-            s^4 + N s^3 + (N K_d + K_p) s^2 + N K_p s + N K_i
+            s^4 + N s^3 + (N K_d + K_p) s^2 + (N K_p + K_i) s + N K_i
           }.
       \]
       For your final choice of \(K_p,\) \(K_i\) and \(K_d,\) \textbf{determine} where the zeros of \(G(s)\) are located.
-      \emph{You can inspect the MATLAB scripts or Simulink model to find \(N.\)}
+      \emph{You can inspect the MATLAB scripts or Simulink model to find the filter coefficient \(N.\)}
       \label{lab4:report:q1}
     }
     \item{%
@@ -435,7 +441,7 @@ Make sure to leverage your other deliverables in your answers!
       You may assume that ``sufficiently fast'' means that the zeros is atleast four times farther away in real part than any of the poles.
 
       Using the zeros you determined in~\ref{lab4:report:q1}, \textbf{determine} if the zeros affected your system's response.
-      \textbf{Acquire} the impulse response of the \(G(s)\) in~\ref{lab4:report:q1}
+      \textbf{Acquire} the step response of the \(G(s)\) in~\ref{lab4:report:q1}
       % \[
       %   G(s) = K_d \frac{s^2 + \frac{K_p}{K_d} s + \frac{K_i}{K_d}}{s^3 + K_d s^2 + K_p s + K_i}.
       % \]
@@ -443,18 +449,19 @@ Make sure to leverage your other deliverables in your answers!
       \[
         \tilde{G}(s)
           =
-            \frac{K_i}{
-              s^4 + N s^3 + (N K_d + K_p) s^2 + N K_p s + N K_i
-              % s^3 + K_d s^2 + K_p s + K_i
+            \frac{
+              N K_i
+            }{
+              s^4 + N s^3 + (N K_d + K_p) s^2 + (N K_p + K_i) s + N K_i
             }.
-      \]
-      Compare these and determine \textbf{where} in the output response (Figure 2 in the last procedure) would it affect your system?
-      \emph{Note: The reason why we are looking at the impulse response as opposed to the step response is because we have a non-zero initial condition. You can make a similar argument if you look at the step response.}
+      \]\footnote{I provide a script \texttt{q2.m} to help you do this.}
+      Compare these and determine \textbf{where} in the output response (Figure 2 generated by the last procedure) would the zeros affect your system.
+      %\emph{Note: The reason why we are looking at the impulse response as opposed to the step response is because we have a non-zero initial condition. You can make a similar argument if you look at the step response.}
       \label{lab4:report:q2}
     }
     \item{%
       The PD controller of Part I produced a steady state constant error.
-      This was explained, in Part II, as being caused by a step input disturbance to the plant \(P(s).\)
+      This was explained, in Part II, as being due to a step input disturbance to the plant \(P(s).\)
       \textbf{Prove} that if \(K_i \neq 0\) then step input disturbances to the plant are perfectly rejected.
       To do so, first find the transfer function from \(d(t)\) to \(y(t)\) in the diagram
       %
@@ -467,12 +474,11 @@ Make sure to leverage your other deliverables in your answers!
           \node [draw, smooth_block, left = 0.50 of Sum2] (Gain1) {
             \(
               \frac{
-                \left(K_d + \frac{K_p}{N}\right) s^2 + \left(K_p + \frac{K_i}{N}\right) s + K_i
+                (N K_d + K_p) s^2 + (N K_p + K_i) s + N K_i
               }{
-                s\left(\frac{s}{N} + 1\right)
+                s^2 + N s
               }
             \)
-            %\(\frac{K_d s^2 + K_p s + K_i}{s}\)
           };
           \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
           \node [right = 0.50 of Plant] (after_plant) {};
