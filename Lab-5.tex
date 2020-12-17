@@ -20,7 +20,7 @@ Normally, proportional error feedback would preserve the stability of an already
 Unfortunately, communication delays can actually destabilize such a system.
 Your task is to design a control law that achieves the desired specifications:
 \begin{itemize}
-  \item{track a reference offset with \(1\%\) error and}
+  \item{track a constant reference with \emph{approximately} \(1\%\) error and}
   \item{preserve closed loop stability under the presence of communication delays.}
 \end{itemize}
 
@@ -177,14 +177,14 @@ Since the closed loop transfer function is not composed solely of real rational 
 \begin{figure}
   \centering
   \includegraphics{Lab_5_Nyquist_Delay.eps}
-  \caption[Nyquist Plot of Transfer Functions with and without a delay.]{Nyquist plots of an unknown loop transfer function \(L(s)\) (left) and of the same transfer function delayed by \SI{50}{\milli\second} (right).}
+  \caption[Nyquist Plot of Transfer Functions with and without a delay.]{Nyquist plots of an unknown loop transfer function \(L(s)\) (left) and of the same transfer function delayed by \SI{500}{\milli\second} (right).}
   \label{fig:lab5:delay}
 \end{figure}
 %
 If you compare the Nyquist plot of \(L(s)\) with the Nyquist plot of \(e^{-\tau s} L(s)\) you should observe some similarities;
 in fact, a number of points on the latter Nyquist plot look like a rotated version of the former Nyquist plot.
 This is depicted by Figure~\ref{fig:lab5:delay}.
-This notion, if put formally\footnote{If you do not see why, do not be alarmed. This lab will directly translate the specification for you.}, allows us to translate the earlier delay specification into the following phase margin specification: 
+This notion, if put formally\footnote{If you do not see why, do not be alarmed. This lab will directly translate the specification for you.}, allows us to translate the earlier delay specification into the following phase margin specification:
 \begin{quote}
   The loop transfer function \(L(s)\) has a phase margin strictly greater than \(\tau \omega_{\mathrm{gc}}\) where \(\omega_{\mathrm{gc}}\) is the gain crossover frequency in \SI{}{\radian} and \(\tau\) is the delay in the loop in \SI{}{\second}.
 \end{quote}
@@ -238,11 +238,11 @@ Consider the simple proportional feedback loop
       (Sum1.west);
   \end{tikzpicture}
 \end{center}
-where \(P(s)\) is the dynamics of line-following drone.
+where \(P(s)\) are the dynamics of the controlled line-following drone.
 Your first task is to
 %
 \begin{deliverable}[label={del:lab5:p1:1}]
-  \textbf{Choose} a loop gain \(0 < K < 400\) so that the steady-state step tracking error is less than or equal to \(1\%.\)
+  \textbf{Choose} the smallest loop gain \(0 < K\) so that the steady-state step tracking error is less than or equal to \(5\%.\)
 \end{deliverable}
 %
 You will then acquire a Nyquist plot to verify stability of the closed loop system when there are no delays as well as acquire a Nyquist plot to demonstrate instability when the delay is introduced.
@@ -274,8 +274,8 @@ To complete these tasks, follow the next procedure.
       \[
         \frac{1}{1 + K P(s)}.
       \]
-      \textbf{Choose} a gain \(K\) so that the DC gain of this transfer function is less than \(0.01.\)
-      This assures a steady-state tracking error of less than \(1\%.\)
+      \textbf{Choose} a gain \(K\) so that the DC gain of this transfer function is less than \(0.05.\)
+      This assures a steady-state tracking error of less than \(5\%.\)
     }
     \item{%
       \textbf{Change} the variable \texttt{K} \emph{in the MATLAB script} ``procedure\_5\_1.m'' to match your chosen gain.
@@ -381,7 +381,7 @@ is a Lag compensator with \SI{0}{\decibel} DC gain.
 Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lag control design.
 %
 \begin{deliverable}[label={del:lab5:p2:1}]
-  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
+  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\)
   This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
   \textbf{Design} a Lag compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
   \textbf{You must show the use of the design equations for full marks.}
@@ -397,11 +397,13 @@ You will then acquire a Nyquist plot to demonstrate that the delayed system has 
   In this procedure you will design a Lag compensator, using the content you learned in your course, and simulate the delayed closed loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} the engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
+      The engineers at VenX have determined that the compensated closed loop system must have a phase margin strictly greater than
       \[
         \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
       \]
-      Using the Bode plot in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required gain crossover to achieve this specification.
+      where \(\omega_\mathrm{gc}\) is the gain crossover.
+      %Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}.
+      Using the Bode plot for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required gain crossover to achieve this specification.
     }
     \item{%
       \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
@@ -484,7 +486,7 @@ is a Lead compensator with unit DC gain.
 Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lead control design.
 %
 \begin{deliverable}[label={del:lab5:p3:1}]
-  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\) 
+  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\)
   This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
   \textbf{Design} a Lead compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
   \textbf{You must show the use of the design equations for full marks.}
@@ -500,11 +502,12 @@ You will then acquire a Nyquist plot to demonstrate that the delayed system has 
   In this procedure you will design a Lead compensator, using the content you learned in your course, and simulate the delayed closed loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} the engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
+      The engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
       \[
         \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
       \]
-      Using the Bode plot in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required phase addition to meet this specification.
+      %Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} t
+      Using the Bode plot for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required phase addition to meet this specification.
     }
     \item{%
       \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
@@ -662,11 +665,12 @@ in your report, you are required to answer the questions of the following delive
 Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab5:report}]
   \begin{enumerate}[label={(\arabic*)}]
-    \item{%
-      In both the Lead and Lag design procedures you had to add more phase (or decrease the gain crossover more) than what the phase margin specification demands.
-      Acquire a Bode plot of your Lead and Lag compensators to \textbf{explain why}.
-      \label{lab5:report:q1}
-    }
+    % \item{%
+    %   In the Lead and Lag design procedures you may have had to add more phase (or decrease the gain crossover more) than what the phase margin specification demanded.
+    %   Acquire a Bode plot of your Lead and Lag compensators to \textbf{explain why} this can happen.
+    %   If you did not have to do this, explain what the other side-effects of the Lead/Lag controllers are besides their intended effects (e.g. does the Lead controller only add phase?).
+    %   \label{lab5:report:q1}
+    % }
     \item{%
       \textbf{Describe} the qualitative differences between the final closed loop response of your Lag compensated and Lead compensated systems.
       Touch on characteristics like
@@ -797,15 +801,15 @@ questions where it is shown per question.
         & \ref{del:lab5:p4:1}         & 4       \\ \hline
         & \ref{del:lab5:p4:2}         & 4       \\ \hhline{=|=|=}
 Lab Subtotal&                       & 36      \\ \hhline{=|=|=}
-        & \ref{lab5:report}~\ref{lab5:report:q1}  & 3       \\ \hline
+%        & \ref{lab5:report}~\ref{lab5:report:q1}  & 3       \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q2}  & 3       \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q3}  & 3       \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q4}  & 3      \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q5}  & 3      \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q6}  & 3      \\ \hline
         & \ref{lab5:report}~\ref{lab5:report:q7}  & 3      \\ \hhline{=|=|=}
-Report Subtotal&  & 21 \\ \hhline{=|=|=}
-  Total &                       & 57
+Report Subtotal&  & 18 \\ \hhline{=|=|=}
+  Total &                       & 54
 \end{tabular}
 \caption[Grading Scheme for Lab 5]{Grading scheme for Lab 5.}
 \label{tab:lab5:grading}
