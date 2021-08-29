@@ -262,15 +262,6 @@ signal and the steady-state value of the signal. Then you
 compute the relative error between the maximum value and the settling value of
 the output.
 %
-\begin{figure}
-  \includegraphics{Lab_2_Peak.eps}
-  \caption[Depicting Overshoot Measurements for a Second-Order System.]{%
-    The maximum peak occurs at time \(T_\mathrm{peak}\) with amplitude
-    \(y_\mathrm{max}.\) The steady-state value is shown as \(y_{\mathrm{ss}}.\)
-  }
-  \label{fig:lab2:peak}
-\end{figure}
-%
 \begin{procedure}[label={proc:lab2:p1}]
   In this procedure you will capture a variety of characteristics of
   your provided second-order system to achieve the goal of Deliverable
@@ -309,7 +300,17 @@ the output.
     }
   \end{enumerate}
 \end{procedure}
-
+\FloatBarrier
+%
+\begin{figure}
+  \includegraphics{Lab_2_Peak.eps}
+  \caption[Depicting Overshoot Measurements for a Second-Order System.]{%
+    The maximum peak occurs at time \(T_\mathrm{peak}\) with amplitude
+    \(y_\mathrm{max}.\) The steady-state value is shown as \(y_{\mathrm{ss}}.\)
+  }
+  \label{fig:lab2:peak}
+\end{figure}
+%
 \subsection{Exploring Proportional Error Feeedback}
 For this section you will explore how proportional error feedback affects
 the behaviour of a second-order system. You will complete the following
@@ -467,6 +468,21 @@ crosses the value \(\SI{3}{dB}\) below the DC gain
   \end{enumerate}
 \end{procedure}
 %
+\begin{figure}[H]
+  \centering
+  \subfloat[A fairly well damped second-order system.]{%
+    \includegraphics[scale=0.75]{Lab_2_Bode.eps}%
+  }\hfill
+  \subfloat[A much less damped, \(\zeta << 0.707,\) second-order system.%
+  \label{fig:lab2:bode:b}]{%
+    \includegraphics[scale=0.75]{Lab_2_Bode_Peak.eps}%
+  }
+  \caption[Sample Bode Plots of a Second-Order System]{
+    Sample Bode plots of a second-order system.
+  }
+  \label{fig:lab2:bode}
+\end{figure}
+%
 \begin{procedure}[label={proc:lab2:p4}]
   \begin{enumerate}[label=(\arabic*)]
     \item{
@@ -481,20 +497,6 @@ crosses the value \(\SI{3}{dB}\) below the DC gain
   \end{enumerate}
 \end{procedure}
 %
-\begin{figure}
-  \centering
-  \subfloat[A fairly well damped second-order system.]{%
-    \includegraphics{Lab_2_Bode.eps}%
-  }\hfill\\
-  \subfloat[A much less damped, \(\zeta << 0.707,\) second-order system.%
-  \label{fig:lab2:bode:b}]{%
-    \includegraphics{Lab_2_Bode_Peak.eps}%
-  }\hfill\\
-  \caption[Sample Bode Plots of a Second-Order System]{
-    Sample Bode plots of a second-order system.
-  }
-  \label{fig:lab2:bode}
-\end{figure}
 
 \subsection{Disturbance Rejection}
 You have almost completed the experimental part of this lab. This section
