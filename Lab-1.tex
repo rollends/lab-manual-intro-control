@@ -24,9 +24,8 @@ The primary objectives of this lab are to
 \begin{enumerate}[label=(\arabic*)]
   \item{
     \textbf{Install} MATLAB, Simulink and required toolboxes.
-    Alternatively, \textbf{connect remotely} to
-    \url{engterm.uwaterloo.ca} or any other lab computer of your choice
-    that has MATLAB.
+    Alternatively, after establishing a \href{https://uwaterloo.ca/information-systems-technology/services/virtual-private-network-vpn/about-virtual-private-network-vpn} {VPN connection} to the uW campus, \textbf{connnect} to
+    \url{englab.uwaterloo.ca}, the portal for remote connection to several computers managed by Engineering Computing or by specific engineering departments. For the Engineering Computing (EngComp) machines, the available software is listed, almost all of them having Matlab 2019b available. Amongst the ECE machines, at least the ones named \emph{ece-control} and \emph{ece-public}, have Matlab 2019b installed. 
   }
   \item{
     Understand how to \textbf{open} and \textbf{modify}
@@ -46,7 +45,7 @@ The primary objectives of this lab are to
   }
 \end{enumerate}
 This lab may take a long time as it is very likely your first encounter with Simulink.
-As a result, I suggest you give you and your partner time to work through the lab and the problems.
+As a result, I suggest you give yourselves time to work through the lab and the problems.
 I also recommend you spend some time by yourself exploring Simulink so as to reduce the amount of time you spend on future labs.
 
 \section{Experimental Procedure}
@@ -54,11 +53,11 @@ This entire lab will be done using the ``\texttt{Lab\_1.slx}'' Simulink model.
 First extract the ``\texttt{Lab\_1\_Data.zip}'' file available from Learn.
 Inside there you will find zip files created for each individual group. Extract
 the zip file associated to your group, and there you will find the relevant
-``\texttt{Lab\_1.slx}'' file. The R2019 version may be found in a nested
-directory.
+``\texttt{Lab\_1.slx}'' file. 
 
 In the Simulink model you will
-find a number of blocks already placed for you in an open loop configuration:
+find a number of blocks already placed for you in an 
+open-loop configuration:
 \begin{itemize}
   \item{a signal generator,}
   \item{a summing junction,}
@@ -81,7 +80,7 @@ of the system we wish to control?
 
 \subsection{Acquiring the Bandwidth in Time-Domain}
 The goal of this portion of the lab is to acquire the bandwidth of the
-given linear system in both open and closed loop configuration.
+given linear system in both open and closed-loop configuration.
 The result of this subsection will be the following deliverables.
 %
 \begin{deliverable}[label={lab1:d1}]
@@ -154,21 +153,6 @@ input, we take a different approach.
   \end{enumerate}
 \end{procedure}
 %
-\begin{figure}
-  \includegraphics{Lab_1_LowFrequency.eps}
-  \caption[Low Frequency Response of a Low-Pass Plant]{The low-frequency response to my low-pass plant \(P(s).\) The gain
-  at this low frequency is \(0.8395.\) Can you see why? What is the DC
-  gain approximately?}
-  \label{fig:lab1:lowfreq}
-\end{figure}
-%
-\begin{figure}
-  \includegraphics{Lab_1_Bandwidth.eps}
-  \caption[Time-Domain Response of a First-Order System at the Bandwidth Frequency]{The response to my \(P(s)\) at the bandwidth frequency.
-  Can you see why this is the bandwidth frequency for my plant?}
-  \label{fig:lab1:bandwidth}
-\end{figure}
-%
 For low-pass systems, as we increase the frequency of the input, we will
 observe, the output amplitude \emph{decreases}. The bandwidth frequency
 is the frequency that marks the point where we distinguish between the
@@ -190,6 +174,21 @@ inputs a low-pass system rejects.
     \frac{1}{\sqrt{2}} = \frac{\left\|G(j\omega)\right\|}{\left\|G(0)\right\|}.
   \]
 \end{definition}
+%
+\begin{figure}[H]
+  \includegraphics{Lab_1_LowFrequency.eps}
+  \caption[Low Frequency Response of a Low-Pass Plant]{The low-frequency response to my low-pass plant \(P(s).\) The gain
+  at this low frequency is \(0.8395.\) Can you see why? What is the DC
+  gain approximately?}
+  \label{fig:lab1:lowfreq}
+\end{figure}
+%
+\begin{figure}[H]
+  \includegraphics{Lab_1_Bandwidth.eps}
+  \caption[Time-Domain Response of a First-Order System at the Bandwidth Frequency]{The response to my \(P(s)\) at the bandwidth frequency.
+  Can you see why this is the bandwidth frequency for my plant?}
+  \label{fig:lab1:bandwidth}
+\end{figure}
 %
 What is the definition above trying to characterize? The
 gain is the multiplier between the input amplitude and output amplitude. For
@@ -244,8 +243,8 @@ with lower frequencies.
   \end{enumerate}
 \end{procedure}
 %
-Having acquired the bandwidth for the open loop system, we now investigate
-the closed loop system.
+Having acquired the bandwidth for the open-loop system, we now investigate
+the closed-loop system.
 %
 \begin{figure}
   \centering
@@ -343,8 +342,7 @@ response. The \(2\%\)-settling time and the time constant.
 \end{figure}
 %
 The settling time is a measure of long-term behaviour.
-The notion is best depicted by Figure
-\ref{fig:lab1:settling-time}.
+The notion is depicted by Figure \ref{fig:lab1:settling-time}, which shows the time response of a \emph{second-order} system.
 In Figure~\ref{fig:lab1:settling-time:a} the steady-state value is
 measured peak-to-peak, \emph{from the base to the top} of the signal.
 Then \(2\%\) of the
@@ -353,11 +351,11 @@ steady-state value, depicted as the broken lines in Figure
 \ref{fig:lab1:settling-time:b}. Notice how the signal \emph{stays} in the
 settling region after the settling time.
 The next characteristic of the step response worthy of measurement is the
-time constant. First let us define the standard first order form for a first
+time constant. First let us define the standard first-order form for a first
 order transfer function.
 %
 \begin{definition}[]{Standard First-Order Form}
-  The standard first order form for a strictly proper, first-order transfer
+  The standard first-order form for a strictly proper, first-order transfer
   function \(P(s)\) is
   \[
     P(s) = \frac{K}{\tau s + 1},
@@ -366,12 +364,12 @@ order transfer function.
   constant}.
 \end{definition}
 %
-It can be verified that the number \(K\) in the standard first order form
+It can be verified that the number \(K\) in the standard first-order form
 is simply the DC gain. The time constant can be estimated experimentally
 in an easy way.
 %
 \begin{definition}[]{The Time Constant}
-  For a first order plant \(P(s)\) and step input \(U(s) = \frac{1}{s},\)
+  For a first-order plant \(P(s)\) and step input \(U(s) = \frac{1}{s},\)
   the time constant is the time \(\tau > 0\) it takes for
   the output \(y(t)\) to reach \(1-e^{-1} \approx 63\%\) of its steady-state value.
 \end{definition}
@@ -453,7 +451,11 @@ constant. In this section, you will attempt to find this limit.
 \section{Report Deliverable}
 Good job! You made it through Lab 1. You are required to submit a report
 that verifies you completed Lab 1 and that you understand the procedures you
-performed. In addition to including
+performed. \\
+\\
+Preface your lab report with the \hyperlink{intro:decl}{Declaration of Authorship}.\\
+
+In addition to including
 \begin{itemize}
   \item{Deliverable~\ref{lab1:d1},}
   \item{Deliverable~\ref{lab1:d2},}
@@ -471,8 +473,6 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab1:report:q1}
       \textbf{Derive} a formula for the DC gain of \(P(s)\) in terms of
       \(a, b, T.\)
-      %\emph{Hint: Recall that the DC gain for a stable system \(G(s)\)
-      %is just \(G(0).\)}
     }
     \item{
       \label{lab1:report:q2}
@@ -481,24 +481,15 @@ Make sure to leverage your other deliverables in your answers!
         P(s) = \frac{b T}{s + a T}\quad ,
       \]
       for \(a, b > 0\) and \(T \in \{10, 100\}.\) \textbf{Derive} a
-      formula for the bandwidth of \(P(s)\) in terms of \(a, b, T.\)
-      \emph{Hint: Remember that the bandwidth frequency \(\omega\) solves
-      the equation}
-      \[
-        \frac{\left\|P(j \omega)\right\|}{\left\|P(0)\right\|}
-        =
-        \frac{1}{\sqrt{2}}.
-      \]
-      \emph{Solve the expression for \(\omega.\) You should get a polynomial in \(\omega^2\) which
-      you can solve.}
+      formula for the bandwidth of \(P(s)\) in terms of \(a, b, T.\), starting from the Definition \ref{def:bandwidth}.
     }
     \item{
       \label{lab1:report:q3}
       Using the formulas you derived in~\ref{lab1:report:q1} and
       \ref{lab1:report:q2} and the estimates of your bandwidth and DC gain
       in Procedures~\ref{proc:lab1:p1} and~\ref{proc:lab1:p2},
-      \textbf{estimate} \(a, b.\)
-      Make estimates for both of the values \(T\in \{10, 100\}\) can take.
+      \textbf{estimate} \(a, b, T.\) Recall that \(T\) can only take on
+      values \(10\) or \(100.\)
     }
     \item{
       \label{lab1:report:q4}
@@ -509,9 +500,7 @@ Make sure to leverage your other deliverables in your answers!
     }
     \item{
       \label{lab1:report:q5}
-      \textbf{Find} a formula for the time constant of \(P(s)\) in terms of
-      \(a, b, T.\) \emph{Hint: If you put \(P(s)\) in standard first order
-      form, can you see what the time constant is?}
+      \textbf{Find} a formula for the time constant of \(P(s)\) in terms of \(a, b, T.\)
     }
     \item{
       \label{lab1:report:q6}
@@ -522,7 +511,7 @@ Make sure to leverage your other deliverables in your answers!
         Y(s) = P(s) U(s).
       \]
       \emph{Solve for an explicit expression for \(y(t)\) in the time domain.
-      Then find how long it takes to reach within \(2\%\) of the DC gain (the steady state value for a unit step)}
+      Then find how long it takes to reach within \(2\%\) of the DC gain (the steady state-value for a unit step).}
     }
     \item{
       \label{lab1:report:q7}
@@ -540,12 +529,8 @@ Make sure to leverage your other deliverables in your answers!
       \textbf{Find} the transfer
       function from the input to the output when the system is in
       closed-loop, treating \(a, b, T, K_p\) as just unknown parameters.
-      \emph{Hint: In closed loop you can write the input to the plant as
-      \(U(s) = K_p(R(s) - Y(s))\)
-      where \(R(s)\) is the input to the loop summing junction. See
-      Figure~\ref{fig:lab1:closing-loop}. Combine this with \(Y(s) = P(s)U(s)\)
-      and isolate \(Y(s)\) to get an expression \(Y(s) = G(s) R(s)\) where
-      \(G(s)\) is some transfer function. Put \(G(s)\) in standard first order form.}
+      \emph{Hint: For the closed-loop configuration, you can get an expression \(Y(s) = G(s) R(s)\) where
+      \(G(s)\) is the closed-loop transfer function. Put \(G(s)\) in standard first-order form.}
     }
     \item{
       \label{lab1:report:q10}
@@ -575,8 +560,10 @@ The grading scheme is shown in Table~\ref{tab:lab1:grading}. The breakdown of
 your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
-\begin{table}
+\begin{table} [H]
 \centering
+\caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
+\label{tab:lab1:grading}
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
         & \ref{lab1:d1}         & 4       \\ \hline
@@ -587,21 +574,19 @@ questions where it is shown per question.
         & \ref{lab1:d6}         & 4       \\ \hhline{=|=|=}
 Lab Subtotal&                       & 24      \\ \hhline{=|=|=}
         & \ref{lab1:report}~\ref{lab1:report:q1}  & 1       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q2}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q2}  & 3       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q3}  & 3       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q4}  & 3       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q5}  & 1       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q6}  & 1       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q7}  & 3       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q8}  & 3       \\ \hline
-        & \ref{lab1:report}~\ref{lab1:report:q9}  & 1       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q4}  & 2       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q5}  & 3       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q6}  & 3       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q7}  & 2       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q8}  & 2       \\ \hline
+        & \ref{lab1:report}~\ref{lab1:report:q9}  & 2       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q10} & 5       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q11} & 5       \\ \hline
         & \ref{lab1:report}~\ref{lab1:report:q12} & 1       \\ \hhline{=|=|=}
-Report Subtotal&  & 28 \\ \hhline{=|=|=}
-  Total &                       & 52
+Report Subtotal&  & 32 \\ \hhline{=|=|=}
+  Total &                       & 56
 \end{tabular}
-\caption[Grading Scheme for Lab 1]{Grading scheme for Lab 1.}
-\label{tab:lab1:grading}
 \end{table}
 %

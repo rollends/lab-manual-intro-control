@@ -1,6 +1,6 @@
 \chapter{Bringing it Together: Lateral Motion Control}\label{Lab:3}
-Imagine you are a young, aspiring, junior engineer at VenX, a private company in an alternate Universe, manufucturing a mining probe on Venus%
-\footnote{This society isn't particularly concerned about the environmental impact. It isn't our planet, right?}.
+Imagine you are a young, aspiring, junior engineer at VenX, a private company in an alternate Universe, manufacturing a mining probe on Venus%
+\footnote{This society isn't particularly concerned about the environmental impact.}
 Because of your junior status, they have only asked you to design a simple controller that ensures the landing module lands at the correct location.
 The controller you design controls the level of horizontal thrust to achieve a desired position relative to some point on the surface.
 You may assume that all units are in standard units.
@@ -10,7 +10,7 @@ Distances are measured in meters, time is measured in seconds, mass is measured 
 \begin{enumerate}[label=(\arabic*)]
   \item{
     \textbf{Use} the skills you learned in Labs~\ref{Lab:1} and~\ref{Lab:2}
-    to identify parameters of an opaque, black box system.
+    to identify parameters of a black-box system.
   }
   \item{
     \textbf{Design} a proportional inner-loop controller that stabilizes the velocity and controls it to a desired value.
@@ -81,10 +81,10 @@ You will treat velocity as the measurement (output).
 Once stabilized, you will design a controller in Part II that, again using velocity as a measurement, ensures perfect tracking of a reference velocity.
 We call this the inner loop controller since it corresponds to the inner most loops of the system (ignoring the stabilizing loop).
 Finally, in Part III you will design a controller that uses the inner loop and negative feedback to achieve perfect tracking to a desired reference position.
-The end result is that you will have a closed loop system that stabilizes the nonlinear landing module dynamics to achieve a desired horizontal position against disturbances!
+The end result is that you will have a closed-loop system that stabilizes the nonlinear landing module dynamics to achieve a desired horizontal position against disturbances!
 
 \subsection{Part I: Stabilize and Identify the Plant}\label{Lab:3:Part:I}
-Your deliverables for this subsection are
+Your deliverables for this subsection are:
 %
 \begin{deliverable}[label={del:lab3:g1:1}]
   \textbf{Choose} and \textbf{record} a gain value \(K_1\) for your stabilizing gain.
@@ -113,7 +113,7 @@ The reason for this is quite simple. A physical system normally integrates the i
 \]
 where \(M > 0\) is the mass of the landing module.
 The step response of this system is unbounded.
-It is true that there is friction in your model but it is often hard to model friction in reality, so we will take the above equation as our model.
+It is true that there is friction in your model, but it is often hard to model friction in reality, so we will take the above equation as our model.
 To stabilize the plant, close the loop in the following way
 %
 \begin{center}
@@ -192,7 +192,7 @@ Your deliverable for this section is
   \textbf{Acquire} a (unit) step response from the signal \(v_r(t)\) to the signal \(v(t).\)
   \textbf{Ensure} you have cursors that indicate the following:
   \begin{itemize}
-    \item{the time constant is \(\frac{1}{\sqrt{50}} \approx 0.1414.\)}
+    \item{the time constant is \(\frac{1}{\sqrt{50}} \approx 0.1414 s.\)}
     \item{the DC gain, or steady-state value, is \(1.\)}
   \end{itemize}
 \end{deliverable}
@@ -239,10 +239,6 @@ Close the loop around \(G_1(s)\) with a proportional error feedback controller l
       (Gain1.east)
       --
       (Plant.west);
-    % \draw [arrow, smooth_path]
-    %   (w.base)
-    %   --
-    %   (Sum1.west);
 
     \draw [smooth_area_path, fill = Blue, fill opacity = 0.50, text opacity = 1]
       ($(w)+(0.25, 0)$) -- +(0, 0.50) -| node[midway, above, color=Blue] {\(G_1(s)\)} ($(v)+(-0.50,0)$) -- +(0, -0.75) -| ($(w)+(0.25, 0)$);
@@ -282,36 +278,30 @@ Close the loop around \(G_1(s)\) with a proportional error feedback controller l
   \end{tikzpicture}
 \end{center}
 %
-As in Lab~\ref{Lab:1}, you should observe that the new time constant \(\tau_2\) of the transfer function from \(v_r(t)\) to \(v(t),\) which we denote \(G_2(s),\) is given by
-\[
-  \tau_2 = \frac{\tau_1}{1 + K_2}
-\]
-and that, in particular,
+Let's denote by \(G_2(s),\) the transfer function from \(v_r(t)\) to \(v(t)\). This transfer function takes the form:
 \[
   G_2(s)
     = \frac{V(s)}{V_r(s)}
-    = \frac{K_3 K_2}{1 + K_2} \frac{1}{\tau_2 s + 1}.
+    = \bar{K}\ \frac{1}{\tau_2 s + 1}.
 \]
+
 Your task is to ensure that \(G_2(s)\) has the desired time constant of \(\frac{1}{\sqrt{50}}\) and has a DC gain of \(1.\)
 %
 \begin{procedure}[label={proc:lab3:speedup}]
-  In this procedure you use another closed loop to accelerate the response of your system, thereby making it usable to do position step tracking.
+  In this procedure you use another closed-loop to accelerate the response of your system, thereby making it usable to do position step tracking.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       \textbf{Close} the loop as described above.
       You should connect the signal labelled \(v\) to the summing junction labelled ``\(G_2\) Loop.''%
     }
     \item{%
-      We would like the time constant of \(G_2(s),\) denoted \(\tau_2,\) to be equal to \(\frac{1}{\sqrt{50}}.\)
-      This would mean that, for a step change in the \emph{reference velocity}, the \emph{actual velocity} will reach \(63.3\%\) of the reference velocity in \SI{0.1414}{s}.
-      Using the fact that
-      \[
-        \tau_2 = \frac{\tau_1}{1 + K_2}
-      \]
-      where \(\tau_1\) is the time constant of \(G_1(s)\) you measured earlier, \textbf{solve} for the \(K_2\) you need to achieve the specification \(\tau_2 = \frac{1}{\sqrt{50}}.\)%
+    \textbf{Derive} symbolic expressions for \(\bar{K}\) and for \(\tau_2\), using the expression of \(G_2(s)\).
     }
     \item{%
-      \textbf{Solve} for the gain \(K_3\) that ensures \(G_2(s)\) has a DC gain of \(1.\)%
+      \textbf{Calculate} the value of \(K_2\) to achieve the specification \(\tau_2 = \frac{1}{\sqrt{50}}.\)%
+    }
+    \item{%
+      \textbf{Calculate} the gain \(K_3\) such that \(G_2(s)\) has a DC gain of \(1.\)%
     }
     \item{%
       \textbf{Set} the respective blocks corresponding to \(K_2\) and \(K_3\) in the Simulink diagram.%
@@ -388,10 +378,6 @@ Close the loop to arrive at a diagram
       (Gain4.east)
       --
       (G2.west);
-    % \draw [arrow, smooth_path]
-    %   (w.base)
-    %   --
-    %   (Sum1.west);
 
     \draw [arrow, smooth_path]
       (r.base)
@@ -407,11 +393,8 @@ form
 \[
   G_2(s) = \frac{1}{\frac{1}{\sqrt{50}}s + 1}.
 \]
-Verify that the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) in the Simulink model, is
-\[
-  G_3(s) = \frac{K_4\sqrt{50}}{s^2 + \sqrt{50} s + K_4 \sqrt{50}}.
-\]
-%
+Calculate the transfer function from \(r(t)\) to \(x(t),\) denoted \(G_3(s)\) in the Simulink model.
+
 \begin{procedure}[label={proc:lab3:regulate}]
   You will make a specific choice for \(K_4\) in this procedure and then simulate the entire non-linear system.
   \begin{enumerate}[label={(\arabic*)}]
@@ -469,7 +452,12 @@ You must complete the previous procedure before starting this final procedure.
 %
 
 \section{Report Deliverable}
-Wow you made it through the Lab 3 experiment! Good job! As usual, you are expected to submit a report demonstrating that you completed the lab and that you understand the tasks performed.
+You made it through the Lab 3 experiment! As usual, you are expected to submit a report demonstrating that you completed the lab and that you understand the tasks performed.
+\\
+\\
+Preface your lab report with the \hyperlink{intro:decl}{Declaration of Authorship}.
+\\
+
 In addition to including
 \begin{itemize}
   \item{Deliverable~\ref{del:lab3:g1:1},}
@@ -482,93 +470,8 @@ In addition to including
 \end{itemize}
 in your report, you are required to answer the questions of the following deliverable.
 Make sure to leverage your other deliverables in your answers!
-\begin{deliverable}[label={lab3:report}]
-  \begin{enumerate}[label={(\arabic*)}]
-    \item{%
-      The entire closed loop system \(G_3(s)\) can be described by the diagram in Figure~\ref{fig:lab3:entire}.
-      \textbf{Derive} the transfer function from \(r(t)\) to \(x(t)\)
-      in terms of the \emph{symbols} \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
-      Leave your answer in symbolic form.
-      \emph{It is not required, but it is wise to verify your answer against the transfer functions discussed throughout the lab. They should be consistent.}
-      \label{lab3:report:q1}
-    }
-    \item{%
-      You should find that the transfer function that you derived in~\ref{lab3:report:q1} was a second-order transfer function with no zero.
-      \textbf{Write} the transfer function of~\ref{lab3:report:q1} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
-      Leave your answer in symbolic form.
-      \label{lab3:report:q2}
-    }
-    \item{%
-      Unlike in Lab 2, you can change the settling time of the final, second order transfer function from \(r(t)\) to \(x(t).\)
-      Leveraging the formula that estimates the \(2\%\) settling time
-      \[
-        T_{2\%} \approx \frac{4}{\zeta \omega}
-      \]
-      for a transfer function in standard form \textbf{identify} the two gains that affect the settling time of your transfer function \(G_3(s)\) (use the standard form derived in~\ref{lab3:report:q2}).
-      \emph{Aside: You may assume for this question that your system is underdamped. It is true that we designed for a critically damped system and, in that case, the formula does not apply. However we will gloss over this technicality.}
-      \label{lab3:report:q3}
-    }
-    \item{%
-      To produce Deliverable~\ref{del:lab3:g3:2}, you simulated the true response of your controller against the complete, nonlinear system;
-      not a linear approximation of it!
-      The Model Linearizer performs a linear approximation of the nonlinear differential equation found in the Plant block.
-      It then gives you the step response of the corresponding linear system's transfer function.
-      As a result, you designed against only an approximation of the true system.
-      This explains why you will have observed a modest to large overshoot of the target horizontal position before the landing module settles.
-      That doesn't mean linear system theory is completely useless, however.
-
-      Using the transfer function \(G_3(s)\) found in~\ref{lab3:report:q2}, 
-      \textbf{determine} a gain (not a particular value, the symbol) that you can change to reduce the overshoot \emph{without affecting the settling time}.
-      \textbf{Justify} your explanation using the relevant overshoot formula (see Lab~\ref{Lab:2}) and make sure to include whether you would increase or decrease that gain.
-      \emph{It is not required for your submission but I highly recommend you give your answer a try in simulation. You might be surprised!}
-      \label{lab3:report:q4}
-    }
-    \item{%
-      As mentioned in~\ref{lab3:report:q4}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
-      The engineers at VenX included in that model a variable wind force that increases in magnitude as you get closer to the ground \emph{and} has some sinusoidal variability.
-      As part of the specification, the engineers would like to know just how large of a force they can afford.
-
-      Since wind is just an additional force to the input force \(u(t)\), we can model it as \(d(t)\);
-      \(d(t)\) is an input disturbance.
-      Assume
-      \[
-        d(t) = M + A\sin\left(\pi t\right),
-      \]
-      where \(M, A > 0\).
-
-      Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
-      \textbf{justify} why you did not notice large sinusoidal disturbances in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
-      \textbf{Specifically determine} how large the constant \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
-      \label{lab3:report:q5}
-    }
-    \item{%
-      The software developers at VenX want your controller to have \(x(t),\) your horizontal position, track perfectly any constant reference position \(r(t).\)
-
-      Does your control system (treating \(r(t)\) as the input and \(x(t)\) as the output) do this?
-      If yes, does it matter what the constants \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M\) are?
-      \textbf{Justify} using the theory learned in the course.
-      \emph{You may assume that \(K_1,\) \(K_2,\) \(K_3,\) \(K_4\) and \(M\) are positive.}
-      %\emph{Use the transfer function \(G_3(s)\) put in standard form (as derived in~\ref{lab3:report:q3}) to answer the question.}
-      \label{lab3:report:q6}
-    }
-    \item{%
-      The philosophy of this control design was to (1) design a controller that regulates a desired velocity fast enough by controlling the input force and (2) design a controller that regulates a desired position by controlling the desired velocity.
-      This is a very common technique used in aerospace since it breaks the control design into smaller, easier chunks that aim to solve different problems.
-      With this philosophy in mind, the data you have at hand, and the answers to all the previous questions, answer the following question as best as you possibly can:
-
-      Your supervisor at the company VenX was alarmed by your Deliverable~\ref{del:lab3:g3:2}.
-      They think the acceleration imparted by your controller is too large and could damage delicate components that are deployed on descent.
-      How could you decrease the acceleration imparted by your controllers?
-      \emph{This is a conceptual question.
-      We are looking for you to think about which gains to change and why.
-      We are not looking for you to pick exact numbers.
-      You may justify your answer using physical intuition (physics) or any formulas that apply.}
-      \label{lab3:report:q7}
-    }
-  \end{enumerate}
-\end{deliverable}
-
-\begin{figure}
+%
+\begin{figure}[H]
   \centering
   \begin{tikzpicture}[x=1in, y=1in]
     \node[smooth_block] (Plant) {\(\frac{K_1}{M s}\)};
@@ -651,27 +554,115 @@ Make sure to leverage your other deliverables in your answers!
       node[below right] {\(-\)};
 
   \end{tikzpicture}
-  \caption[Closed Loop system for Lab 3]{Entire closed loop architecture for Lab 3.}
+  \caption[Closed-loop system for Lab 3]{Entire closed-loop architecture for Lab 3.}
   \label{fig:lab3:entire}
 \end{figure}
+
+\begin{deliverable}[label={lab3:report}]
+  \begin{enumerate}[label={(\arabic*)}]
+    \item{%
+      The entire closed-loop system \(G_3(s)\) can be described by the diagram in Figure~\ref{fig:lab3:entire}.
+      \textbf{Derive} the transfer function from \(r(t)\) to \(x(t)\)
+      in terms of the \emph{symbols} \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
+      Leave your answer in symbolic form.
+      \emph{It is not required, but it is wise to verify your answer against the transfer functions discussed throughout the lab. They should be consistent.}
+      \label{lab3:report:q1}    
+    }
+    \item{%
+      You should find that the transfer function that you derived in~\ref{lab3:report:q1} was a second-order transfer function with no zero.
+      \textbf{Write} the transfer function of~\ref{lab3:report:q1} in standard second order form by deducing what its DC gain \(\hat{K},\) natural frequency \(\omega_n\) and damping ratio \(\zeta\) are in terms of the symbols \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M.\)
+      Leave your answer in symbolic form.
+      \label{lab3:report:q2}
+    }
+    \item{%
+      Unlike in Lab 2, you can change the settling time of the final, second order transfer function from \(r(t)\) to \(x(t).\)
+      Leveraging the formula that estimates the \(2\%\) settling time
+      \[
+        T_{2\%} \approx \frac{4}{\zeta \omega}
+      \]
+      for a transfer function in standard form \textbf{identify} the two gains that affect the settling time of your transfer function \(G_3(s)\) (use the standard form derived in~\ref{lab3:report:q2}).
+      \emph{Aside: You may assume for this question that your system is underdamped. It is true that we designed for a critically damped system and, in that case, the formula does not apply. However, we will gloss over this technicality.}
+      \label{lab3:report:q3}
+    }
+    \item{%
+      To produce Deliverable~\ref{del:lab3:g3:2}, you simulated the true response of your controller against the complete, nonlinear system;
+      not a linear approximation of it!
+      The Model Linearizer performs a linear approximation of the nonlinear differential equation found in the Plant block.
+      It then gives you the step response of the corresponding linear system's transfer function.
+      As a result, you designed against only an approximation of the true system.
+      This explains why you will have observed a modest to large overshoot of the target horizontal position before the landing module settles.
+      That doesn't mean linear system theory is completely useless, however.
+
+      Using the transfer function \(G_3(s)\) found in~\ref{lab3:report:q2}, 
+      \textbf{determine} a gain (not a particular value, the symbol) that you can change to reduce the overshoot \emph{without affecting the settling time}.
+      \textbf{Justify} your explanation using the relevant overshoot formula and make sure to include whether you would increase or decrease that gain.
+      \emph{It is not required for your submission but I highly recommend you give your answer a try in simulation. You might be surprised!}
+      \label{lab3:report:q4}
+    }
+    \item{%
+      As mentioned in~\ref{lab3:report:q4}, to produce Deliverable~\ref{del:lab3:g3:2} you simulated your control design against the real system.
+      The engineers at VenX included in that model a variable wind force that increases in magnitude as you get closer to the ground \emph{and} has some sinusoidal variability.
+      As part of the specification, the engineers would like to know just how large of a force they can afford.
+
+      Since wind is just an additional force to the input force \(u(t)\), we can model it as \(d(t)\);
+      \(d(t)\) is an input disturbance.
+      Assume
+      \[
+        d(t) = B + A\sin\left(\pi t\right),
+      \]
+      where \(B, A > 0\).
+
+      Using the Bode plot you acquired in Deliverable~\ref{del:lab3:g3:3},
+      \textbf{justify} why you did not notice large sinusoidal disturbances in your response acquired in Deliverable~\ref{del:lab3:g3:2}.
+      \textbf{Specifically determine} how large the constant \(A\) would have to be to observe a sinusoid of amplitude \SI{1}{m} in the output.
+      \label{lab3:report:q5}
+    }
+    \item{%
+      The software developers at VenX want your controller to have \(x(t),\) your horizontal position, track perfectly any constant reference position \(r(t).\)
+
+      Does your control system (treating \(r(t)\) as the input and \(x(t)\) as the output) do this?
+      If yes, does it matter what the constants \(K_1,\) \(K_2,\) \(K_3,\) \(K_4,\) and \(M\) are?
+      \textbf{Justify} using the theory learned in the course.
+      \emph{You may assume that \(K_1,\) \(K_2,\) \(K_3,\) \(K_4\) and \(M\) are positive.}
+      \label{lab3:report:q6}
+    }
+    \item{%
+      The philosophy of this control design was to (1) design a controller that regulates a desired velocity fast enough by controlling the input force and (2) design a controller that regulates a desired position by controlling the desired velocity.
+      This is a very common technique used in aerospace since it breaks the control design into smaller, easier chunks that aim to solve different problems.
+      With this philosophy in mind, the data you have at hand, and the answers to all the previous questions, answer the following question as best as you possibly can:
+
+      Your supervisor at the company VenX was alarmed by your Deliverable~\ref{del:lab3:g3:2}.
+      They think the acceleration imparted by your controller is too large and could damage delicate components that are deployed on descent.
+      How could you decrease the acceleration imparted by your controllers?
+      \emph{This is a conceptual question.
+      We are looking for you to think about which gains to change and why.
+      We are not looking for you to pick exact numbers.
+      You may justify your answer using physical intuition (physics) or any formulas that apply.}
+      \label{lab3:report:q7}
+    }
+  \end{enumerate}
+\end{deliverable}
+
 
 \subsection{Grading Scheme}
 The grading scheme is shown in Table~\ref{tab:lab3:grading}. The breakdown of
 your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
-\begin{table}
+\begin{table}[H]
 \centering
+\caption[Grading Scheme for Lab 3]{Grading scheme for Lab 3.}
+\label{tab:lab3:grading}
 \begin{tabular}{c|l|c}
         & Deliverable           & Marks  \\ \hline
         & \ref{del:lab3:g1:1}         & 1       \\ \hline
         & \ref{del:lab3:g1:2}         & 4      \\ \hline
         & \ref{del:lab3:g1:3}        & 2       \\ \hline
-        & \ref{del:lab3:g2:1}        & 6       \\ \hline
+        & \ref{del:lab3:g2:1}        & 8       \\ \hline
         & \ref{del:lab3:g3:1}         & 4      \\ \hline
         & \ref{del:lab3:g3:2}         & 4       \\ \hline
         & \ref{del:lab3:g3:3}         & 4       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 25      \\ \hhline{=|=|=}
+Lab Subtotal&                       & 27      \\ \hhline{=|=|=}
         & \ref{lab3:report}~\ref{lab3:report:q1}  & 4       \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q2}  & 4       \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q3}  & 4       \\ \hline
@@ -680,9 +671,7 @@ Lab Subtotal&                       & 25      \\ \hhline{=|=|=}
         & \ref{lab3:report}~\ref{lab3:report:q6}  & 3      \\ \hline
         & \ref{lab3:report}~\ref{lab3:report:q7}  & 3      \\ \hhline{=|=|=}
 Report Subtotal&  & 25 \\ \hhline{=|=|=}
-  Total &                       & 50
+  Total &                       & 52
 \end{tabular}
-\caption[Grading Scheme for Lab 3]{Grading scheme for Lab 3.}
-\label{tab:lab3:grading}
 \end{table}
 %

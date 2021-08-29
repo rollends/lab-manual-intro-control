@@ -53,7 +53,7 @@ will have a window that looks like Figure~\ref{fig:app1:model-linearizer}.
 
 \subsection{Setting up your System: Input to Output}
 \label{App:Simulink:ModelLinearizer:2}
-Now that you know how to open up the Model Linearizer, we must now prepare
+Now that you know how to open up the Model Linearizer, we must prepare
 the system we want to analyze. The Model Linearizer tool doesn't know what
 we consider an ``input'' and what we consider an ``output'' just from our
 Simulink diagram. But you do! Whenever you want to take a step response, you
@@ -70,7 +70,7 @@ an example,
 %
 Suppose we wanted to analyze the relationship between the signals
 labelled \(u\) and \(y.\)
-Right click the signal wire labelled \(u\) and hover over ``Linear Analysis
+Right-click the signal wire labelled \(u\) and hover over ``Linear Analysis
 Points'' as depicted in Figure~\ref{fig:app1:io-menu:a}.
 %
 \begin{figure}
@@ -91,8 +91,7 @@ Points'' as depicted in Figure~\ref{fig:app1:io-menu:a}.
   \label{fig:app1:io-menu:b}
 \end{figure}
 %
-This context menu has a number of options of which we will only avail ourselves
-to two.
+This context menu has a number of options of which we will only use two.
 Since we would like to indicate to the Model Linearizer App that this wire
 is where the input appears, we select ``\texttt{Input Perturbation}.'' We
 repeat the \emph{same exact} process for the desired output signal wire \(y\)
@@ -117,7 +116,7 @@ the placement of the ``\texttt{Input Perturbation}'' and
 ``\texttt{Output Measurement}'' annotations is not arbitrary;
 it is intentional! This
 allows us to quickly change the configuration of the system, closing the loop
-for example, and get closed loop measurements without having to change our
+for example, and get closed-loop measurements without having to change our
 annotations!
 
 \FloatBarrier
@@ -125,7 +124,7 @@ annotations!
 \label{App:Simulink:ModelLinearizer:3}
 Having indicated to the Model Linearizer app the input and output signal, you
 are now ready to acquire a step response. Open the Model Linearizer. Look at
-the top bar of the Model Linearizer and confirm that it looks like so
+the top bar of the Model Linearizer and confirm that it looks as depicted below:
 %
 \begin{center}
   \includegraphics[width=0.8\linewidth]{%

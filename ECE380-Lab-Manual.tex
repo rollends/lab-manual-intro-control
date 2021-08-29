@@ -31,19 +31,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BEG: COLOR/TEXT/FONT CONFIGURATION
 %
-% \setmainfont{SourceSerifPro-Regular}[
-%   BoldFont = SourceSerifPro-Bold,
-%   ItalicFont = SourceSerifPro-It,
-% ]
-% \setsansfont{SourceSansPro-Regular}[
-%   BoldFont = SourceSansPro-Bold,
-%   ItalicFont = SourceSansPro-It,
-% ]
-% \setmonofont{SourceCodePro-Regular}[
-%   BoldFont = SourceCodePro-Bold,
-%   ItalicFont = SourceCodePro-It,
-%   Scale = 0.90,
-% ]
 
 \definecolor{Orange}{cmyk}{0, 0.40, 0.80, 0}
 \definecolor{Red}{cmyk}{0.20, 1.00, 1.00, 0}
@@ -53,6 +40,9 @@
 \definecolor{Green}{cmyk}{1, 0.50, 0.70, 0}
 \definecolor{LiteGreen}{cmyk}{0.1, 0.05, 0.05, 0}
 \definecolor{RichBlack}{cmyk}{0.25, 0.25, 0.25, 0.70}
+\definecolor{Lime}{cmyk}{25, 0, 100, 0}
+\definecolor{LiteLime}{cmyk}{0.05, 0, 0.2, 0}
+
 
 \newtcolorbox[%
   auto counter,%
@@ -93,6 +83,17 @@
   arc=0pt,
   #1
 }
+\newtcolorbox{declaration}[1][]{%
+  enhanced,
+  colframe=Lime,%
+  colback=LiteLime,%
+  fonttitle=\bfseries,%
+  title={{Declaration of Authorship}},
+  %breakable,
+  arc=0pt,
+  #1
+}
+
 
 \tikzfading[name=fade lightly right,%
             left color=transparent!0,%
@@ -190,8 +191,8 @@
 %
 \hypersetup{
   xetex,
-  pdfauthor={Rollen S. D'Souza},
-  pdftitle={ECE 380 --- Spring 2020 --- Lab Manual},
+  pdfauthor={Rollen S. D'Souza, Carmen Caradima},
+  pdftitle={ECE 380 --- Lab Manual},
   pdfcreator={XeLaTeX with the HyperRef package.},
   breaklinks,
   plainpages=false,
@@ -258,24 +259,17 @@
 \begin{flushright}
 {
   \rmfamily\HUGE\noindent
-  \textbf{SE 380 --- Intro to Feedback Control}\\
-  Winter 2020\\
-  {Lab Manual v1.2}\\
-  {
-    \scshape
-    \small Built \today ---
-    \makeatletter
-    \small Commit {%
-      \@@input|"git rev-list --max-count=1 HEAD | cut -c -6 -"
-    }
-    \makeatother
-  }
+  \textbf{ECE/SE 380 --- Analog Control Systems}\\
+  Fall 2021\\
+  {Lab Manual v1.5}\\
 }
 \end{flushright}
 \begin{flushright}
 {
   \rmfamily\Large\noindent
-  Rollen S. D'Souza
+  Rollen S. D'Souza\\
+  \rmfamily\small\noindent  
+  Revised by C. Caradima
 }
 \end{flushright}
 \vspace{0.25in}
@@ -291,7 +285,6 @@
 % BEG: COPYRIGHT BS
 %
 \thispagestyle{empty}
-%\noindent\textcopyright 2020 Rollen S. D'Souza\\
 
 \noindent
 Cover page image captured by SpaceX\textregistered~on their STP-2 Mission, licensed under the Creative Commons Non-Commercial 2.0.

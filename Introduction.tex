@@ -1,13 +1,12 @@
 \chapter{Introduction}
 Welcome to your remote lab for ECE 380, Introduction to Feedback Control.
-The in-lab portion of this course was designed to give you a hands-on
+The lab portion of this course was designed to give you a hands-on
 feel for control using analog circuits. Given the current climate, this is
 clearly not possible in the way previously envisioned.
 
 We persist. This lab is designed to run in MATLAB and Simulink. You will engage
 in understanding, developing, executing and analyzing Simulink
-diagrams that model and simulate control systems. Every lab, though
-somewhat artificial, is
+diagrams that model and simulate control systems. Every lab is
 provided with brief motivation on how one can see this applied in a real
 world problem. I hope I can help connect the abstract block diagrams of
 Simulink with the real world for you.
@@ -55,7 +54,7 @@ Simulink is an add-on to MATLAB that allows you to design and simulate
 systems (physical or otherwise) using block diagrams like in
 Figure~\ref{fig:intro:1}.
 %
-\begin{figure}
+\begin{figure}[H]
   \centering
   \begin{tikzpicture}[x=1in, y=1in]
     \node [draw, block] (Controller) {\(K_p + K_i\frac{1}{s}\)};
@@ -128,26 +127,7 @@ system we wish to control; it will then be your task to analyze this block,
 design a controller, and implement it by linking up blocks
 in the appropriate feedback architecture.
 
-% \section{Git Version Control}
-% We will be using the \texttt{git} version control system in tandem with
-% the Gitlab hosted on \url{git.uwaterloo.ca} to facilitate delivery of lab
-% content and to give you a mechanism for
-% \begin{enumerate}[label=(\arabic*)]
-%   \item{tracking your temporary work, and}
-%   \item{submitting your final work.}
-% \end{enumerate}
-% There is no requirement that you use git ``properly.'' If you are not
-% comfortable using the terminal to perform git operations, you can use graphical
-% tools like \href{https://www.sourcetreeapp.com/}{Sourcetree} or
-% \href{https://www.gitkraken.com/git-client}{GitKraken}. You can even manually
-% upload the files using the graphical web interface at \url{git.uwaterloo.ca}.
-% As long as your able to download files from your repository and upload your
-% solutions, I am happy. Having said that, it is an important skill in this
-% day and age to understand how to use version control. This is a
-% great opportunity to learn git!
-
 \section{Lab Logistics and Deliverables}\label{intro:logistics}
-%Lab deadlines can be found in Table~\ref{tab:labcalendar}.
 Lab deadlines can be found in your course outline and on LEARN.
 Read carefully.
 Times are provided in the active Eastern Time.
@@ -157,9 +137,7 @@ Every lab requires you to complete a number of procedures described in green box
   \begin{enumerate}[label=(\arabic*)]
     \item{Yes here is step 1,}
     \item{oh wow step 2,}
-    \item{really you are still reading this,}
-    \item{you must be really bored,}
-    \item{consider finding better things to do.}
+    \item{you got the idea.}
   \end{enumerate}
 \end{procedure}
 \noindent
@@ -167,127 +145,62 @@ and deliverables described in red boxes like
 \begin{deliverable}[]
   Here are some things you will need to save for your report.
 \end{deliverable}
-Procedures are simply steps you should follow that will eventually result in a deliverable, which is something you must record and submit as part of your report.
+Procedures are simply steps you should follow that will eventually result in one or more deliverables, namely something you must record and submit as part of your report. {\color{red}Note that the sequential number of the procedure may differ from the number of the deliverable. Procedures are, nevertheless, positioned and numbered such that they integrate well in the flow of information of specific sections. In other words, do not skip content trying to jump from a deliverable to what you may think is the corresponding procedure simply based on the procedure's number.}\\
+
 Every lab chapter ends with a final summative deliverable, usually
 consisting of a series of questions that you must answer.
 %
 All the deliverables should be packaged up in an organized way; ideally
-they should be in your report in the order presented under headings directly
-corresponding to the deliverable label (1.1, 1.2, etc.). If you want a sense
-of how to format your report, please see a very basic LaTeX template that I
-have created for you on Overleaf \href{https://www.overleaf.com/read/jnwwfmnvkgpx}{here}.
-Your final report must be submitted as a PDF document on Learn.
-Your grade is entirely based on your report.
+they should be in your report in the order presented under headings directly corresponding to the deliverable label (1.1, 1.2, etc.). \\
+
+We expect that the majority of your submissions will be typeset. However, for parts that involve a lot of formulas/diagrams/equations, it is acceptable to include \textbf {neatly hand-written parts}; make sure that they are \textbf {organized and legible}.
+Your final report must be submitted as one PDF document on Learn; it is the duty of both lab partners to verify that the PDF file has been rendered correctly.
+Your grade is entirely based on your report.\\
+
+Occasionally, there has been confusion about what is allowed and what is not allowed in labs. You are responsible for knowing what constitutes an "academic offence" according to \href{https://uwaterloo.ca/secretariat/policies-procedures-guidelines/policy-71} {Policy 71} of the university. In particular, according to this policy:
+\begin{enumerate}
+\item{Cheating is an academic offence. Cheating includes copying from another student's work or allowing another student to copy from one's own work, submitting another person's work as one's own, fabrication of data and use of unauthorized aids.}
+\item{Plagiarism (the act of presenting the ideas, words, or other intellectual property of another as one's own) is an academic offence. The use of other people's work must be completely and unambiguously acknowledged and referenced in all written material, including laboratory reports and computer programs.}
+\end{enumerate}
+
+In this course, labs are being done in groups of two students, subject to enrolment constraints. Each group must do their own analysis and their own design, do their own edits to the Matlab/Simulink files provided, and write up their own lab report. However:
+\begin{enumerate}
+\item{You may talk to the lab instructor, the teaching assistant and the course instructor about any aspect of the lab.}
+\item{You are allowed to consult with other students in the class or share \emph{high-level ideas and approaches}, but \emph{not} to share detailed analysis or detailed design results.}
+\item{You may not obtain or look at lab reports (either in hardcopy or softcopy) written by other students, whether they are current students or former students of ECE/SE 380. You may not let any other student access any part of your lab report (either in hardcopy or softcopy).}
+\item{In your report, you must completely and unambiguously acknowledge and reference any person, website, report, book, or notes that you used to help you with your work. You should reference this lab manual, and the course notes, for example.}
+\item{You must include in each report, and sign, the following statement:}
+\end{enumerate}
+
+\begin {declaration} \label{intro:decl} \hypertarget{intro:decl}
+  We acknowledge and promise that: 
+  \begin{enumerate}[label=\emph{\alph*})]
+  \item We are the sole authors of this lab report and associated simulation files/code.
+  \item This work represents our original work.
+  \item We have not shared detailed analysis or detailed design results, computer code, or Simulink diagrams with any other student.
+  \item We have not obtained or looked at lab reports from any other current or former student of ECE/SE 380, and we have not let any other student access any part of our lab work.
+  \item We have completely and unambiguously acknowledged and referenced all persons and aids used to help us with our work.
+  \end{enumerate}
+  Student1 Name and Signature:\\
+  Student2 Name and Signature: 
+\end{declaration}
+
 Every lab has its own grading scheme, but the following penalties apply equally to all labs:
 \begin{itemize}
   \item{
-    \(-5\%\) for not having a typeset document or for poor organization,
+    \(-5\%\) for poor organization or hand-written parts that are messy or difficult to read,
   }
   \item{
-    \(-10\%\) for not submitting a PDF,
+    \(-5\%\) for the submission not being in PDF format,
   }
   \item{
-    \(-20\%\) within the first \texttt{24} hours it is late. After
-    \texttt{24} hours, it becomes \(-100\%.\) If prior arrangements are made
-    or a valid reason presented within a week from the missed deadline, this
-    is waived. In no case will a lab report be accepted more than a week past
-    the deadline; if a valid reason exists for being unable to hand in the lab
-    within the week following the deadline, then the lab will be assigned a
-    weight of zero and the remaining labs will be reweighted accordingly.
-    \textbf{Contact the Lab Instructor for this.}
-    All reports are due at \texttt{23:59:59 EASTERN} on the due date.
-    %All deadlines will be reported both
-    %in Eastern Daylight Time (\texttt{EDT}) and Coordinated Universal Time
-    %(\texttt{UTC})
-    %so that there can be no confusion on the deadline in case you are not
-    %in Waterloo.
-  }
+  	\(-5\%\) for not including the \hyperlink{intro:decl}{Declaration of Authorship} shown above,}
+  \item{
+    \(-1\%\) per hour within the first 24 hours past the submission deadline. After 24 hours, the penalty becomes \(-100\%\). If prior arrangements are made or a valid reason presented within one week from the missed deadline, the late penalty is waived. In no case will a lab report be accepted more than one week past the deadline. If a valid reason exists for being unable to hand in the lab report
+    within the week following the deadline, then a solution tailored to each particular situation will be offered.  \textbf{Contact the Lab Instructor for this.}
+    All reports are due at \texttt{23:59 Eastern Time} on the due date shown in the Course Outline.
+   }
 \end{itemize}
-%
-% In terms of general style, I am a proponent of letter grade style
-% grading schemes for discussion questions.
-% Often grading is arbitrary and it can be hard to really pin down the value of
-% a question especially when the content has no obvious discrete points to
-% get correctly for the student and marker. I will have markers
-% rate these discussion answers on the scale shown in
-% Table~\ref{tab:letter-grading}.
-% %
-% \begin{table}
-% \centering
-% \begin{tabular}{r|c|l}
-% Value & Letter & Explanation\\ \hline
-% \(100\%\) & A+ & Meets Expectations.\\ \hline
-% \(90\%\)  & A & Meets Expectations. Answer could be Improved Upon. \\ \hline
-% \(80\%\) & B & Would Meet Expectations. Made Minor Mistakes.\\ \hline
-% \(60\%\) & C & Would Meet Expectations. Made a few Major Mistakes.\\ \hline
-% \(40\%\) & D & Fundamental Lack of Understanding in Attempt.\\ \hline
-% \(0\%\) & F & No Understanding or No Work Shown.
-% \end{tabular}
-% \caption[Letter Grading Scheme]{Letter grade with associated value and
-% description for how we assign the grade.}
-% \label{tab:letter-grading}
-% \end{table}
-%
 Minor mistakes are penalized quite steeply so check your work.
 Mistakes in discussions usually amount to theoretical mistakes in understanding;
 we will make an attempt to avoid double, or any other cascade, deduction.
-% The letter grade \(A\) is reserved for when discussion
-%responses have no mistakes but a better explanation exists or an explanation
-%ought to be expanded upon. This is to prevent steep penalties for purely a
-%lack of insight.
-
-%
-% \begin{table}
-%   \centering
-%   \begin{tabular}{c|c|c|l}
-%       & Release Date & Due Date & Grading Release Date\\ \hline
-%     Form Your
-%       &
-%       & \texttt{21 SEP 2359 EDT}
-%       & \\
-%     Group
-%       &
-%       & \texttt{22 SEP 0359 UTC}
-%       & \\ \hline
-%     Lab 1
-%       & \texttt{21 SEP 2359 EDT}
-%       & \texttt{07 OCT 2359 EDT}
-%       & \\
-%       & \texttt{22 SEP 0359 UTC}
-%       & \texttt{08 OCT 0359 UTC}
-%       & \\ \hline
-%     Lab 2
-%       & {\texttt{07 OCT 2359 EDT}}
-%       & {\texttt{26 OCT 2359 EDT}}
-%       & \\
-%       & {\texttt{08 OCT 0359 UTC}}
-%       & {\texttt{27 OCT 0359 UTC}}
-%       & \\ \hline
-%     Lab 3
-%       & {\texttt{26 OCT 2359 EDT}}
-%       & {\texttt{09 NOV 2359 EST}}
-%       & \\
-%       & {\texttt{27 OCT 0359 UTC}}
-%       & {\texttt{10 NOV 0459 UTC}}
-%       & \\ \hline
-%     Lab 4
-%       & {\texttt{09 NOV 2359 EST}}
-%       & {\texttt{23 NOV 2359 EST}}
-%       & \\
-%       & {\texttt{10 NOV 0459 UTC}}
-%       & {\texttt{24 NOV 0459 UTC}}
-%       & \\ \hline
-%     Lab 5
-%       & {\texttt{23 NOV 2359 EST}}
-%       & {\texttt{07 DEC 2359 EST}}
-%       & \\
-%       & {\texttt{24 NOV 0459 UTC}}
-%       & {\texttt{08 DEC 0459 UTC}}
-%       &
-%   \end{tabular}
-%   \caption[Lab Calendar]{%
-%     Lab Calendar showing release dates, due dates and expected grading
-%     deadlines. Tentative dates are colored blue.
-%   }
-%   \label{tab:labcalendar}
-% \end{table}

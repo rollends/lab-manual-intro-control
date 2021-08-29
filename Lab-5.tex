@@ -1,31 +1,31 @@
 \chapter{Lead and Lag Compensator Design}\label{Lab:5}
 Your exploration into the line-following, unmanned aerial vehicle (UAV), developed in Lab~\ref{Lab:4}, convinced VenX engineers that the inner-outer loop structure, described in Lab~\ref{Lab:3}, was much easier to work with.
-This is the design they went with instead\footnote{In \texttt{ECE 488} and \texttt{ECE 481}, you will learn about an idea known as State Feedback. This is how I did this design}.
+This is the design they went with instead\footnote{In \texttt{ECE 488} and \texttt{ECE 481}, you will learn about an idea known as state feedback. This is how I did this design.}.
 %
 \begin{center}
   \input{Lab_5_UAV_PF_Ground.pdf_tex}
 \end{center}
 %
-Recall that the drone achieved perfect step tracking of a desired \emph{distance} away from a line segment in space.
-In other words, if the input to that closed loop system was equal to \(2\mathbf{1}(t)\) then the drone would track the line segment with an error of \SI{2}{\meter} in steady-state.
+Recall that the drone achieved perfect step-tracking of a desired \emph{distance} away from a line segment in space.
+In other words, if the input to that closed-loop system was equal to \(2 \cdot \mathbf{1}(t)\) then the drone would track the line segment with an error of \SI{2}{\meter} in steady-state.
 Engineers did this to provide the ability to tune an offset from the pre-planned path stored in the drone.
 
 Engineers would like to use this input to adjust the distance remotely with a control law located at a remotely deployed ground station.
 The ground station monitors weather patterns and information relayed by specialists on Earth to decide on a desired offset from the preplanned path.
 The station then communicates with the drone.
 The station sends reference commands and receives an observed output distance from the path.
-The observed output distance is used in closed loop feedback on the ground station to update what the commanded reference offset should be.
+The observed output distance is used in closed-loop feedback on the ground station to update what the commanded reference offset should be.
 
 Normally, proportional error feedback would preserve the stability of an already stable \emph{second-order} system.
 Unfortunately, communication delays can actually destabilize such a system.
 Your task is to design a control law that achieves the desired specifications:
 \begin{itemize}
-  \item{track a constant reference with \(1\%\) error and}
-  \item{preserve closed loop stability under the presence of communication delays.}
+  \item{track a constant reference with \(2\%\) error and}
+  \item{preserve closed-loop stability under the presence of communication delays.}
 \end{itemize}
 
-\section{Objectives}\label{Lab:4:Objectives}
-This goals of this lab are to
+\section{Objectives}\label{Lab:5:Objectives}
+The goals of this lab are to:
 \begin{enumerate}[label=(\arabic*)]
   \item{
     \textbf{Practice} the Lead and Lag Design Procedures as you've learned them in your course.
@@ -37,7 +37,7 @@ This goals of this lab are to
     \textbf{Learn} how a phase margin specification determines the maximum delay \(L(s)\) can afford before losing stability.
   }
 \end{enumerate}
-The deliverable dependency graph is
+The deliverable dependency graph is the following:
 \begin{center}
 \begin{tikzpicture}[x=1em, y=1em]
   \node[deliverable] (D1) {%
@@ -71,28 +71,28 @@ The deliverable dependency graph is
 \end{tikzpicture}
 \end{center}
 
-\section{Experimental Procedure}\label{Lab:4:Experiment}
+\section{Experimental Procedure}\label{Lab:5:Experiment}
 This lab is split into four parts.
-In Part I you will pick a proportional error gain \(K\) to achieve the tracking specification and then observe how closed loop stability is lost upon introducing a delay.
-In Part II and Part III you will design a Lag and Lead compensator respectively, using the Bode plot acquired in Part I, to stabilize the closed loop system even in the presence of the delay.
+In Part I you will calculate a proportional error gain \(K\) to achieve the tracking specification and then observe how closed-loop stability is lost upon introducing a delay. 
+In Part II and Part III you will design a lag and lead compensator respectively, using the Bode plot acquired in Part I, to stabilize the closed-loop system even in the presence of the delay.
 You will verify this using a Nyquist plot.
-Finally in Part IV you will observe the Lag and Lead compensators stabilize the simulated system.
+Finally in Part IV you will observe the lag and lead compensators stabilize the simulated system.
 
 \subsection{Preamble: Delays}
 A ``perfect'' delay of \(\tau\) units of time from an input signal \(u(t)\) to an output signal \(y(t)\) is determined by the static equation
 \[
-  y(t) = u(t - \tau).
+  y(t) = u(t - \tau)
 \]
 The value of the output \(y\) at time \(t\) is given by the value of the input signal \(u\) at a time \(\tau\) units prior.
-Take the Laplace transform of both sides\footnote{and suppose the integrals converge} and simplify to find
+Take the Laplace transform of both sides\footnote{and suppose the integrals converge.} and simplify to find
 \[
-  Y(s) = e^{-\tau s} U(s).
+  Y(s) = e^{-\tau s} U(s)
 \]
-It is in this sense that one can view \(e^{-\tau s}\) as the transfer function of the delay operator\footnote{This is an irrational transfer function. Take \texttt{ECE 481} to see how we can approximate this transfer function and incorporate into a more formal design philosophy}.
+It is in this sense that one can view \(e^{-\tau s}\) as the transfer function of the delay operator\footnote{This is an irrational transfer function. Take \texttt{ECE 481} to see how we can approximate this transfer function and incorporate into a more formal design philosophy.}.
 This gives a frequency-domain version of the time delay.
 %
 Suppose a loop transfer function \(L(s)\) satisfies the Nyquist criterion.
-Specifically imagine that the closed loop system
+Specifically imagine that the closed-loop system
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
@@ -129,11 +129,8 @@ Specifically imagine that the closed loop system
 \end{center}
 %
 is stable.
-Is it true that
-\begin{quote}
-  The closed loop system remains stable under a delay of \(\tau\) seconds?
-\end{quote}
-Recognizing that \(e^{-\tau s}\) is the transfer function of the delay operator, we could equivalently ask that the closed loop system
+Is it true that the closed-loop system remains stable under a delay of \(\tau\) seconds?\\
+Recognizing that \(e^{-\tau s}\) is the transfer function of the delay operator, we could equivalently ask if the closed-loop system
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
@@ -169,10 +166,8 @@ Recognizing that \(e^{-\tau s}\) is the transfer function of the delay operator,
   \end{tikzpicture}
 \end{center}
 %
-is stable.
-
-But how do we check the stability of this system?
-Since the closed loop transfer function is not composed solely of real rational polynomials, we \emph{cannot} use the Routh-Hurwitz stability criterion. Fortunately, the Nyquist criterion still applies\footnote{Why? That is probably outside the scope of this course. Pursue a MASc in control theory and you'll find out.}.
+is stable. But how do we check the stability of this system? \\
+Since the closed-loop transfer function is not composed solely of real rational polynomials, we \emph{cannot} use the Routh-Hurwitz stability criterion. Fortunately, the Nyquist criterion still applies\footnote{Why? That is probably outside the scope of this course. Pursue a MASc in control theory and you'll find out.}.
 %
 \begin{figure}
   \centering
@@ -186,19 +181,20 @@ in fact, a number of points on the latter Nyquist plot look like a rotated versi
 This is depicted by Figure~\ref{fig:lab5:delay}.
 This notion, if put formally\footnote{If you do not see why, do not be alarmed. This lab will directly translate the specification for you.}, allows us to translate the earlier delay specification into the following phase margin specification:
 \begin{quote}
-  The loop transfer function \(L(s)\) has a phase margin strictly greater than \(\tau \omega_{\mathrm{gc}}\) where \(\omega_{\mathrm{gc}}\) is the gain crossover frequency in \SI{}{\radian} and \(\tau\) is the delay in the loop in \SI{}{\second}.
+  The loop transfer function \(L(s)\) has a phase margin strictly greater than \(\tau \omega_{\mathrm{gc}}\) where \(\omega_{\mathrm{gc}}\) is the gain-crossover frequency in \SI{}{\radian/s} and \(\tau\) is the delay in the loop in \SI{}{\second}.
 \end{quote}
-This is the primary specification you will meet in this lab to accomodate the delay.
-Note that this specification only makes sense when \(L(s)\) is already stable in closed loop.
+This is the primary specification you will meet in this lab to accommodate the delay.
+Note that this specification only makes sense when \(L(s)\) is already stable in closed-loop.
 
-In practice, attempting to change the phase margin can also result in a changed gain crossover and thereby change what delays \(L(s)\) can afford.
-The lag compensator in particular changes the gain crossover in order to increase the phase margin.
-The lead compensator often results in a slightly higher gain crossover frequency.
+In practice, attempting to change the phase margin can also result in a changed gain-crossover and thereby change what delays \(L(s)\) can afford.
+The lag compensator in particular changes the gain-crossover in order to increase the phase margin.
+The lead compensator often results in a slightly higher gain-crossover frequency.
 
 \subsection{Part I: Delays and Stability}
-Consider the simple proportional feedback loop
+Consider the simple proportional feedback loop where \(P(s)\) are the dynamics of the controlled line-following drone. 
 %
-\begin{center}
+\begin{figure}[H]
+\centering
   \begin{tikzpicture}[x=1in, y=1in]
 
     \node [draw, smooth_block] (Plant) {\(P(s)\)};
@@ -237,29 +233,32 @@ Consider the simple proportional feedback loop
       --
       (Sum1.west);
   \end{tikzpicture}
-\end{center}
-where \(P(s)\) are the dynamics of the controlled line-following drone.
+  \caption[KP in closed-loop without a delay.]{Block diagram of proportional controller and plant without delay.}
+  \label{fig:lab5:KP_NOdelay}
+  \end{figure}
+  
+The controller is designed in two stages: first the gain K is determined, and then the dynamic portion of the compensator is designed.
 Your first task is to
 %
 \begin{deliverable}[label={del:lab5:p1:1}]
-  \textbf{Choose} the smallest loop gain \(0 < K\) so that the steady-state step tracking error is less than or equal to \(5\%.\)
+	\textbf{Calculate} the loop gain \(K>0\) so that the steady-state step tracking error is less than or equal to \(2\%.\)  From the range of gains \(K\), \textbf{choose} a value for K that lies within \(10\%\) of the smallest gain that satisfies the steady-state step tracking error requirement.
 \end{deliverable}
 %
-You will then acquire a Nyquist plot to verify stability of the closed loop system when there are no delays as well as acquire a Nyquist plot to demonstrate instability when the delay is introduced.
+You will then acquire a Nyquist plot to verify stability of the closed-loop system when there are no delays as well as acquire a Nyquist plot to demonstrate instability when the delay is introduced.
 %
 \begin{deliverable}[label={del:lab5:p1:2}]
   \textbf{Acquire} two Nyquist plots (using the Model Linearizer app) so that
   \begin{itemize}
-    \item{one demonstrates the stability of the gain-compensated closed loop system when there is no delay and}
-    \item{the other demonstrates the instability of the gain-compensated closed loop system with a delay.}
+    \item{one demonstrates the stability of the gain-compensated closed-loop system when there is no delay and}
+    \item{the other demonstrates the instability of the gain-compensated closed-loop system with a delay.}
   \end{itemize}
 \end{deliverable}
 %
-Finally, you will need to acquire a Bode plot of the undelayed open loop system in order to perform the Lead and Lag design procedures.
+Finally, you will need to acquire a Bode plot of the undelayed open-loop system in order to perform the lead and lag design procedures.
 %
 \begin{deliverable}[label={del:lab5:p1:3}]
-  \textbf{Acquire} a Bode plot (using the Model Linearizer app) of the undelayed open loop system.
-  \textbf{Place} a cursor at the gain crossover frequency on the magnitude plot.
+  \textbf{Acquire} a Bode plot (using the Model Linearizer app) of the undelayed open-loop system.
+  \textbf{Place} a cursor at the gain-crossover frequency on the magnitude plot.
 \end{deliverable}
 %
 To complete these tasks, follow the next procedure.
@@ -270,12 +269,7 @@ To complete these tasks, follow the next procedure.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       Assume the plant \(P(s)\) has a DC gain \(1.\)
-      The transfer function from \(r(t)\) to \(e(t)\) is
-      \[
-        \frac{1}{1 + K P(s)}.
-      \]
-      \textbf{Choose} a gain \(K\) so that the DC gain of this transfer function is less than \(0.05.\)
-      This assures a steady-state tracking error of less than \(5\%.\)
+      \textbf{Calculate} a gain \(K\) so that the steady-state tracking error of the system shown in Figure ~\ref{fig:lab5:KP_NOdelay} for a unit-step input is less than or equal to \(2\%.\)From the range of gains \(K\), \textbf{choose} a value for K that lies within \(10\%\) of the smallest gain that satisfies the steady-state step tracking error requirement.
     }
     \item{%
       \textbf{Change} the variable \texttt{K} \emph{in the MATLAB script} ``procedure\_5\_1.m'' to match your chosen gain.
@@ -285,22 +279,22 @@ To complete these tasks, follow the next procedure.
       \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path without the ``Delay.''
     }
     \item{%
-      The model should already be correctly configured with the ``Open Loop Input'' set to the signal \(e(t)\) and the ``Open Loop Output'' set to signal \(y(t).\)
+      The model should already be correctly configured with the ``Open-Loop Input'' set to the signal \(e(t)\) and the ``Open-Loop Output'' set to signal \(y(t).\)
       \textbf{Verify} this.
     }
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
       This produces part of Deliverable~\ref{del:lab5:p1:2}.
-      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you have closed loop stability.
+      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you have closed-loop stability.
     }
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Bode plot.
-      \textbf{Identify} the \SI{0}{\decibel} gain crossover and the phase margin.
-      \textbf{Place} a cursor on the gain crossover frequency on the magnitude plot.
+      \textbf{Identify} the \SI{0}{\decibel} gain-crossover and the phase margin.
+      \textbf{Place} a cursor on the gain-crossover frequency on the magnitude plot.
       This completes Deliverable~\ref{del:lab5:p1:3}.
     }
     \item{%
-      If you are curious, \textbf{run} ``procedure\_5\_1\_simulate.m'' to see how the closed loop system behaves without a delay.
+      If you are curious, \textbf{run} ``procedure\_5\_1\_simulate.m'' to see how the closed-loop system behaves without a delay.
     }
     \item{%
       \textbf{Open} the ``Lab\_5\_Model\_System.slx'' Simulink model and \textbf{ensure} that the switch is pointed towards the path \textbf{with} the ``Delay.''
@@ -308,34 +302,35 @@ To complete these tasks, follow the next procedure.
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
       This completes Deliverable~\ref{del:lab5:p1:2}.
-      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do not have closed loop stability.
+      Assuming \(P(s)\) has no unstable poles, \textbf{assess} how did the closed-loop stability change.
     }
     \item{%
-      If you are curious, \textbf{run} ``procedure\_5\_1\_simulate.m'' to see how the closed loop system behaves with the delay.
-      Expect the system to behave undesireably;
-      It is even possible that the simulation stops early if the drone travels backwards!
+      If you are curious, \textbf{run} ``procedure\_5\_1\_simulate.m'' to see how the closed-loop system behaves with the delay.
+      Expect the system to behave undesirably; it is even possible that the simulation stops early if the drone travels backwards!
     }
   \end{enumerate}
 \end{procedure}
 
 \subsection{Part II: Design a Lag controller}
-One way to increase the phase margin of a loop transfer function is to introduce a Lag controller.
-Lag controllers decrease the gain so as to change the gain crossover;
-changing the gain crossover in turn changes the phase margin.
-In this part the closed loop system takes the form
+One way to increase the phase margin of a loop transfer function is to introduce a lag controller.
+Lag controllers decrease the gain so as to change the gain-crossover;
+changing the gain-crossover in turn changes the phase margin.
+In this part the closed-loop system takes the form
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
 
-    \node [draw, smooth_block] (Plant) {\(K P(s)\)};
-    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lag}(s)\)};
+    \node [draw, smooth_block] (Plant) {\(K \cdot P(s)\)};
+    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lag\_dyn}(s)\)};
     \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
     \node [right = 0.50 of Plant] (after_plant) {};
     \node [right = 0.50 of after_plant] (y) {};
     \node [left = 0.50 of Sum1] (r) {};
+    \node [smooth_annotate, below = 0 of Gain1] {};
+    \node [smooth_annotate, below = 0 of Plant] {};
 
-    \node [smooth_annotate, below = 0 of Gain1] {Controller};
-    \node [smooth_annotate, below = 0 of Plant] {Plant};
+    \draw [smooth_area_path, fill = Blue, fill opacity = 0.50, text opacity = 1]
+      ($(Gain1)+(-0.4, 0)$) -- +(0, 0.25) -| node[left, above, color=Blue] {\(C_{lag}(s)\)} ($(Plant)+(-0.08,0)$) -- +(0, -0.25) -| ($(Gain1)+(-0.4, 0)$);
 
     \draw [arrow, smooth_path]
       (Plant.east) -- (after_plant.base) -- (y.base) node [below right] {\(y\)};
@@ -366,47 +361,44 @@ In this part the closed loop system takes the form
 \end{center}
 %
 where
+
 \[
-  C_\mathrm{lag}(s)
-    =
-      \frac{\alpha T s + 1}{T s + 1}
-  ,
-  \;
-  0 < \alpha < 1
+  C_{lag}(s)=K \cdot C_{lag\_dyn}(s) \\ 
+   = K \cdot \frac{\alpha T s + 1}{T s + 1}, \quad with 
+   \quad 0 < \alpha < 1
   ,
   \;
   T > 0.
 \]
-is a Lag compensator with \SI{0}{\decibel} DC gain.
-Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lag control design.
+is a lag compensator. Note that dynamic portion of the lag compensator, \(C_\mathrm{lag\_dyn}\) has \SI{0}{\decibel} DC gain and \(K\) is the compensator gain determined in Deliverable  \ref{del:lab5:p1:1}.\\
+Your task is to find \(\alpha\) and \(T\), by completing the lag compensator design.\\
 %
 \begin{deliverable}[label={del:lab5:p2:1}]
-  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\)
-  This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
-  \textbf{Design} a Lag compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
-  \textbf{You must show the use of the design equations for full marks.}
+  Let \(\omega_\mathrm{gc}\) denote the \SI{0}{\decibel} gain-crossover frequency (in \SI{}{\radian}) of \(K \cdot P(s).\); this is the value you determined using the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
+  \textbf{Design} a lag compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open-loop system has a phase margin strictly greater than \(\frac{12\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)\\
+  \textbf{You must show the use of the design equations for full marks. If your design relies on readings from a Bode plot, include the specific plot to show where your design values came from.}\\
+  \textbf{Note} that the lag compensator design steps and/or notations from the lecture notes may differ from the notation used in the lab manual and associated scripts. You are encouraged to use the design procedure from your lecture notes. Present your resulting compensator parameters in \textbf{the same format} as shown in the lab manual.\\
 \end{deliverable}
 %
-You will then acquire a Nyquist plot to demonstrate that the delayed system has been stabilized with the Lag compensator.
+You will then acquire a Nyquist plot to demonstrate that the delayed system has been stabilized with the lag compensator.
 %
 \begin{deliverable}[label={del:lab5:p2:2}]
-  \textbf{Acquire} a Nyquist plot demonstrating the Lag compensated system \emph{with delay} is closed loop stable.
+  \textbf{Acquire} a Nyquist plot demonstrating the lag-compensated system \emph{with delay} is closed-loop stable.
 \end{deliverable}
 %
 \begin{procedure}[label={proc:lab5:2}]
-  In this procedure you will design a Lag compensator, using the content you learned in your course, and simulate the delayed closed loop system.
+  In this procedure you will design a lag compensator, using the content you learned in your course, and simulate the delayed closed-loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      The engineers at VenX have determined that the compensated closed loop system must have a phase margin strictly greater than
+      The engineers at VenX have determined that the compensated closed-loop system must have a phase margin strictly greater than
       \[
-        \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
+        \frac{12\omega_\mathrm{gc}}{100}~\mathrm{rad}.
       \]
-      where \(\omega_\mathrm{gc}\) is the gain crossover.
-      %Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}.
-      Using the Bode plot for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required gain crossover to achieve this specification.
-    }
+      where \(\omega_\mathrm{gc}\) is the gain-crossover frequency
+      found for \(K \cdot P(s)\) in Deliverable~\ref{del:lab5:p1:3}.
+      }
     \item{%
-      \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
+      Following the lag compensator design steps from lectures, \textbf{determine} \(\alpha\) and \(T\) such that the lag-compensated system meets the phase-margin specification.
       This produces Deliverable~\ref{del:lab5:p2:1}.
     }
     \item{%
@@ -419,28 +411,28 @@ You will then acquire a Nyquist plot to demonstrate that the delayed system has 
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
       This completes Deliverable~\ref{del:lab5:p2:2}.
-      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do  have closed loop stability.
+      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do  have closed-loop stability.
     }
   \end{enumerate}
 \end{procedure}
 
 \subsection{Part III: Design a Lead controller}
-Another way to increase the phase margin of a loop transfer function is to introduce a Lead controller.
-Lead controllers add phase at the crossover frequency.
-In this part the closed loop system takes the form
+Another way to increase the phase margin of a loop transfer function is to introduce a lead compensator.
+Lead compensators add phase near the gain-crossover frequency.
+In this part the closed-loop system takes the form
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
 
-    \node [draw, smooth_block] (Plant) {\(K P(s)\)};
-    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lead}(s)\)};
+    \node [draw, smooth_block] (Plant) {\(K \cdot P(s)\)};
+    \node [draw, smooth_block, left = 0.50 of Plant] (Gain1) {\(C_\mathrm{lead\_dyn}(s)\)};
     \node [draw, smooth_sum, left = 0.50 of Gain1] (Sum1) {};
     \node [right = 0.50 of Plant] (after_plant) {};
     \node [right = 0.50 of after_plant] (y) {};
     \node [left = 0.50 of Sum1] (r) {};
 
-    \node [smooth_annotate, below = 0 of Gain1] {Controller};
-    \node [smooth_annotate, below = 0 of Plant] {Plant};
+    \draw [smooth_area_path, fill = Blue, fill opacity = 0.50, text opacity = 1]
+      ($(Gain1)+(-0.5, 0)$) -- +(0, 0.25) -| node[left, above, color=Blue] {\(C_{lead}(s)\)} ($(Plant)+(-0.08,0)$) -- +(0, -0.25) -| ($(Gain1)+(-0.5, 0)$);
 
     \draw [arrow, smooth_path]
       (Plant.east) -- (after_plant.base) -- (y.base) node [below right] {\(y\)};
@@ -472,50 +464,45 @@ In this part the closed loop system takes the form
 %
 where
 \[
-  C_\mathrm{lead}(s)
-    =
-      \frac{\alpha T s + 1}{T s + 1}
-  ,
-  \;
-  \alpha > 1
+  C_{lead}(s)=K \cdot C_{lead\_dyn}(s) \\ 
+   = K \cdot \frac{\alpha T s + 1}{T s + 1}, \quad with 
+   \quad \alpha > 1
   ,
   \;
   T > 0.
 \]
-is a Lead compensator with unit DC gain.
-Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the Lead control design.
+is a lead compensator. Note that the dynamic portion of this compensator, \(C_\mathrm{lead\_dyn}\), has a unit DC gain and \(K\) is the compensator gain determined in Deliverable  \ref{del:lab5:p1:1}.\\
+Your task is to find \(\alpha\) and \(T\) in terms of a phase margin specification and the Bode plot of \(K \cdot P(s)\) --- determined by Deliverable~\ref{del:lab5:p1:3} --- to complete the lead compensator design.
 %
 \begin{deliverable}[label={del:lab5:p3:1}]
-  Let \(\omega_\mathrm{gc}\) determine the \SI{0}{\decibel} gain crossover frequency (in \SI{}{\radian}) of \(K P(s).\)
-  This can determined by looking at the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
-  \textbf{Design} a Lead compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open loop system has a phase margin strictly greater than \(\frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)
-  \textbf{You must show the use of the design equations for full marks.}
+  Let \(\omega_\mathrm{gc}\) denote the \SI{0}{\decibel} gain-crossover frequency (in \SI{}{\radian}) of \(K \cdot P(s)\); this is the value you determined using the Bode plot from Deliverable~\ref{del:lab5:p1:3}.
+  \textbf{Design} a lead compensator (determine \(\alpha\) and \(T\)) so that the Bode plot of the compensated open-loop system has a phase margin strictly greater than \(\frac{12\omega_\mathrm{gc}}{100}~\mathrm{rad}.\)\\
+  \textbf{You must show the use of the design equations for full marks. If in the design process you used readings from a Bode plot, include the specific plot to show where your design values came from.}\\
+  \textbf{Note} that the lead compensator design steps and/or notations from the lecture notes may differ from the notation used in the lab manual and scripts. You are encouraged to use the design procedure from your lecture notes. Present your resulting compensator parameters in \textbf{the same format} as shown in the lab manual.\\
 \end{deliverable}
 %
 You will then acquire a Nyquist plot to demonstrate that the delayed system has been stabilized with the Lead compensator.
 %
 \begin{deliverable}[label={del:lab5:p3:2}]
-  \textbf{Acquire} a Nyquist plot demonstrating the Lead compensated system \emph{with delay} is closed loop stable.
+  \textbf{Acquire} a Nyquist plot demonstrating the lead-compensated system \emph{with delay} is closed-loop stable.
 \end{deliverable}
 %
 \begin{procedure}[label={proc:lab5:3}]
-  In this procedure you will design a Lead compensator, using the content you learned in your course, and simulate the delayed closed loop system.
+  In this procedure you will design a lead compensator, using the content you learned in your course, and simulate the delayed closed-loop system.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
-      The engineers at VenX have determined that compensated closed loop system must have a phase margin strictly greater than
+      The engineers at VenX have determined that the compensated closed-loop system must have a phase margin strictly greater than
       \[
-        \frac{6\omega_\mathrm{gc}}{100}~\mathrm{rad}.
+        \frac{12\omega_\mathrm{gc}}{100}~\mathrm{rad}.
       \]
-      %Using the \SI{0}{\decibel} gain crossover frequency \(\omega_\mathrm{gc}\) found for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3} t
-      Using the Bode plot for \(K P(s)\) in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required phase addition to meet this specification.
+      Using the Bode plot for \(K \cdot P(s)\) in Deliverable~\ref{del:lab5:p1:3}, \textbf{determine} the required phase addition to meet this specification.
     }
     \item{%
-      \textbf{Choose} \(\alpha\) and \(T\) in a way to meet this specification.
+      Following the lead compensator design steps from lectures, \textbf{determine} \(\alpha\) and \(T\) to meet this phase-margin specification.
       This produces Deliverable~\ref{del:lab5:p3:1}.
     }
     \item{%
-      \textbf{Change} the variable \texttt{alpha} and \texttt{T} \emph{in the MATLAB script} ``procedure\_5\_3.m'' to match your chosen parameters.
-      \textbf{Change} the gain \texttt{K} in that same script if your design procedure demands it.
+      \textbf{Change} the variables \texttt{alpha} and \texttt{T} \emph{in the MATLAB script} ``procedure\_5\_3.m'' to match your chosen parameters.
       \textbf{Run} the script.
     }
     \item{%
@@ -524,16 +511,16 @@ You will then acquire a Nyquist plot to demonstrate that the delayed system has 
     \item{%
       \textbf{Open} the Model Linearizer App and \textbf{acquire} a Nyquist plot.
       This completes Deliverable~\ref{del:lab5:p3:2}.
-      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do  have closed loop stability.
+      Assuming \(P(s)\) has no unstable poles, \textbf{verify} that you do  have closed-loop stability.
     }
   \end{enumerate}
 \end{procedure}
 
 \subsection{Part IV: Simulating the Real System}
-In Parts II and III you designed and verified Lag and Lead compensators that ensure closed loop stability of a plant with delay.
+In Parts II and III you designed and verified lag and lead compensators that ensure closed-loop stability of a plant with delay.
 This was verified using the Nyquist plots of Deliverable~\ref{del:lab5:p2:2} and~\ref{del:lab5:p3:2}.
-In this part, you will simulate the real closed loop system with delays.
-The true closed loop system takes the form
+In this part, you will simulate the real closed-loop system with delays.
+The true closed-loop system takes the form
 %
 \begin{center}
   \begin{tikzpicture}[x=1in, y=1in]
@@ -553,7 +540,7 @@ The true closed loop system takes the form
     \node [right = 0.40 of after_plant] (y) {};
     \node [left = 0.40 of Sum1] (r) {};
 
-    \node [smooth_annotate, below = 0 of Gain1] {Controller};
+    \node [smooth_annotate, below = 0 of Gain1] {Compensator};
     \node [smooth_annotate, below = 0 of Plant] {Plant};
     \node [smooth_annotate, below = 0 of delay1] {Send Delay};
     \node [smooth_annotate, below = 0 of delay2] {Receive Delay};
@@ -594,20 +581,20 @@ The true closed loop system takes the form
   \end{tikzpicture}
 \end{center}
 %
-The ``Send Delay'' captures the amount of time the plant has to wait to see an update from the controller on the ground while the ``Receive Delay'' captures the amount of time the controller has to wait to see an updated output.
+The ``Send Delay'' captures the amount of time the plant has to wait to see an update from the compensator on the ground while the ``Receive Delay'' captures the amount of time the compensator has to wait to see an updated output.
 From a networking perspective, this is lower bounded by the ping time\footnote{since it ignores any computational delays.}.
 If you designed your Lag and Lead compensators correctly in Parts II and III, then you should expect them to perform adequately.
 Remember, stability is the primary characteristic of concern in this discussion.
-Do not be alarmed if the settling time or overshoot is undesireable.
+Do not be alarmed if the settling time or overshoot is undesirable.
 
-There are precisely two deliverables for this part.
-First you will simulate the real system against the Lag compensator to produce
+There are two deliverables for this part.
+First you will simulate the real system against the lag compensator to produce
 %
 \begin{deliverable}[label={del:lab5:p4:1}]
   \textbf{Acquire} Figure 542 generated by ``procedure\_5\_4\_simulate.m.''
 \end{deliverable}
 %
-Second, you will simulate the real system against the Lead compensator to produce
+Second, you will simulate the real system against the lead compensator to produce
 %
 \begin{deliverable}[label={del:lab5:p4:2}]
   \textbf{Acquire} Figure 552 generated by ``procedure\_5\_5\_simulate.m.''
@@ -616,14 +603,14 @@ Second, you will simulate the real system against the Lead compensator to produc
 To do so, follow the next couple procedures.
 %
 \begin{procedure}[label={proc:lab5:4}]
-  In this procedure you will simulate the real closed loop system with your Lag compensator.
+  In this procedure you will simulate the real closed-loop system with your lag compensator.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       \textbf{Run} ``procedure\_5\_4\_simulate.m.''
     }
     \item{%
       \textbf{Save} Figure 542.
-      \textbf{Verify} the simulatation ran to completion (\SI{240}{\second}) and that the error settles.
+      \textbf{Verify} the simulation ran to completion (\SI{240}{\second}) and that the error settles.
       If there are oscillations, they should decay.
       This produces Deliverable~\ref{del:lab5:p4:1}.
     }
@@ -631,14 +618,14 @@ To do so, follow the next couple procedures.
 \end{procedure}
 %
 \begin{procedure}[label={proc:lab5:5}]
-  In this procedure you will simulate the real closed loop system with your Lead compensator.
+  In this procedure you will simulate the real closed-loop system with your lead compensator.
   \begin{enumerate}[label={(\arabic*)}]
     \item{%
       \textbf{Run} ``procedure\_5\_5\_simulate.m.''
     }
     \item{%
       \textbf{Save} Figure 552.
-      \textbf{Verify} the simulatation ran to completion (\SI{240}{\second}) and that the error settles.
+      \textbf{Verify} the simulation ran to completion (\SI{240}{\second}) and that the error settles.
       If there are oscillations, they should decay.
       This produces Deliverable~\ref{del:lab5:p4:2}.
     }
@@ -648,7 +635,8 @@ To do so, follow the next couple procedures.
 
 \section{Report Deliverable}\label{Lab:5:Report}
 You are almost done the lab component of this course!
-As usual, you are expected to submit a report demonstrating that you completed the lab and that you understand the tasks performed.
+As usual, you are expected to submit a report demonstrating that you completed the lab and that you understand the tasks performed.\\
+Preface your lab report with the \hyperlink{intro:decl}{Declaration of Authorship}.\\
 In addition to including
 \begin{itemize}
   \item{Deliverable~\ref{del:lab5:p1:1},}
@@ -665,14 +653,14 @@ in your report, you are required to answer the questions of the following delive
 Make sure to leverage your other deliverables in your answers!
 \begin{deliverable}[label={lab5:report}]
   \begin{enumerate}[label={(\arabic*)}]
-    % \item{%
-    %   In the Lead and Lag design procedures you may have had to add more phase (or decrease the gain crossover more) than what the phase margin specification demanded.
-    %   Acquire a Bode plot of your Lead and Lag compensators to \textbf{explain why} this can happen.
-    %   If you did not have to do this, explain what the other side-effects of the Lead/Lag controllers are besides their intended effects (e.g. does the Lead controller only add phase?).
-    %   \label{lab5:report:q1}
-    % }
+     \item{%
+       In the lead and lag design procedures you may have had to add more phase (or alter the gain-crossover location) than what the phase margin specification demanded.
+       Acquire a Bode plot of your lead and lag compensators to \textbf{explain why} this can happen.
+       Explain what the other side-effects of the lead/lag controllers are besides their intended effects (e.g. does the lead controller only add phase?).
+       \label{lab5:report:q1}
+     }
     \item{%
-      \textbf{Describe} the qualitative differences between the final closed loop response of your Lag compensated and Lead compensated systems.
+      \textbf{Describe} the qualitative differences between the final closed-loop response of your lag-compensated and lead-compensated systems.
       Touch on characteristics like
       \begin{itemize}
         \item{
@@ -689,24 +677,21 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab5:report:q2}
     }
     \item{%
-      \textbf{Describe} how you would choose between a Lead compensator or Lag compensator.
+      \textbf{Describe} how you would choose between a lead compensator or lag compensator.
 
       Ensure to leverage the Nyquist plots in Deliverables~\ref{del:lab5:p2:2} and~\ref{del:lab5:p3:2} as well as your answers to~\ref{lab5:report:q1} and~\ref{lab5:report:q2} in your discussion.
 
       \label{lab5:report:q3}
     }
     \item{%
-      Using the original phase margin \(\phi\) and gain crossover \(\omega_\mathrm{gc}\) of \(K P(s)\) --- both of which can be found by looking at the Bode plot of Deliverable~\ref{del:lab5:p1:3} --- \textbf{compute} the maximum delay
-      \[
-        \tau_\mathrm{max} = \frac{\phi}{\omega_\mathrm{gc}}
-      \]
+      Using the uncompensated phase margin \(\phi\) and gain-crossover \(\omega_\mathrm{gc}\) of \(K \cdot P(s)\) --- both of which can be found by looking at the Bode plot of Deliverable~\ref{del:lab5:p1:3} --- \textbf{compute} the maximum delay
       the uncompensated system could afford before becoming unstable.
       \label{lab5:report:q4}
     }
     \item{%
       A local WiFi network usually sees a round trip time for network packets of around \SI{1}{\milli\second} to \SI{3}{\milli\second}.
 
-      \textbf{Would} your uncompensated system be stable if the feedback loop involved communication over a similar wireless network with comparable delays?
+      \textbf{Would} your uncompensated system \(K \cdot P(s)\) be stable if the feedback loop involved communication over a similar wireless network with comparable delays?
       If not, would the compensated system be stable?
       \label{lab5:report:q5}
     }
@@ -721,14 +706,14 @@ Make sure to leverage your other deliverables in your answers!
       \label{lab5:report:q6}
     }
     \item{%
-      Using the Nyquist plot of the \emph{delayed} system acquired in Deliverable~\ref{del:lab5:p1:2}, \textbf{determine} if there exists an additional proportional feedback gain \(\hat{K} \in \mathbb{R}\) that would stabilize the system \(K P(s)\) even in the presence of the \SI{60}{\milli\second} delay.
+      Using the Nyquist plot of the \emph{delayed} system acquired in Deliverable~\ref{del:lab5:p1:2}, \textbf{determine} if there exists an additional proportional feedback gain \(\hat{K} \in \mathbb{R}\) that would stabilize the system \(K \cdot P(s)\) even in the presence of the \SI{60}{\milli\second} delay.
 
-      To be clear: Can you find a (positive or negative) gain \(\hat{K}\) that renders the closed loop system
+      To be clear: Can you find a gain \(\hat{K}\) that renders the closed-loop system
       %
       \begin{center}
         \begin{tikzpicture}[x=1in, y=1in]
 
-          \node [draw, smooth_block] (Plant) {\(K P(s)\)};
+          \node [draw, smooth_block] (Plant) {\(K \cdot P(s)\)};
           \node [draw, smooth_block, right = 0.4 of Plant] (Delay) {%
             \(e^{-0.06 s}\)
           };
@@ -774,7 +759,7 @@ Make sure to leverage your other deliverables in your answers!
       %
       stable?
 
-      If it exists, does this closed loop system have a larger or smaller steady-state error in comparison to the undelayed \(K P(s).\)
+      If it exists, does this closed-loop system have a larger or smaller steady-state error in comparison to the undelayed \(K P(s).\)
 
       What does this suggest about the effect of delays on performance?
       \label{lab5:report:q7}
@@ -787,31 +772,31 @@ The grading scheme is shown in Table~\ref{tab:lab5:grading}. The breakdown of
 your grade is shown per deliverable except in the case of the lab
 questions where it is shown per question.
 %
-\begin{table}
+\begin{table}[H]
 \centering
-\begin{tabular}{c|l|c}
-        & Deliverable           & Marks  \\ \hline
-        & \ref{del:lab5:p1:1}         & 4       \\ \hline
-        & \ref{del:lab5:p1:2}         & 4       \\ \hline
-        & \ref{del:lab5:p1:3}         & 4      \\ \hline
-        & \ref{del:lab5:p2:1}         & 4      \\ \hline
-        & \ref{del:lab5:p2:2}         & 4       \\ \hline
-        & \ref{del:lab5:p3:1}         & 4       \\ \hline
-        & \ref{del:lab5:p3:2}         & 4       \\ \hline
-        & \ref{del:lab5:p4:1}         & 4       \\ \hline
-        & \ref{del:lab5:p4:2}         & 4       \\ \hhline{=|=|=}
-Lab Subtotal&                       & 36      \\ \hhline{=|=|=}
-%        & \ref{lab5:report}~\ref{lab5:report:q1}  & 3       \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q2}  & 3       \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q3}  & 3       \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q4}  & 3      \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q5}  & 3      \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q6}  & 3      \\ \hline
-        & \ref{lab5:report}~\ref{lab5:report:q7}  & 3      \\ \hhline{=|=|=}
-Report Subtotal&  & 18 \\ \hhline{=|=|=}
-  Total &                       & 54
-\end{tabular}
 \caption[Grading Scheme for Lab 5]{Grading scheme for Lab 5.}
 \label{tab:lab5:grading}
+\begin{tabular}{c|l|c}
+        & Deliverable           & Marks  \\ \hline
+        & \ref{del:lab5:p1:1}         & 2       \\ \hline
+        & \ref{del:lab5:p1:2}         & 4       \\ \hline
+        & \ref{del:lab5:p1:3}         & 2      \\ \hline
+        & \ref{del:lab5:p2:1}         & 8      \\ \hline
+        & \ref{del:lab5:p2:2}         & 2       \\ \hline
+        & \ref{del:lab5:p3:1}         & 8       \\ \hline
+        & \ref{del:lab5:p3:2}         & 2       \\ \hline
+        & \ref{del:lab5:p4:1}         & 2       \\ \hline
+        & \ref{del:lab5:p4:2}         & 2       \\ \hhline{=|=|=}
+Lab Subtotal&                       & 32      \\ \hhline{=|=|=}
+        & \ref{lab5:report}~\ref{lab5:report:q1}  & 3       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q2}  & 3       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q3}  & 2       \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q4}  & 3      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q5}  & 3      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q6}  & 6      \\ \hline
+        & \ref{lab5:report}~\ref{lab5:report:q7}  & 6      \\ \hhline{=|=|=}
+Report Subtotal&  & 26 \\ \hhline{=|=|=}
+  Total &                       & 58
+\end{tabular}
 \end{table}
 %
